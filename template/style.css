@@ -1,3 +1,22 @@
+
+/*  Navbar  */
 .navbar{
-    background-color: #ff6b81;
+    background-color: #b33939;
+}
+
+
+/*  Side Navigation     */
+.side-nav{
+    height: 100%;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #273c75;
+}
+
+.side-nav .nav-item{
+    padding: 10px;
+}
+
+.side-nav .nav-item:hover{
+    background-color: #487eb0;
 }

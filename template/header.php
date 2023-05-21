@@ -10,7 +10,7 @@
     </head>
     <body>
         <nav class="navbar">
-            <div class="container-fluid px-4 py-2">
+            <div class="container-fluid ps-4 py-2">
                 <a class="navbar-brand fs-4 fw-bold text-light" href="#">
                 <i class="bi-journal-text"></i>
                 Library Management System
