@@ -9,7 +9,6 @@ body{
     background-color: #b33939;
 }
 
-
 /*  Side Navigation     */
 .side-nav{
     height: 100%;
@@ -51,6 +50,6 @@ body{
 }
 
 .charts{
-    width: 300px;
+    width: 100%;
     margin: 80px 20px;
 }

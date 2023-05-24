@@ -41,19 +41,19 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container pt-5">
     <div class="row">
-        <div class="col-4">
+        <div class="col col-xl-4 col-lg-6 col-sm-12">
             <div class="charts">
                 <canvas class="book-chart"></canvas>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col col-xl-4 col-lg-6 col-sm-12">
             <div class="charts">
                 <canvas class="thesis-chart"></canvas>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col col-xl-4 col-lg-6 col-sm-12">
             <div class="charts">
                 <canvas class="student-chart"></canvas>
             </div>
