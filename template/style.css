@@ -1,7 +1,4 @@
 /*  General styles  */
-body{
-    background-color: #f7f1e3;
-}
 
 
 /*  Navbar  */
@@ -12,8 +9,7 @@ body{
 /*  Side Navigation     */
 .side-nav{
     height: 100%;
-    padding-top: 35px;
-    padding-bottom: 50px;
+    padding-top: 20px;
     background-color: #273c75;
 }
 
@@ -27,6 +23,10 @@ body{
 
 .side-nav .nav-item:hover{
     background-color: #487eb0;
+}
+
+.offcanvas-body{
+    padding: 20px 0px;
 }
 
 /*  Dashboard Styles*/
