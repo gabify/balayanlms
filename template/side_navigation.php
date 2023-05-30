@@ -8,7 +8,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link fs-5 fw-light text-light" href="#">
+            <a class="nav-link fs-5 fw-light text-light" href="../balayanlms/book/bookDashboard.php">
                 <i class="bi-journal-bookmark-fill"></i>
                 Books
             </a>

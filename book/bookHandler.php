@@ -17,4 +17,17 @@
         $stmt->execute();
     }
 
+    //Get all books
+    function getAllBooks($pdo){
+        $sql = 'CALL getAllBooks';
+        $stmt = $pdo->query($sql);
+        $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if($books){
+            return $books;
+        }else{
+            return 'Some error occurred';
+        }
+    }
+
 ?>

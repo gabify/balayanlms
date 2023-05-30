@@ -6,10 +6,12 @@
                     <h5 class="card-title text-light pt-2 fs-4 fw-bolder">1</h5>
                     <p class="card-text text-light pt-1 fw-light">Total Books</p>
                 </div>
-                <div class="card-footer text-center text-light">
-                    More
-                    <i class="bi-arrow-right-circle"></i>
-                </div>
+                <a href="../balayanlms/book/bookDashboard.php" class="text-decoration-none">
+                    <div class="card-footer text-center text-light">
+                        More
+                        <i class="bi-arrow-right-circle"></i>
+                    </div>
+                </a>
             </div>
         </div>
         
