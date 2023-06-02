@@ -44,29 +44,77 @@ $books = getAllBooks($pdo);
             id="tableViewContent" role="tabpanel" 
             aria-labelledby="home-tab" 
             tabindex="0">
-                <table class="table table-hover table-bordered">
-                    <thead class="table-dark">
-                        <tr class="text-center fs-5">
-                            <th scope="col">Accession Number</th>
-                            <th scope="col">Call Number</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Action</th>
+            <div class="row my-3 mx-2">
+                <div class="col-4">
+                    Show 
+                    <form action="" class="d-inline-block mx-1">
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </form>
+                    Entries
+                </div>
+                <div class="col-4">
+                    <h3 class="display-6 text-center">Book <strong>Details</strong></h3>
+                </div>
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-4">
+                            <button class="btn btn-outline-secondary fw-bold fs-6 d-inline-block">
+                                Add New
+                                <i class="bi-plus fs-5 fw-bold align-middle"></i>
+                            </button>
+                        </div>
+                        <div class="col-8">
+                            <form class="d-flex justify-content-end" role="search">
+                                <div class="input-group mb-3">
+                                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-hover table-bordered">
+                <thead class="">
+                    <tr class="text-center fs-5">
+                        <th scope="col">Accession #</th>
+                        <th scope="col">Call Number</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <?php foreach($books as $book):?>
+                        <tr class="text-center">
+                            <td><?php echo htmlspecialchars($book['accessnum']);?></td>
+                            <td><?php echo htmlspecialchars($book['callnum']);?></td>
+                            <td><?php echo htmlspecialchars($book['title']);?></td>
+                            <td>
+                                <a href="#" class="btn"><i class="bi-eye-fill fs-4 text-primary"></i></a>
+                                <a href="#" class="btn"><i class="bi-pencil-fill fs-4 text-warning"></i></a>
+                                <a href="#" class="btn"><i class="bi-trash3-fill fs-4 text-danger"></i></a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                        <?php foreach($books as $book):?>
-                            <tr class="text-center">
-                                <td><?php echo htmlspecialchars($book['accessnum']);?></td>
-                                <td><?php echo htmlspecialchars($book['callnum']);?></td>
-                                <td><?php echo htmlspecialchars($book['title']);?></td>
-                                <td>
-                                    <button class="btn btn-primary">View</button>
-                                    <button class="btn btn-danger">Delete</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item"><a class="page-link text-dark" href="#">Previous</a></li>
+                    <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link text-dark" href="#">Next</a></li>
+                </ul>
+            </nav>
+            <div class="my-1 text-end">
+                Showing 0 out of 200 entries
+            </div>
         </div>
         <div 
             class="tab-pane fade" 
