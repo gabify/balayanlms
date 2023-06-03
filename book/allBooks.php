@@ -63,9 +63,12 @@ $books = getAllBooks($pdo);
                 <div class="col-4">
                     <div class="row">
                         <div class="col-4">
-                            <button class="btn btn-outline-secondary fw-bold fs-6 d-inline-block">
-                                Add New
-                                <i class="bi-plus fs-5 fw-bold align-middle"></i>
+                            <button 
+                                class="btn btn-outline-secondary fw-bold fs-6 d-inline-block"
+                                data-bs-toggle="modal"
+                                data-bs-target="#addNewBook">
+                                    Add New
+                                    <i class="bi-plus fs-5 fw-bold align-middle"></i>
                             </button>
                         </div>
                         <div class="col-8">
@@ -103,18 +106,30 @@ $books = getAllBooks($pdo);
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-end">
-                    <li class="page-item"><a class="page-link text-dark" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link text-dark" href="#">Next</a></li>
-                </ul>
-            </nav>
-            <div class="my-1 text-end">
-                Showing 0 out of 200 entries
+
+            <div class="container-fluid my-2 g-0">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-between">
+                        <div class="col col-4">
+                            <div class="my-1">
+                                Showing 0 out of 200 entries
+                            </div>
+                        </div>
+                        <div class="col col-4">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-end">
+                                    <li class="page-item"><a class="page-link text-dark" href="#">Previous</a></li>
+                                    <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link text-dark" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
         </div>
         <div 
             class="tab-pane fade" 
@@ -123,6 +138,11 @@ $books = getAllBooks($pdo);
             aria-labelledby="profile-tab" 
             tabindex="0">
                 Another text here
+                
         </div>
     </div>
 </div>
+
+
+<!-- Modal for Adding new book -->
+<?php include '../balayanlms/book/addBook.php';?>
