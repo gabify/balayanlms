@@ -7,7 +7,6 @@ require '../balayanlms/book/bookHandler.php';
 $books = getAllBooks($pdo);
 
 ?>
-
 <div class="container-fluid mt-4 px-4">
     <ul class="nav nav-tabs" id="optionTab" role="tablist">
         <li class="nav-item" role="presentation">
@@ -146,3 +145,4 @@ $books = getAllBooks($pdo);
 
 <!-- Modal for Adding new book -->
 <?php include '../balayanlms/book/addBook.php';?>
+

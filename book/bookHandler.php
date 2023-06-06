@@ -1,45 +1,55 @@
 <?php 
 
     //Insert Author
-    function insertAuthor($pdo, $author)
+    function getAuthorId($pdo, $author)
     {
-        $sql = 'CALL insertAuthor(:author)';
+        $sql = 'CALL getAuthor(:author)';
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':author', $author, PDO::PARAM_STR);
         $stmt->execute();
+
+        $author = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $author['authorId'];
     }
 
     //Insert Publisher
-    function insertPublisher($pdo, $publisher){
-        $sql = 'CALL insertPublisher(:publisher)';
+    function getPublisherId($pdo, $publisher){
+        $sql = 'CALL getPublisher(:publisher)';
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':publisher', $publisher, PDO::PARAM_STR);
         $stmt->execute();
+
+        $publisher = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $publisher['publisherId'];
     }
 
-    function insertBookDetails($pdo, $bookInfo): int
+    function insertBookDetails($pdo, $bookInfo, $authorId, $publisherId): int
     {
         $sql = 'CALL insertBookInfo(:accessnumber, :callnumber, :bookTitle, :bookAuthor, :bookPublisher, :bookCopyright)';
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':accessnumber', $bookInfo['accessnum'], PDO::PARAM_INT);
         $stmt->bindParam(':callnumber', $bookInfo['callnum'], PDO::PARAM_STR);
         $stmt->bindParam(':bookTitle', $bookInfo['title'], PDO::PARAM_STR);
-        $stmt->bindParam(':bookAuthor', $bookInfo['author'], PDO::PARAM_INT);
-        $stmt->bindParam(':bookPublisher', $bookInfo['publisher'], PDO::PARAM_INT);
+        $stmt->bindParam(':bookAuthor', $authorId, PDO::PARAM_INT);
+        $stmt->bindParam(':bookPublisher', $publisherId, PDO::PARAM_INT);
         $stmt->bindParam(':bookCopyright', $bookInfo['copyright'], PDO::PARAM_INT);
 
         $stmt->execute();
 
-        return $pdo->lastInsertId();
+        $bookInfoId = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $bookInfoId['bookInfoId'];
 
     }
 
-    function insertBook($pdo, $bookInfoId): int
+    function insertBook($pdo, $bookInfoId, $statusId): int
     {
         $sql = 'CALL insertBook(:InfoId, :statusId)';
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':InfoId', $bookInfoId, PDO::PARAM_INT);
-        $stmt->bindParam(':statusId', 1, PDO::PARAM_INT);
+        $stmt->bindParam(':statusId', $statusId, PDO::PARAM_INT);
 
         $stmt->execute();
 
@@ -52,14 +62,17 @@
         try{
             $pdo->beginTransaction();
 
-            $bookInfoId = insertBookDetails($pdo, $bookInfo);
+            $authorId = getAuthorId($pdo, $bookInfo['author']);
+            $publisherId = getPublisherId($pdo, $bookInfo['publisher']);
+
+            $bookInfoId = insertBookDetails($pdo, $bookInfo, $authorId, $publisherId);
 
             if(!$bookInfoId){
                 $pdo->rollBack();
                 return 'Aborted';
             }
 
-            insertBook($pdo, $bookInfoId);
+            insertBook($pdo, $bookInfoId, 1);
             $pdo->commit();
         }catch(\PDOException $e){
             $pdo->rollBack();
@@ -81,20 +94,6 @@
         }else{
             return 'Some error occurred';
         }
-    }
-
-    function getAllPublishers($pdo){
-        $sql = 'CALL getAllPublishers()';
-        $stmt = $pdo->query($sql);
-        $publishers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $publishers;
-    }
-
-    function getAllAuthors($pdo){
-        $sql = 'CALL getAllAuthors()';
-        $stmt = $pdo->query($sql);
-        $authors = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $authors;
     }
 
 ?>
