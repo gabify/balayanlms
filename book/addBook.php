@@ -1,8 +1,29 @@
 <?php
+    $bookInfo = ['acccessnum'=>'','callnum'=>'','title'=>'','publisher'=>'','author'=>'','copyright'=>''];
+    
+    if(isset($_POST['addBook'])){
+        $bookInfo['accessnum'] = htmlspecialchars($_POST['accessnum']);
+        $bookInfo['callnum'] = htmlspecialchars($_POST['callnum']);
+        $bookInfo['title'] = htmlspecialchars($_POST['title']);
+        $bookInfo['publisher'] = htmlspecialchars($_POST['publisher']);
+        $bookInfo['author'] = htmlspecialchars($_POST['author']);
+        $bookInfo['copyright'] = htmlspecialchars($_POST['copyright']);
 
-$publishers = getAllPublishers($pdo);
-$authors = getAllAuthors($pdo);
-
+        if(newBookTransact($pdo, $bookInfo) == 'success'){
+            $_SESSION['status'] = 'ok';
+            $_SESSION['statusIcon'] = 'success';
+            $_SESSION['statusTitle'] = 'Operation Successful!';
+            $_SESSION['statusText'] = 'A new book has been added to the collection!';
+            //Not working, will change later
+            header('Location: '.$_SERVER['REQUEST_URI']);
+            die();
+        }else{
+            $_SESSION['status'] = 'failed';
+            $_SESSION['statusIcon'] = 'error';
+            $_SESSION['statusTitle'] = 'Operation Failed!';
+            $_SESSION['statusText'] = 'An error occured. Please try again later!';
+        }
+    }
 ?>
 
 <!-- Modal -->
@@ -14,7 +35,7 @@ $authors = getAllAuthors($pdo);
     tabindex="-1" 
     aria-labelledby="staticBackdropLabel" 
     aria-hidden="true">
-    <form action="">
+    <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" class="needs-validation g-3">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
             <div class="modal-header">
@@ -30,7 +51,7 @@ $authors = getAllAuthors($pdo);
                     <div class="row my-2">
                         <div class="col col-lg-6">
                             <div class="input-group mb-3">
-                                <span class="input-group-text" id="acnum">Accession Number</span>
+                                <span class="input-group-text" id="forAccessNum">Accession Number</span>
                                 <input 
                                     type="text" 
                                     class="form-control" 
@@ -38,12 +59,16 @@ $authors = getAllAuthors($pdo);
                                     aria-label="Accession Number" 
                                     aria-describedby="basic-addon1"
                                     id="accessnum"
-                                    name="accessnum">
+                                    name="accessnum"
+                                    required>
+                                    <div class="invalid-feedback">
+                                        Please provide a valid Accession Number!
+                                    </div>
                             </div>
                         </div>
                         <div class="col col-lg-6">
                             <div class="input-group mb-3">
-                                <span class="input-group-text" id="callnum">Call Number</span>
+                                <span class="input-group-text" id="forCallNum">Call Number</span>
                                 <input 
                                     type="text" 
                                     class="form-control" 
@@ -51,7 +76,8 @@ $authors = getAllAuthors($pdo);
                                     aria-label="Accession Number" 
                                     aria-describedby="basic-addon1"
                                     id="callnum"
-                                    name="callnum">
+                                    name="callnum"
+                                    required>
                             </div>
                         </div>
                     </div>
@@ -62,57 +88,52 @@ $authors = getAllAuthors($pdo);
                                 <textarea class="form-control" 
                                     aria-label="With textarea"
                                     id="title"
-                                    name="title">
+                                    name="title"
+                                    required>
                                 </textarea>
                             </div>
                         </div>
                     </div>
                     <div class="row my-3">
-                        <div class="col col-6">
-                            <div class="input-group">
-                                <select 
-                                    class="form-select" 
+                        <div class="col col-lg-6">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="forPublisher">Publisher</span>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    placeholder="...." 
+                                    aria-label="Publisher" 
+                                    aria-describedby="basic-addon1"
                                     id="publisher"
-                                    name="publisher" 
-                                    aria-label="Publisher selection">
-                                    <option selected>Choose Publisher..</option>
-                                    <?php foreach($publishers as $publisher):?>
-                                        <option value="<?php echo htmlspecialchars($publisher['id']);?>">
-                                            <?php echo htmlspecialchars($publisher['publisherName']);?>
-                                        </option>
-                                    <?php endforeach;?>
-                                </select>
-                                <button 
-                                    class="btn btn-outline-secondary" 
-                                    type="button"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#newPublisher">
-                                        Add Publisher
-                                </button>
+                                    name="publisher"
+                                    required>
+                                    <div class="invalid-feedback">
+                                        Please provide a valid Publisher!
+                                    </div>
                             </div>
                         </div>
-                        <div class="col col-6">
-                            <div class="input-group">
-                                <select 
-                                    class="form-select" 
+                        <div class="col col-lg-6">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="forAuthor">Author</span>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    placeholder="...." 
+                                    aria-label="Publisher" 
+                                    aria-describedby="basic-addon1"
                                     id="author"
-                                    name="author" 
-                                    aria-label="Author selection">
-                                    <option selected>Choose Authors..</option>
-                                    <?php foreach($authors as $author):?>
-                                        <option value="<?php echo htmlspecialchars($author['id']);?>">
-                                            <?php echo htmlspecialchars($author['authorName']);?>
-                                        </option>
-                                    <?php endforeach;?>
-                                </select>
-                                <button class="btn btn-outline-secondary" type="button">Add Author</button>
+                                    name="author"
+                                    required>
+                                    <div class="invalid-feedback">
+                                        Please provide a valid Author!
+                                    </div>
                             </div>
                         </div>
                     </div>
                     <div class="row my-2">
                         <div class="col col-lg-6">
                             <div class="input-group mb-3">
-                                <span class="input-group-text" id="acnum">Copyright</span>
+                                <span class="input-group-text" id="acnum">Copyright Year</span>
                                 <input 
                                     type="text" 
                                     class="form-control" 
@@ -120,7 +141,11 @@ $authors = getAllAuthors($pdo);
                                     aria-label="Accession Number" 
                                     aria-describedby="basic-addon1"
                                     id="copyright"
-                                    name="copyright">
+                                    name="copyright"
+                                    required>
+                                    <div class="invalid-feedback">
+                                        Please provide a valid Copyright Year!
+                                    </div>
                             </div>
                         </div>
                         <div class="col col-lg-6">
@@ -150,13 +175,9 @@ $authors = getAllAuthors($pdo);
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger">Confirm</button>
+                <button type="submit" class="btn btn-danger" name="addBook" id="addBook">Confirm</button>
             </div>
         </div>
     </form>
 </div>
-
-
-<!-- Modal for Adding new publisher -->
-<?php include '../balayanlms/book/addNewPublisher.php'; ?>
 
