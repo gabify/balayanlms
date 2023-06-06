@@ -84,9 +84,12 @@
     }
 
     //Get all books
-    function getAllBooks($pdo){
-        $sql = 'CALL getAllBooks';
-        $stmt = $pdo->query($sql);
+    function getAllBooks($pdo, $offset, $limit){
+        $sql = 'CALL getAllBooks(:opset, :recordPerPage)';
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':opset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':recordPerPage', $limit, PDO::PARAM_INT);
+        $stmt->execute();
         $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if($books){
@@ -94,6 +97,16 @@
         }else{
             return 'Some error occurred';
         }
+    }
+
+    //Get total number of pages in pagination
+    function getTotalPages($pdo, $total_records_per_page){
+        $sql = 'SELECT COUNT(*) AS totalRecords FROM books';
+        $stmt = $pdo->query($sql);
+        $totalRecords = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $totalPages = ceil($totalRecords['totalRecords']/$total_records_per_page);
+        return $totalPages;
     }
 
 ?>

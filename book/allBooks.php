@@ -1,10 +1,24 @@
 <?php 
-session_start();
+    session_start();
 
-$pdo = require '/xampp/htdocs/balayanlms/configuration/connect.php';
-require '../balayanlms/book/bookHandler.php';
+    $pdo = require '/xampp/htdocs/balayanlms/configuration/connect.php';
+    require '../balayanlms/book/bookHandler.php';
 
-$books = getAllBooks($pdo);
+    $page_no = 1;
+    $total_record_per_page = 10;
+    $totalPages = getTotalPages($pdo, $total_record_per_page);
+
+    if(isset($_GET['page_no'])){
+        $page_no = $_GET['page_no'];
+        // check if the page number is not greater than total page
+        // If greater than, show null result
+    }
+
+    $offset = ($page_no - 1) * $total_record_per_page;
+    $previous_page = $page_no - 1;
+    $next_page = $page_no + 1;
+
+    $books = getAllBooks($pdo, $offset, $total_record_per_page);
 
 ?>
 <div class="container-fluid mt-4 px-4">
@@ -48,10 +62,10 @@ $books = getAllBooks($pdo);
                     Show 
                     <form action="" class="d-inline-block mx-1">
                         <select class="form-select" aria-label="Default select example">
-                            <option selected>0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
+                            <option selected><?php echo $page_no;?></option>
+                            <?php for($page = $page_no + 1; $page<= $totalPages; $page++):?>
+                                <option value="<?php echo $page;?>"><?php echo $page;?></option>
+                            <?php endfor;?>
                         </select>
                     </form>
                     Entries
@@ -111,7 +125,7 @@ $books = getAllBooks($pdo);
                     <div class="col-12 d-flex justify-content-between">
                         <div class="col col-4">
                             <div class="my-1">
-                                Showing 0 out of 200 entries
+                                Showing <?php echo $page_no;?> out of <?php echo $totalPages;?> entries
                             </div>
                         </div>
                         <div class="col col-4">
