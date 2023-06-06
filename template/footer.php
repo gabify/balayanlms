@@ -11,7 +11,7 @@
             Swal.fire({
                 icon: '<?php echo $_SESSION['statusIcon'];?>',
                 title: '<b><?php echo $_SESSION['statusTitle'];?></b>',
-                text: '<?php echo $_SESSION['statusText'];?>',
+                text: '<?php echo $_SESSION['statusText'];?>'
             })
         </script>
         <?php 
@@ -21,6 +21,22 @@
             unset($_SESSION['statusText']);
         ?>
     <?php endif;?>
+
+    <script>
+        function toDelete(){
+            Swal.fire({
+                icon: 'warning',
+                title: '<b>Are you sure?</b>',
+                text: "You won't be able to revert this!",
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+
+                // Will add delete query
+            })
+        }
+    </script>
 
     </body>
 </html>
