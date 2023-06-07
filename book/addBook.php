@@ -14,7 +14,7 @@
             $_SESSION['statusIcon'] = 'success';
             $_SESSION['statusTitle'] = 'Operation Successful!';
             $_SESSION['statusText'] = 'A new book has been added to the collection!';
-            //Not working, will change later
+            //Needs to reload the table after insert, still figuring out hoow to do it.
             header('Location: '.$_SERVER['REQUEST_URI']);
             die();
         }else{

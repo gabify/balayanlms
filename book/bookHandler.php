@@ -101,12 +101,24 @@
 
     //Get total number of pages in pagination
     function getTotalPages($pdo, $total_records_per_page){
-        $sql = 'SELECT COUNT(*) AS totalRecords FROM books';
+        $sql = 'SELECT COUNT(*) AS totalRecords FROM books WHERE isDeleted = 0';
         $stmt = $pdo->query($sql);
         $totalRecords = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $totalPages = ceil($totalRecords['totalRecords']/$total_records_per_page);
         return $totalPages;
     }
+
+    //Not totally delete a book
+    function notTotalDelete($pdo, $id){
+        $sql = 'CALL notTotalDelete(:id)';
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result['result'];
+    }   
 
 ?>
