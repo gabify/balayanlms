@@ -99,6 +99,29 @@
         }
     }
 
+    //Get one book
+    function getBook($pdo, $id){
+        $sql = 'CALL getBook(:id)';
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $book = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($book){
+            return $book;
+        }else{
+            return 'deleted';
+        }
+    }
+
+    //get status
+    function getStatus($pdo){
+        $sql = 'CALL getStatus()';
+        $stmt = $pdo->query($sql);
+        $stats = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stats;
+    }
+
     //Get total number of pages in pagination
     function getTotalPages($pdo, $total_records_per_page){
         $sql = 'SELECT COUNT(*) AS totalRecords FROM books WHERE isDeleted = 0';
@@ -107,6 +130,49 @@
 
         $totalPages = ceil($totalRecords['totalRecords']/$total_records_per_page);
         return $totalPages;
+    }
+
+    //Update Book
+    function updateBookDetails($pdo, $bookInfo, $authorId, $publisherId){
+        $sql = 'CALL updateBookDetails(:callnumber, :bookTitle, :bookAuthor, :bookPublisher, :bookCopyright, :stat, :id)';
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':callnumber', $bookInfo['callnum'], PDO::PARAM_STR);
+        $stmt->bindParam(':bookTitle', $bookInfo['title'], PDO::PARAM_STR);
+        $stmt->bindParam(':bookAuthor', $authorId, PDO::PARAM_INT);
+        $stmt->bindParam(':bookPublisher', $publisherId, PDO::PARAM_INT);
+        $stmt->bindParam(':bookCopyright', $bookInfo['copyright'], PDO::PARAM_INT);
+        $stmt->bindParam(':stat', $bookInfo['status'], PDO::PARAM_INT);
+        $stmt->bindParam(':id', $bookInfo['id'], PDO::PARAM_INT);
+
+        if($stmt->execute()){
+            return 'success';
+        }else{
+            return 'failed';
+        }
+        
+    }
+
+    function updateBookTransact($pdo, $bookInfo)
+    {
+        try{
+            $pdo->beginTransaction();
+
+            $authorId = getAuthorId($pdo, $bookInfo['author']);
+            $publisherId = getPublisherId($pdo, $bookInfo['publisher']);
+
+            $result = updateBookDetails($pdo, $bookInfo, $authorId, $publisherId);
+
+            if($result == 'failed'){
+                $pdo->rollBack();
+                return 'failed';
+            }
+            $pdo->commit();
+        }catch(\PDOException $e){
+            $pdo->rollBack();
+            return $e->getMessage();
+        }
+        
+        return $result;
     }
 
     //Not totally delete a book

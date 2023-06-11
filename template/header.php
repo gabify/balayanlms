@@ -6,6 +6,7 @@
         <link rel="stylesheet" href= "../balayanlms/node_modules/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="../balayanlms/node_modules/bootstrap-icons/font/bootstrap-icons.min.css">
         <link rel="stylesheet" href="../balayanlms/template/style.css">
+        
         <title>Library Management System</title>
     </head>
     <body>

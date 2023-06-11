@@ -53,3 +53,24 @@
     width: 100%;
     margin: 80px 20px;
 }
+
+/* Add book styles */
+#addBook{
+    max-width: 750px;
+}
+
+
+/* Book Not found styles */
+#error404{
+    font-size: 10vw;
+}
+.sadFace{
+    font-size: 13vw;
+}
+
+/* View Book */
+.book-cover{
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+}
