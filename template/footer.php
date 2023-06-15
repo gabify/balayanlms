@@ -2,6 +2,7 @@
             Copyright &copy;2023 <a href="#" class="text-decoration-none">Gabify&#128020</a>
         </footer>
         <script src="../balayanlms/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../balayanlms/node_modules/jquery/dist/jquery.min.js"></script>
         <script src="../balayanlms/node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
         <script src="../balayanlms/book/deleteBook.js"></script>
 

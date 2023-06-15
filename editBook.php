@@ -15,11 +15,11 @@
         $bookInfo['accessnum'] = htmlspecialchars($book['accessnum']);
         $bookInfo['callnum'] = htmlspecialchars($book['callnum']);
         $bookInfo['title'] = htmlspecialchars($book['title']);
-        $bookInfo['author'] = htmlspecialchars($book['authorName']);
-        $bookInfo['publisher'] = htmlspecialchars($book['publisherName']);
+        $bookInfo['author'] = htmlspecialchars($book['author_name']);
+        $bookInfo['publisher'] = htmlspecialchars($book['publisher_name']);
         $bookInfo['copyright'] = htmlspecialchars($book['copyright']);
         $bookInfo['copy'] = htmlspecialchars($book['copy']);
-        $bookInfo['status'] = htmlspecialchars($book['stat']);
+        $bookInfo['status'] = htmlspecialchars($book['stat_value']);
     }
 
     if(isset($_POST['updateBook'])){
@@ -180,7 +180,7 @@
                                                     </option>
                                                 <?php else:?>
                                                     <option value="<?php echo htmlspecialchars($stat['id']);?>">
-                                                        <?php echo htmlspecialchars($stat['stat']);?>
+                                                        <?php echo htmlspecialchars($stat['stat_value']);?>
                                                     </option>
                                                 <?php endif;?>
                                             <?php endforeach;?>

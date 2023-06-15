@@ -3,8 +3,7 @@
     $pdo = require '../balayanlms/configuration/connect.php';
     require '../balayanlms/book/bookHandler.php';
 
-    $bookInfo = ['acccessnum'=>'','callnum'=>'','title'=>'','publisher'=>'','author'=>'','copyright'=>''];
-    
+    $bookInfo = ['accessnum'=>'','callnum'=>'','title'=>'','publisher'=>'','author'=>'','copyright'=>''];
     if(isset($_POST['addBook'])){
         $bookInfo['accessnum'] = htmlspecialchars($_POST['accessnum']);
         $bookInfo['callnum'] = htmlspecialchars($_POST['callnum']);
@@ -47,6 +46,7 @@
                             aria-describedby="basic-addon1"
                             id="accessnum"
                             name="accessnum"
+                            value="<?php echo $bookInfo['accessnum'];?>"
                             required>
                             <div class="invalid-feedback">
                                 Please provide a valid Accession Number!
@@ -60,10 +60,11 @@
                             type="text" 
                             class="form-control" 
                             placeholder="...." 
-                            aria-label="Accession Number" 
+                            aria-label="Call Number" 
                             aria-describedby="basic-addon1"
                             id="callnum"
                             name="callnum"
+                            value="<?php echo $bookInfo['callnum'];?>"
                             required>
                     </div>
                 </div>
@@ -77,6 +78,7 @@
                             id="title"
                             name="title"
                             required>
+                            <?php echo $bookInfo['accessnum'];?>
                         </textarea>
                     </div>
                 </div>
@@ -93,6 +95,7 @@
                             aria-describedby="basic-addon1"
                             id="publisher"
                             name="publisher"
+                            value="<?php echo $bookInfo['accessnum'];?>"
                             required>
                             <div class="invalid-feedback">
                                 Please provide a valid Publisher!
@@ -106,10 +109,11 @@
                             type="text" 
                             class="form-control" 
                             placeholder="...." 
-                            aria-label="Publisher" 
+                            aria-label="Author" 
                             aria-describedby="basic-addon1"
                             id="author"
                             name="author"
+                            value="<?php echo $bookInfo['accessnum'];?>"
                             required>
                             <div class="invalid-feedback">
                                 Please provide a valid Author!
@@ -120,15 +124,16 @@
             <div class="row my-2">
                 <div class="col col-lg-6">
                     <div class="input-group mb-3">
-                        <span class="input-group-text" id="acnum">Copyright Year</span>
+                        <span class="input-group-text" id="forcopyright">Copyright Year</span>
                         <input 
                             type="text" 
                             class="form-control" 
                             placeholder="199x" 
-                            aria-label="Accession Number" 
+                            aria-label="Copyright Year" 
                             aria-describedby="basic-addon1"
                             id="copyright"
                             name="copyright"
+                            value="<?php echo $bookInfo['accessnum'];?>"
                             required>
                             <div class="invalid-feedback">
                                 Please provide a valid Copyright Year!
@@ -137,11 +142,11 @@
                 </div>
                 <div class="col col-lg-6">
                     <div class="input-group mb-3">
-                        <span class="input-group-text" id="accessnum">Copy</span>
+                        <span class="input-group-text" id="forcopy">Copy</span>
                         <input 
                             type="text" 
                             class="form-control"  
-                            aria-label="Accession Number" 
+                            aria-label="Copy" 
                             aria-describedby="basic-addon1"
                             id="copy"
                             name="copy"
@@ -154,7 +159,7 @@
                 <div class="col col-12">
                     <div class="input-group mb-3">
                         <input type="file" class="form-control" id="bookCover">
-                        <label class="input-group-text" for="inputGroupFile02">Upload</label>
+                        <label class="input-group-text" for="bookCover">Upload</label>
                     </div>
                 </div>
             </div>

@@ -2,10 +2,10 @@
 
     //Insert Author
     function getAuthorId($pdo, $author)
-    {
-        $sql = 'CALL getAuthor(:author)';
+    {   
+        $sql = 'CALL getAuthor(:authorName)';
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':author', $author, PDO::PARAM_STR);
+        $stmt->bindParam(':authorName', $author, PDO::PARAM_STR);
         $stmt->execute();
 
         $author = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -15,9 +15,9 @@
 
     //Insert Publisher
     function getPublisherId($pdo, $publisher){
-        $sql = 'CALL getPublisher(:publisher)';
+        $sql = 'CALL getPublisher(:publisherName)';
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':publisher', $publisher, PDO::PARAM_STR);
+        $stmt->bindParam(':publisherName', $publisher, PDO::PARAM_STR);
         $stmt->execute();
 
         $publisher = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -27,9 +27,8 @@
 
     function insertBookDetails($pdo, $bookInfo, $authorId, $publisherId): int
     {
-        $sql = 'CALL insertBookInfo(:accessnumber, :callnumber, :bookTitle, :bookAuthor, :bookPublisher, :bookCopyright)';
+        $sql = 'CALL insertBookDetails(:callnumber, :bookTitle, :bookAuthor, :bookPublisher, :bookCopyright)';
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':accessnumber', $bookInfo['accessnum'], PDO::PARAM_INT);
         $stmt->bindParam(':callnumber', $bookInfo['callnum'], PDO::PARAM_STR);
         $stmt->bindParam(':bookTitle', $bookInfo['title'], PDO::PARAM_STR);
         $stmt->bindParam(':bookAuthor', $authorId, PDO::PARAM_INT);
@@ -46,10 +45,11 @@
 
     function insertBook($pdo, $bookInfoId, $statusId): int
     {
-        $sql = 'CALL insertBook(:InfoId, :statusId)';
-        $stmt = $pdo->prepare($sql);
+        $now = date("Y-m-d H:i:s");
+        $stmt = $pdo->prepare('CALL insertBook(:InfoId, :statusId, :createdAt)');
         $stmt->bindParam(':InfoId', $bookInfoId, PDO::PARAM_INT);
         $stmt->bindParam(':statusId', $statusId, PDO::PARAM_INT);
+        $stmt->bindParam(':createdAt', $now, PDO::PARAM_STR); //Timestamp not inserting
 
         $stmt->execute();
 
@@ -85,10 +85,9 @@
 
     //Get all books
     function getAllBooks($pdo, $offset, $limit){
-        $sql = 'CALL getAllBooks(:opset, :recordPerPage)';
-        $stmt = $pdo->prepare($sql);
+        $stmt = $pdo->prepare('CALL getAllBooks(:opset, :pages)');
         $stmt->bindParam(':opset', $offset, PDO::PARAM_INT);
-        $stmt->bindParam(':recordPerPage', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':pages', $limit, PDO::PARAM_INT);
         $stmt->execute();
         $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -101,8 +100,7 @@
 
     //Get one book
     function getBook($pdo, $id){
-        $sql = 'CALL getBook(:id)';
-        $stmt = $pdo->prepare($sql);
+        $stmt = $pdo->prepare('CALL getBook(:id)');
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         $book = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -116,16 +114,14 @@
 
     //get status
     function getStatus($pdo){
-        $sql = 'CALL getStatus()';
-        $stmt = $pdo->query($sql);
+        $stmt = $pdo->query('CALL getStatus()');
         $stats = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $stats;
     }
 
     //Get total number of pages in pagination
     function getTotalPages($pdo, $total_records_per_page){
-        $sql = 'SELECT COUNT(*) AS totalRecords FROM books WHERE isDeleted = 0';
-        $stmt = $pdo->query($sql);
+        $stmt = $pdo->query("SELECT COUNT(*) AS totalRecords FROM books WHERE is_deleted = 0");
         $totalRecords = $stmt->fetch(PDO::FETCH_ASSOC);
 
         $totalPages = ceil($totalRecords['totalRecords']/$total_records_per_page);
@@ -134,8 +130,7 @@
 
     //Update Book
     function updateBookDetails($pdo, $bookInfo, $authorId, $publisherId){
-        $sql = 'CALL updateBookDetails(:callnumber, :bookTitle, :bookAuthor, :bookPublisher, :bookCopyright, :stat, :id)';
-        $stmt = $pdo->prepare($sql);
+        $stmt = $pdo->prepare('CALL updateBookDetails(:callnumber, :bookTitle, :bookAuthor, :bookPublisher, :bookCopyright, :stat, :id)');
         $stmt->bindParam(':callnumber', $bookInfo['callnum'], PDO::PARAM_STR);
         $stmt->bindParam(':bookTitle', $bookInfo['title'], PDO::PARAM_STR);
         $stmt->bindParam(':bookAuthor', $authorId, PDO::PARAM_INT);
@@ -177,8 +172,7 @@
 
     //Not totally delete a book
     function notTotalDelete($pdo, $id){
-        $sql = 'CALL notTotalDelete(:id)';
-        $stmt = $pdo->prepare($sql);
+        $stmt = $pdo->prepare('CALL notTotalDelete(:id)');
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 

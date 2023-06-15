@@ -12,9 +12,6 @@
     id="tableViewContent" role="tabpanel" 
     aria-labelledby="home-tab" 
     tabindex="0">
-    <?php if($page_no > $totalPages):?>
-        <h1 class="text-center display-3 py-5">No Result Found</h1>
-    <?php else:?>
         <div class="row my-3 mx-2 d-flex justify-content-between">
             <div class="col-3">
                 <h3 class="display-6">Books</h3>
@@ -30,16 +27,19 @@
                         </a>
                     </div>
                     <div class="col-8">
-                        <form class="d-flex justify-content-end" role="search">
+                        <form class="d-flex justify-content-end" role="search" method="GET" action="<?php echo $_SERVER['PHP_SELF'];?>">
                             <div class="input-group mb-3">
                                 <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                <button class="btn btn-outline-secondary" type="submit" id="search" name="search">Search</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+        <?php if($page_no > $totalPages):?>
+            <h1 class="text-center display-3 py-5">No Result Found</h1>
+        <?php else:?>
         <table class="table table-hover table-bordered">
             <thead class="">
                 <tr class="text-center fs-5">
@@ -51,7 +51,7 @@
             </thead>
             <tbody class="table-group-divider">
                 <?php foreach($books as $book):?>
-                    <tr class="text-center">
+                    <tr class="text-center" id="<?php echo htmlspecialchars($book['id']);?>">
                         <th scope="row"><?php echo htmlspecialchars($book['accessnum']);?></th>
                         <td><?php echo htmlspecialchars($book['callnum']);?></td>
                         <td class="w-50"><?php echo htmlspecialchars($book['title']);?></td>
@@ -64,7 +64,7 @@
                             </a>
                             <button 
                                 class="btn"
-                                onclick="deleteBook()">
+                                onclick="deleteBook(<?php echo htmlspecialchars($book['id']);?>)">
                                 <i class="bi-trash3-fill fs-4 text-danger"></i>
                             </button>
                         </td>

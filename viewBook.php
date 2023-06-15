@@ -23,11 +23,11 @@
                         <p>Accession Number: <?php echo htmlspecialchars($book['accessnum']);?></p>
                         <p>Call Number: <?php echo htmlspecialchars($book['callnum']);?></p>
                         <p>Title: <?php echo htmlspecialchars($book['title']);?></p>
-                        <p>Author: <?php echo htmlspecialchars($book['authorName']);?></p>
-                        <p>Publisher: <?php echo htmlspecialchars($book['publisherName']);?></p>
+                        <p>Author: <?php echo htmlspecialchars($book['author_name']);?></p>
+                        <p>Publisher: <?php echo htmlspecialchars($book['publisher_name']);?></p>
                         <p>Copyright Year: <?php echo htmlspecialchars($book['copyright']);?></p>
                         <p>Copy: <?php echo htmlspecialchars($book['copy']);?></p>
-                        <p>Status: <?php echo htmlspecialchars($book['stat']);?></p>
+                        <p>Status: <?php echo htmlspecialchars($book['stat_value']);?></p>
                         <div class="d-inline-block">
                             <a href="bookDashboard.php" class="btn btn-secondary" role="button">Back</a>
                             <a href="editBook.php?id=<?php echo htmlspecialchars($book['id']);?>" class="btn btn-warning">
