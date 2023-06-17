@@ -1,4 +1,3 @@
-//Something is wrong with delete, still dont know the cause.
 const deleteBook = (id) =>{
     Swal.fire({
         title: 'Are you sure?',
@@ -28,6 +27,32 @@ const deleteBook = (id) =>{
             'error'
           )
       })
+}
+
+const deleteBookOnView = (id) =>{
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "This will remove this book in the collection.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#b33939',
+    cancelButtonColor: '#4f4f4f',
+    confirmButtonText: 'Yes'
+  }).then((result)=>{
+    if (result.isConfirmed) {
+      return partialDelete(id);
+    }
+  }).then((result)=>{
+    if(result == 'success'){  
+      window.location.replace("../balayanlms/bookDashboard.php");
+    }
+  }).catch((error) =>{
+    Swal.fire(
+        'Error!',
+        error.message,
+        'error'
+      )
+  })
 }
 
 const partialDelete = async (id) =>{

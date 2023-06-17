@@ -1,42 +1,8 @@
-<?php
-    $total_record_per_page = 10;
-    $totalPages = getTotalPages($pdo, $total_record_per_page);
-    $offset = ($page_no - 1) * $total_record_per_page;
-    $previous_page = $page_no - 1;
-    $next_page = $page_no + 1;
-
-    $books = getAllBooks($pdo, $offset, $total_record_per_page);
-?>
 <div 
-    class="tab-pane fade show active" 
+    class="tab-pane fade show active py-3" 
     id="tableViewContent" role="tabpanel" 
     aria-labelledby="home-tab" 
     tabindex="0">
-        <div class="row my-3 mx-2 d-flex justify-content-between">
-            <div class="col-3">
-                <h3 class="display-6">Books</h3>
-            </div>
-            <div class="col-4">
-                <div class="row">
-                    <div class="col-4">
-                        <a 
-                            class="btn btn-outline-secondary fw-bold fs-6 d-inline-block"
-                            href="../balayanlms/addBook.php">
-                                Add New
-                                <i class="bi-plus fs-5 fw-bold align-middle"></i>
-                        </a>
-                    </div>
-                    <div class="col-8">
-                        <form class="d-flex justify-content-end" role="search" method="GET" action="<?php echo $_SERVER['PHP_SELF'];?>">
-                            <div class="input-group mb-3">
-                                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-secondary" type="submit" id="search" name="search">Search</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
         <?php if($page_no > $totalPages):?>
             <h1 class="text-center display-3 py-5">No Result Found</h1>
         <?php else:?>

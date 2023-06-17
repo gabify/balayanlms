@@ -98,6 +98,22 @@
         }
     }
 
+    //Get book using search
+    function getBooks($pdo, $offset, $limit, $keyword){
+        $stmt = $pdo->prepare('CALL getSearchedBooks(:opset, :pages, :keyword)');
+        $stmt->bindParam(':opset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':pages', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':keyword', $keyword, PDO::PARAM_INT);
+        $stmt->execute();
+        $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if($books){
+            return $books;
+        }else{
+            return 'Some error occurred';
+        }
+    }
+
     //Get one book
     function getBook($pdo, $id){
         $stmt = $pdo->prepare('CALL getBook(:id)');
@@ -128,6 +144,16 @@
         return $totalPages;
     }
 
+    //Get total number of pages in pagination
+    //Still ongoing need to do it faster
+    function getTotalSearchedPages($pdo, $total_records_per_page, $keyword){
+        $stmt = $pdo->query("SELECT COUNT(*) AS totalRecords FROM books WHERE is_deleted = 0");
+        $totalRecords = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $totalPages = ceil($totalRecords['totalRecords']/$total_records_per_page);
+        return $totalPages;
+    }
+
     //Update Book
     function updateBookDetails($pdo, $bookInfo, $authorId, $publisherId){
         $stmt = $pdo->prepare('CALL updateBookDetails(:callnumber, :bookTitle, :bookAuthor, :bookPublisher, :bookCopyright, :stat, :id)');
@@ -146,7 +172,7 @@
         }
         
     }
-
+    //update transaction
     function updateBookTransact($pdo, $bookInfo)
     {
         try{

@@ -33,7 +33,7 @@
                             <a href="editBook.php?id=<?php echo htmlspecialchars($book['id']);?>" class="btn btn-warning">
                                 Edit
                             </a>
-                            <button class="btn btn-danger">
+                            <button class="btn btn-danger" onclick="deleteBookOnView(<?php echo htmlspecialchars($book['id']);?>)">
                                 Delete
                             </button>
                         </div>
