@@ -43,7 +43,7 @@
     </div>
 </div>
 
-<div class="container pt-5">
+<div class="container pt-5" id="charts">
     <div class="row">
         <div class="col col-xl-4 col-lg-6 col-sm-12">
             <div class="charts">

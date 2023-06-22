@@ -1,6 +1,6 @@
 <?php
     $host = 'localhost';
-    $user = "root";
-    $pass = "";
+    $user = "gabify";
+    $pass = "talaoc.12535";
     $db = "balayanlms";
 ?>

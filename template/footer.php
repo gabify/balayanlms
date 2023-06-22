@@ -5,6 +5,8 @@
         <script src="../balayanlms/node_modules/jquery/dist/jquery.min.js"></script>
         <script src="../balayanlms/node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
         <script src="../balayanlms/book/deleteBook.js"></script>
+        <script src="../balayanlms/book/dataTable.js"></script>
+        <script src="../balayanlms/book/add_book.js"></script>
 
         <?php if(isset($_SESSION['status'])):?>
             <script>

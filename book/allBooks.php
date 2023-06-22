@@ -1,21 +1,5 @@
 <?php 
     session_start();
-
-    $pdo = require '/xampp/htdocs/balayanlms/configuration/connect.php';
-    require '../balayanlms/book/bookHandler.php';
-
-    $total_record_per_page = 10;
-    $page_no = 1;
-    $totalPages = getTotalPages($pdo, $total_record_per_page);
-    $offset = ($page_no - 1) * $total_record_per_page;
-    $previous_page = $page_no - 1;
-    $next_page = $page_no + 1;
-
-    if(isset($_GET['page_no'])){
-        $page_no = $_GET['page_no'];
-    }
-
-    $books = getAllBooks($pdo, $offset, $total_record_per_page);
 ?>
 <div class="row my-3 mt-5 mx-4 d-flex justify-content-between">
     <div class="col-3">
@@ -24,12 +8,13 @@
     <div class="col-4">
         <div class="row">
             <div class="col-4">
-                <a 
+                <button 
                     class="btn btn-outline-secondary fw-bold fs-6 d-inline-block"
-                    href="../balayanlms/addBook.php">
+                    data-bs-toggle="modal"
+                    data-bs-target="#addBook">
                         Add New
                         <i class="bi-plus fs-5 fw-bold align-middle"></i>
-                </a>
+                </button>
             </div>
             <div class="col-8">
                 <form class="d-flex justify-content-end" role="search" method="GET" action="../balayanlms/bookSearchedResult.php">
@@ -74,7 +59,15 @@
 
     <div class="tab-content px-2 pt-2" id="myTabContent">
         <!--Table View -->
-        <?php include '../balayanlms/book/bookTableView.php';?>
+        <div 
+            class="tab-pane fade mx-3 my-3 py-3 d-flex justify-content-center show active" 
+            id="tableViewContent" 
+            role="tabpanel" 
+            aria-labelledby="profile-tab" 
+            tabindex="0">
+                <?php include '../balayanlms/book/bookTable.php';?>
+                
+        </div>
         
         <!--List View -->
         <div 
@@ -88,4 +81,5 @@
         </div>
     </div>
 </div>
+<?php include '../balayanlms/book/createBook.php';?>
 
