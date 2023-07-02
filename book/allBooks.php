@@ -1,5 +1,7 @@
 <?php 
-    session_start();
+    if(!isset($_SESSION)){
+        session_start();
+    }
 ?>
 <div class="row my-3 mt-5 mx-4 d-flex justify-content-between">
     <div class="col-3">
@@ -60,12 +62,12 @@
     <div class="tab-content px-2 pt-2" id="myTabContent">
         <!--Table View -->
         <div 
-            class="tab-pane fade mx-3 my-3 py-3 d-flex justify-content-center show active" 
+            class="tab-pane fade mx-3 my-3 py-3 show active" 
             id="tableViewContent" 
             role="tabpanel" 
             aria-labelledby="profile-tab" 
             tabindex="0">
-                <?php include '../balayanlms/book/bookTable.php';?>
+            <?php include '../balayanlms/book/bookTable.php';?>
                 
         </div>
         

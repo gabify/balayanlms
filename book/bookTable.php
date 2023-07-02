@@ -1,3 +1,18 @@
+<div class="mb-2 row">
+    <div class="col-6">
+        <div class="row">
+            <div class="col-1 lead">Show</div>
+            <div class="col-2">
+                <select name="limit" id="limit" class="form-select">
+                    <option value="10" selected>10</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            <div class="col-1 lead">Books</div>
+        </div>
+    </div>
+</div>
 <table class="table table-hover table-bordered text-center" id="bookTable">
     <thead class="fs-5">
         <th scope="col">Accession Number</th>

@@ -44,6 +44,10 @@ const deleteBookOnView = (id) =>{
     }
   }).then((result)=>{
     if(result == 'success'){  
+      sessionStorage.setItem("status", "ok");
+      sessionStorage.setItem("statusIcon", "success");
+      sessionStorage.setItem("statusTitle", "Deleted!");
+      sessionStorage.setItem("statusText", "The book has been removed to the collection.");
       window.location.replace("../balayanlms/bookDashboard.php");
     }
   }).catch((error) =>{

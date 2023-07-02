@@ -19,9 +19,8 @@ const insertBook = () =>{
             text: 'A new book has been added to the collection'
         });
         //hide the modal
-        const modal = document.querySelector('#addBook');
-        const modalObj = bootstrap.Modal.getInstance(modal);
-        modalObj.hide();
+        const modal = bootstrap.Modal.getInstance(document.querySelector('#addBook'));
+        modal.hide();
         //remove text on the text field
         document.querySelector('#callnum').value = "";
         document.querySelector('#title').value = "";

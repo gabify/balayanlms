@@ -121,11 +121,7 @@
         $stmt->execute();
         $book = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if($book){
-            return $book;
-        }else{
-            return 'deleted';
-        }
+        return $book;
     }
 
     //get status

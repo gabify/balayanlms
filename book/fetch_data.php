@@ -3,6 +3,9 @@
     $pdo = require '/xampp/htdocs/balayanlms/configuration/connect.php';
     require '../book/bookHandler.php';
 
-    $books = getAllBooks($pdo, 1, 10);
-    echo json_encode($books);
+    if(isset($_GET['limit'])){
+        $limit = htmlspecialchars($_GET['limit']);
+        $books = getAllBooks($pdo, 1, $limit);
+        echo json_encode($books);
+    }
 ?>

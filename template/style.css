@@ -71,6 +71,6 @@
 /* View Book */
 .book-cover{
     width: 400px;
-    height: 400px;
     object-fit: cover;
+    margin-left: 130px;
 }
