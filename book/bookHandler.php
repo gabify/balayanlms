@@ -83,37 +83,6 @@
         return 'success';
     }
 
-    //Get all books
-    function getAllBooks($pdo, $offset, $limit){
-        $stmt = $pdo->prepare('CALL getAllBooks(:opset, :pages)');
-        $stmt->bindParam(':opset', $offset, PDO::PARAM_INT);
-        $stmt->bindParam(':pages', $limit, PDO::PARAM_INT);
-        $stmt->execute();
-        $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if($books){
-            return $books;
-        }else{
-            return 'Some error occurred';
-        }
-    }
-
-    //Get book using search
-    function getBooks($pdo, $offset, $limit, $keyword){
-        $stmt = $pdo->prepare('CALL getSearchedBooks(:opset, :pages, :keyword)');
-        $stmt->bindParam(':opset', $offset, PDO::PARAM_INT);
-        $stmt->bindParam(':pages', $limit, PDO::PARAM_INT);
-        $stmt->bindParam(':keyword', $keyword, PDO::PARAM_INT);
-        $stmt->execute();
-        $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if($books){
-            return $books;
-        }else{
-            return 'Some error occurred';
-        }
-    }
-
     //Get one book
     function getBook($pdo, $id){
         $stmt = $pdo->prepare('CALL getBook(:id)');
@@ -129,15 +98,6 @@
         $stmt = $pdo->query('CALL getStatus()');
         $stats = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $stats;
-    }
-
-    //Get total number of pages in pagination
-    function getTotalPages($pdo, $total_records_per_page){
-        $stmt = $pdo->query("SELECT COUNT(*) AS totalRecords FROM books WHERE is_deleted = 0");
-        $totalRecords = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        $totalPages = ceil($totalRecords['totalRecords']/$total_records_per_page);
-        return $totalPages;
     }
 
     //Get total number of pages in pagination

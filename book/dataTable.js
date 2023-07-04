@@ -4,16 +4,31 @@ const table = document.querySelector("#bookTable");
 //get select element
 const limit = document.querySelector('#limit');
 
+//get book search form
+const bookSearchForm = document.querySelector('#bookSearch');
+
+//page info
+const pageInfo = document.getElementById("pageInfo");
+
 //get data using fetch
-const getData = async(limit) =>{
-    const response = await fetch('../balayanlms/book/fetch_data.php?limit='+limit);
+const getData = async(limit, keyword) =>{
+    const response = await fetch('../balayanlms/book/fetch_data.php?limit='+limit+'&keyword='+keyword);
+    const result = await response.json();
+    if(result == 'Some error occurred'){
+        throw new Error("No such book exist");
+    }
+    return result;
+}
+//get total pages and total books
+const getTotal = async(limit, keyword) =>{
+    const response = await fetch('../balayanlms/book/countNumRows.php?limit='+limit+'&keyword='+keyword);
     const result = await response.json();
     return result;
 }
 
 //render to DOM
-const displayData = (limit) =>{
-    getData(limit).then((books) =>{
+const displayData = (limit, keyword) =>{
+    getData(limit, keyword).then((books) =>{
         const tbody = document.createElement("tbody");
         for(const book of books){ //for each book
             //create elements
@@ -60,7 +75,19 @@ const displayData = (limit) =>{
             tbody.appendChild(tr);
         }
         table.appendChild(tbody);
+        pageInfo.textContent = "";
+        pageInfo.textContent += "Showing "+tbody.childElementCount+" ";
     }).catch((err) =>{
+        Swal.fire(
+            'Error!',
+            err.message,
+            'error'
+          )
+    });
+    getTotal(limit, keyword).then(result =>{
+        pageInfo.textContent += "out of " + result['totalBooks']+ " Books"; //naiiwan need idebug
+        //pagination naaaaaaa!!!
+    }).catch(err=>{
         Swal.fire(
             'Error!',
             err.message,
@@ -70,10 +97,23 @@ const displayData = (limit) =>{
 }
 
 //add event listener to the table element
-table.addEventListener("onload", displayData(limit.value));
+table.addEventListener("onload", 
+    displayData(limit.value, document.getElementById("keyword").value == "" ? "null": keyword));
 limit.addEventListener("change", ()=>{
     const tbody = table.lastElementChild;
-    tbody.remove();
-    displayData(limit.value);
+    const keyword = document.getElementById("keyword").value;
+    if(document.body.contains(tbody)){
+        tbody.replaceChildren();
+    }
+    displayData(limit.value, keyword == "" ? "null": keyword);
+});
+bookSearchForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const tbody = table.lastElementChild;
+    const keyword = document.getElementById("keyword").value;
+    if(document.body.contains(tbody)){
+        tbody.replaceChildren();
+    }
+    displayData(limit.value, keyword == "" ? "null": keyword);
 });
 

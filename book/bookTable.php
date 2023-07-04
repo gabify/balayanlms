@@ -21,3 +21,14 @@
         <th scope="col">Actions</th>
     </thead>
 </table>
+<!-- Pagination -->
+<div class="d-flex justify-content-between my-2">
+    <div class="lead" id="pageInfo"></div>
+    <nav aria-label="book pagination">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="#"></a>
+            </li>
+        </ul>
+    </nav>
+</div>
