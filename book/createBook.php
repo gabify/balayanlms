@@ -1,8 +1,8 @@
 <!-- Add Book  modal -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addBook" tabindex="-1" aria-labelledby="addBook" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <form id="addForm" method="POST" class="needs-validation" novalidate>
-            <div class="modal-content">
+        <div class="modal-content">
+            <form id="addForm" method="POST" class="needs-validation" novalidate>
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Add new book</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -65,7 +65,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-danger" onsubmit="insertBook()">Confirm</button>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>

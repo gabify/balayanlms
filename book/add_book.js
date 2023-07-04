@@ -1,6 +1,7 @@
 const form = document.getElementById('addForm');
 const insertBook = () =>{
     //get all inputs
+    const limit = document.querySelector('#limit');
     const callnum = document.getElementById('callnum').value;
     const title = document.getElementById('title').value;
     const publisher = document.getElementById('publisher').value;
@@ -28,7 +29,7 @@ const insertBook = () =>{
         document.querySelector('#author').value = "";
         document.querySelector('#copyright').value = "";
         //update table
-        displayData();
+        displayData(limit.value);
     }).catch((err)=>{//If some error occured
         //display error message
         Swal.fire({

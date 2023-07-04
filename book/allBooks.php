@@ -19,7 +19,7 @@
                 </button>
             </div>
             <div class="col-8">
-                <form class="d-flex justify-content-end" role="search" method="GET" action="../balayanlms/bookSearchedResult.php">
+                <form class="d-flex justify-content-end" id="bookSearch" role="search" method="GET">
                     <div class="input-group mb-3">
                         <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="keyword" name="keyword">
                         <button class="btn btn-outline-secondary" type="submit" id="search" name="search">Search</button>
