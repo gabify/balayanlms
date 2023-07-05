@@ -1,22 +1,76 @@
+/*  General styles  */
+
 
 /*  Navbar  */
 .navbar{
     background-color: #b33939;
 }
 
-
 /*  Side Navigation     */
 .side-nav{
     height: 100%;
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding-top: 20px;
     background-color: #273c75;
 }
 
 .side-nav .nav-item{
-    padding: 10px;
+    padding-top: 15px;
+}
+
+.side-nav .nav-item .nav-link{
+    padding-left: 30px;
 }
 
 .side-nav .nav-item:hover{
     background-color: #487eb0;
+}
+
+.offcanvas-body{
+    padding: 20px 0px;
+}
+
+/*  Dashboard Styles*/
+#books{
+    background-color: #1B9CFC;
+}
+#books:hover{
+    box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.6), 0 0 8px 0 rgba(0, 0, 0, 0.5);
+}
+#theses{
+    background-color: #FD7272;
+}
+#theses:hover{
+    box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.6), 0 0 8px 0 rgba(0, 0, 0, 0.5);
+}
+#students{
+    background-color: #ffb142;
+}
+#students:hover{
+    box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.6), 0 0 8px 0 rgba(0, 0, 0, 0.5);
+}
+
+.charts{
+    width: 100%;
+    margin: 80px 20px;
+}
+
+/* Add book styles */
+#addBook{
+    max-width: 750px;
+}
+
+
+/* Book Not found styles */
+#error404{
+    font-size: 10vw;
+}
+.sadFace{
+    font-size: 13vw;
+}
+
+/* View Book */
+.book-cover{
+    width: 400px;
+    object-fit: cover;
+    margin-left: 130px;
 }
