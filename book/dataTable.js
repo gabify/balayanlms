@@ -7,12 +7,15 @@ const limit = document.querySelector('#limit');
 //get book search form
 const bookSearchForm = document.querySelector('#bookSearch');
 
+//get page number
+const page = document.querySelector('#page');
+
 //page info
 const pageInfo = document.getElementById("pageInfo");
 
 //get data using fetch
-const getData = async(limit, keyword) =>{
-    const response = await fetch('../balayanlms/book/fetch_data.php?limit='+limit+'&keyword='+keyword);
+const getData = async(limit, page, keyword) =>{
+    const response = await fetch('../balayanlms/book/fetch_data.php?limit='+limit+'&keyword='+keyword+'&page='+page);
     const result = await response.json();
     if(result == 'Some error occurred'){
         throw new Error("No such book exist");
@@ -25,12 +28,10 @@ const getTotal = async(limit, keyword) =>{
     const result = await response.json();
     return result;
 }
-
-//render to DOM
-const displayData = (limit, keyword) =>{
-    getData(limit, keyword).then((books) =>{
-        const tbody = document.createElement("tbody");
-        for(const book of books){ //for each book
+//create table
+const createTable = async(books) =>{
+    const tbody = document.createElement("tbody");
+    for(const book of books){ //for each book
             //create elements
             const tr = document.createElement("tr");
             let tds = [];
@@ -74,20 +75,84 @@ const displayData = (limit, keyword) =>{
             });
             tbody.appendChild(tr);
         }
+        return tbody;
+}
+
+//create pagination
+const createPagination = async(tbody, totalPagesAndBooks, page) =>{
+    const paginationContainer = document.querySelector('.pagination');
+    const prev = page -1;
+    const next = parseInt(page) + 1;
+    let links = [];
+    pageInfo.textContent = "Showing "+tbody.childElementCount+" out of "+totalPagesAndBooks['totalBooks']+" Books"
+    const prevLi = document.createElement('li');
+    const preva = document.createElement('a');
+    prevLi.classList.add("page-item");
+    if(page == 1){
+        prevLi.classList.add("disabled");
+    }
+    preva.classList.add("page-link");
+    preva.classList.add("text-dark");
+    preva.setAttribute("href", "../balayanlms/bookDashboard.php?page="+prev);
+    preva.textContent = 'Previous';
+    prevLi.appendChild(preva);
+    links[0] = prevLi;
+    for(let i = 1; i<=totalPagesAndBooks['totalPages']; i++){
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        li.classList.add("page-item");
+        a.classList.add("page-link");
+        a.classList.add("text-dark");
+        a.textContent = i;
+        if(i == page){
+            a.classList.add("active")
+            a.classList.remove("text-dark")
+        }else{
+            a.setAttribute("href", "../balayanlms/bookDashboard.php?page="+i);
+        }
+        li.appendChild(a);
+        links[i] = li;
+    }
+    const nextLi = document.createElement('li');
+    const nexta = document.createElement('a');
+    nextLi.classList.add("page-item");
+    if(page == totalPagesAndBooks['totalPages']){
+        nextLi.classList.add("disabled");
+    }
+    nexta.classList.add("page-link");
+    nexta.classList.add("text-dark");
+    nexta.setAttribute("href", "../balayanlms/bookDashboard.php?page="+next);
+    nexta.textContent = 'Next';
+    nextLi.appendChild(nexta);
+    links[links.length+1] = nextLi;
+
+    if(paginationContainer.hasChildNodes()){
+        while(paginationContainer.firstChild){
+            paginationContainer.removeChild(paginationContainer.firstChild);
+        }
+    }
+    links.forEach(link => paginationContainer.appendChild(link))
+    if(page > 1){
+        const limit = document.querySelector('#limit');
+        limit.disabled = true;
+    }
+}
+
+// do all the stuffs
+const displayData = async(limit, page, keyword) =>{
+    const books = await getData(limit, page, keyword);
+    const totalPagesAndBooks = await getTotal(limit, keyword);
+    const tbody = await createTable(books);
+    await createPagination(tbody, totalPagesAndBooks, page);
+    return tbody;
+}
+
+//render to DOM
+const renderData = (limit, page, keyword) =>{
+    displayData(limit, page, keyword)
+    .then((tbody) =>{
         table.appendChild(tbody);
-        pageInfo.textContent = "";
-        pageInfo.textContent += "Showing "+tbody.childElementCount+" ";
     }).catch((err) =>{
-        Swal.fire(
-            'Error!',
-            err.message,
-            'error'
-          )
-    });
-    getTotal(limit, keyword).then(result =>{
-        pageInfo.textContent += "out of " + result['totalBooks']+ " Books"; //naiiwan need idebug
-        //pagination naaaaaaa!!!
-    }).catch(err=>{
         Swal.fire(
             'Error!',
             err.message,
@@ -97,15 +162,15 @@ const displayData = (limit, keyword) =>{
 }
 
 //add event listener to the table element
-table.addEventListener("onload", 
-    displayData(limit.value, document.getElementById("keyword").value == "" ? "null": keyword));
+table.addEventListener("load", 
+    renderData(limit.value, page.value, document.getElementById("keyword").value == "" ? "null": keyword));
 limit.addEventListener("change", ()=>{
     const tbody = table.lastElementChild;
     const keyword = document.getElementById("keyword").value;
     if(document.body.contains(tbody)){
         tbody.replaceChildren();
     }
-    displayData(limit.value, keyword == "" ? "null": keyword);
+    renderData(limit.value, page.value, keyword == "" ? "null": keyword);
 });
 bookSearchForm.addEventListener("submit", (e)=>{
     e.preventDefault();
@@ -114,6 +179,16 @@ bookSearchForm.addEventListener("submit", (e)=>{
     if(document.body.contains(tbody)){
         tbody.replaceChildren();
     }
-    displayData(limit.value, keyword == "" ? "null": keyword);
+    renderData(limit.value, page.value, keyword == "" ? "null": keyword);
 });
+
+/* const search = document.querySelector('#keyword');
+search.addEventListener("input", (e)=>{
+    const tbody = table.lastElementChild;
+    const val = e.target.value;
+    if(document.body.contains(tbody)){
+        tbody.replaceChildren();
+    }
+    renderData(limit.value, val == "" ? "null": val);
+}); */
 

@@ -26,9 +26,6 @@
     <div class="lead" id="pageInfo"></div>
     <nav aria-label="book pagination">
         <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="#"></a>
-            </li>
         </ul>
     </nav>
 </div>

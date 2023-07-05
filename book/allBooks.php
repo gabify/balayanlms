@@ -3,33 +3,24 @@
         session_start();
     }
 ?>
-<div class="row my-3 mt-5 mx-4 d-flex justify-content-between">
-    <div class="col-3">
-        <h3 class="display-6">Books</h3>
-    </div>
-    <div class="col-4">
-        <div class="row">
-            <div class="col-4">
-                <button 
-                    class="btn btn-outline-secondary fw-bold fs-6 d-inline-block"
-                    data-bs-toggle="modal"
-                    data-bs-target="#addBook">
-                        Add New
-                        <i class="bi-plus fs-5 fw-bold align-middle"></i>
-                </button>
+<div class="my-2 mt-5 mx-4 d-flex justify-content-between">
+    <h3 class="display-6">Books</h3>
+    <div class="d-flex justify-content-between">
+        <button 
+            class="btn btn-outline-secondary fw-bold fs-6 me-3"
+            data-bs-toggle="modal"
+            data-bs-target="#addBook">
+                Add New
+        </button>
+        <form class="mt-3" id="bookSearch" role="search" method="GET">
+            <div class="input-group mb-3">
+                <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="keyword" name="keyword">
+                <button class="btn btn-outline-secondary" type="submit" id="search" name="search">Search</button>
             </div>
-            <div class="col-8">
-                <form class="d-flex justify-content-end" id="bookSearch" role="search" method="GET">
-                    <div class="input-group mb-3">
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="keyword" name="keyword">
-                        <button class="btn btn-outline-secondary" type="submit" id="search" name="search">Search</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
-<div class="container-fluid mt-4 px-4">
+<div class="container-fluid mt-1 px-4">
     <ul class="nav nav-tabs" id="optionTab" role="tablist">
         <li class="nav-item" role="presentation">
             <button 
