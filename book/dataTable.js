@@ -78,13 +78,9 @@ const createTable = async(books) =>{
         return tbody;
 }
 
-//create pagination
-const createPagination = async(tbody, totalPagesAndBooks, page) =>{
-    const paginationContainer = document.querySelector('.pagination');
+//create previous link
+const createPrev = (page) =>{
     const prev = page -1;
-    const next = parseInt(page) + 1;
-    let links = [];
-    pageInfo.textContent = "Showing "+tbody.childElementCount+" out of "+totalPagesAndBooks['totalBooks']+" Books"
     const prevLi = document.createElement('li');
     const preva = document.createElement('a');
     prevLi.classList.add("page-item");
@@ -96,23 +92,12 @@ const createPagination = async(tbody, totalPagesAndBooks, page) =>{
     preva.setAttribute("href", "../balayanlms/bookDashboard.php?page="+prev);
     preva.textContent = 'Previous';
     prevLi.appendChild(preva);
-    links[0] = prevLi;
-    for(let i = 1; i<=totalPagesAndBooks['totalPages']; i++){
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        li.classList.add("page-item");
-        a.classList.add("page-link");
-        a.classList.add("text-dark");
-        a.textContent = i;
-        if(i == page){
-            a.classList.add("active")
-            a.classList.remove("text-dark")
-        }else{
-            a.setAttribute("href", "../balayanlms/bookDashboard.php?page="+i);
-        }
-        li.appendChild(a);
-        links[i] = li;
-    }
+    return prevLi;
+}
+
+//create next link
+const createNext = (page, totalPagesAndBooks)=>{
+    const next = parseInt(page) + 1;
     const nextLi = document.createElement('li');
     const nexta = document.createElement('a');
     nextLi.classList.add("page-item");
@@ -124,7 +109,136 @@ const createPagination = async(tbody, totalPagesAndBooks, page) =>{
     nexta.setAttribute("href", "../balayanlms/bookDashboard.php?page="+next);
     nexta.textContent = 'Next';
     nextLi.appendChild(nexta);
-    links[links.length+1] = nextLi;
+    return nextLi;
+}
+
+//create pagination
+const createPagination = async(tbody, totalPagesAndBooks, page) =>{
+    pageInfo.textContent = "Showing "+tbody.childElementCount+" out of "+totalPagesAndBooks['totalBooks']+" Books"
+    const paginationContainer = document.querySelector('.pagination');
+    let links = [];
+    links[0] = createPrev(page);
+    if(totalPagesAndBooks['totalPages'] <= 10){
+        for(let i = 1; i<=totalPagesAndBooks['totalPages']; i++){
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            li.classList.add("page-item");
+            a.classList.add("page-link");
+            a.classList.add("text-dark");
+            a.textContent = i;
+            if(i == page){
+                a.classList.add("active")
+                a.classList.remove("text-dark")
+            }else{
+                a.setAttribute("href", "../balayanlms/bookDashboard.php?page="+i);
+            }
+            li.appendChild(a);
+            links[i] = li;
+        }
+    }else if(totalPagesAndBooks['totalPages'] > 10){
+        if(page <= 4){
+            for(let i = 1; i<8; i++){
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                li.classList.add("page-item");
+                a.classList.add("page-link");
+                a.classList.add("text-dark");
+                a.textContent = i;
+                if(i == page){
+                    a.classList.add("active")
+                    a.classList.remove("text-dark")
+                }else{
+                    a.setAttribute("href", "../balayanlms/bookDashboard.php?page="+i);
+                }
+                li.appendChild(a);
+                links[i] = li;
+            }
+            const inBetween = links[1];
+            const secondToLast = links[1];
+            const secondToLastLink = totalPagesAndBooks['totalPages'] - 1;
+            const last = links[1];
+            inBetween.firstChild.removeAttribute("href");
+            inBetween.firstChild.textContent = "...";
+            secondToLast.firstChild.href = "../balayanlms/bookDashboard.php?page="+secondToLastLink;
+            secondToLast.firstChild.textContent = secondToLastLink
+            last.firstChild.href = "../balayanlms/bookDashboard.php?page="+totalPagesAndBooks['totalPages'];
+            last.firstChild.textContent = totalPagesAndBooks['totalPages'];
+            links[8] = inBetween;
+            links[9] = secondToLast;
+            links[10] = last;
+            
+        }else if(page > 4 && page < totalPagesAndBooks['totalPages'] -4){
+            const inBetween = links[1];
+            inBetween.firstChild.removeAttribute("href");
+            inBetween.firstChild.textContent = "...";
+            const first = links[0];
+            const second = links[0];
+            first.firstChild.href = "../balayanlms/bookDashboard.php?page="+ 1;
+            first.firstChild.textContent = "1";
+            second.firstChild.href = "../balayanlms/bookDashboard.php?page="+ 2;
+            second.firstChild.textContent = "2";
+            links[1] = first;
+            links[2] = second;
+            links[3] = inBetween;
+            for(let i = page -2; i <= page + 2; i++){
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                li.classList.add("page-item");
+                a.classList.add("page-link");
+                a.classList.add("text-dark");
+                a.textContent = i;
+                if(i == page){
+                    a.classList.add("active")
+                    a.classList.remove("text-dark")
+                }else{
+                    a.setAttribute("href", "../balayanlms/bookDashboard.php?page="+i);
+                }
+                li.appendChild(a);
+                links[i] = li;
+            }
+            const secondToLast = links[1];
+            const secondToLastLink = totalPagesAndBooks['totalPages'] - 1;
+            const last = links[1];
+            secondToLast.firstChild.href = "../balayanlms/bookDashboard.php?page="+secondToLastLink;
+            secondToLast.firstChild.textContent = secondToLastLink
+            last.firstChild.href = "../balayanlms/bookDashboard.php?page="+totalPagesAndBooks['totalPages'];
+            last.firstChild.textContent = totalPagesAndBooks['totalPages'];
+            links[9] = inBetween;
+            links[10] = secondToLast;
+            links[11] = last;
+        }else{
+            const inBetween = links[1];
+            inBetween.firstChild.removeAttribute("href");
+            inBetween.firstChild.textContent = "...";
+            const first = links[0];
+            const second = links[0];
+            first.firstChild.href = "../balayanlms/bookDashboard.php?page="+ 1;
+            first.firstChild.textContent = "1";
+            second.firstChild.href = "../balayanlms/bookDashboard.php?page="+ 2;
+            second.firstChild.textContent = "2";
+            links[1] = first;
+            links[2] = second;
+            links[3] = inBetween;
+            for(let i = totalPagesAndBooks['totalPages'] -6 ; i <= totalPagesAndBooks['totalPages']; i++){
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                li.classList.add("page-item");
+                a.classList.add("page-link");
+                a.classList.add("text-dark");
+                a.textContent = i;
+                if(i == page){
+                    a.classList.add("active")
+                    a.classList.remove("text-dark")
+                }else{
+                    a.setAttribute("href", "../balayanlms/bookDashboard.php?page="+i);
+                }
+                li.appendChild(a);
+                links[i] = li;
+            }
+        }
+    }
+    
+    links[links.length+1] = createNext(page, totalPagesAndBooks);
 
     if(paginationContainer.hasChildNodes()){
         while(paginationContainer.firstChild){
