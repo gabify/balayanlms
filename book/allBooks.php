@@ -1,6 +1,10 @@
 <?php 
+    $keyword = '';
     if(!isset($_SESSION)){
         session_start();
+    }
+    if(isset($_GET['keyword'])){
+        $keyword = htmlspecialchars($_GET['keyword']);
     }
 ?>
 <div class="my-2 mt-5 mx-4 d-flex justify-content-between">
@@ -10,12 +14,19 @@
             class="btn btn-outline-secondary fw-bold fs-6 me-3"
             data-bs-toggle="modal"
             data-bs-target="#addBook">
-                Add New
+                Add Book
         </button>
         <form class="mt-3" id="bookSearch" role="search" method="GET">
             <div class="input-group mb-3">
-                <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="keyword" name="keyword">
-                <button class="btn btn-outline-secondary" type="submit" id="search" name="search">Search</button>
+                <input 
+                    class="form-control" 
+                    type="search" 
+                    placeholder="Search" 
+                    aria-label="Search" 
+                    id="keyword" 
+                    name="keyword" 
+                    value="<?php echo htmlspecialchars($keyword);?>">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
             </div>
         </form>
     </div>
@@ -69,7 +80,7 @@
             role="tabpanel" 
             aria-labelledby="profile-tab" 
             tabindex="0">
-                Another text here
+            <?php include '../balayanlms/book/bookList.php';?>
                 
         </div>
     </div>

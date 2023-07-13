@@ -29,7 +29,13 @@ const insertBook = () =>{
         document.querySelector('#author').value = "";
         document.querySelector('#copyright').value = "";
         //update table
-        displayData(limit.value);
+        //get page number
+        const page = document.querySelector('#page');
+        //get select element
+        const limit = document.querySelector('#limit');
+        //get search keyword
+        const keyword = document.getElementById("keyword").value;
+        renderData(limit.value, page.value, keyword == "" ? "null": keyword);
     }).catch((err)=>{//If some error occured
         //display error message
         Swal.fire({

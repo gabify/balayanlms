@@ -24,8 +24,8 @@
 <!-- Pagination -->
 <div class="d-flex justify-content-between my-2">
     <div class="lead" id="pageInfo"></div>
-    <nav aria-label="book pagination">
-        <ul class="pagination">
-        </ul>
-    </nav>
+        <nav aria-label="book pagination">
+            <ul class="pagination">
+            </ul>
+        </nav>
 </div>
