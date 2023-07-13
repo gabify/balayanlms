@@ -52,7 +52,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fs-5 fw-light text-light" href="#">
+                        <a class="nav-link fs-5 fw-light text-light" href="../balayanlms/studentDashboard.php">
                             <i class="bi-person-circle"></i>
                             Students
                         </a>

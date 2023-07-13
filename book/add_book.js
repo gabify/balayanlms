@@ -1,7 +1,6 @@
 const form = document.getElementById('addForm');
 const insertBook = () =>{
     //get all inputs
-    const limit = document.querySelector('#limit');
     const callnum = document.getElementById('callnum').value;
     const title = document.getElementById('title').value;
     const publisher = document.getElementById('publisher').value;
@@ -33,9 +32,7 @@ const insertBook = () =>{
         const page = document.querySelector('#page');
         //get select element
         const limit = document.querySelector('#limit');
-        //get search keyword
-        const keyword = document.getElementById("keyword").value;
-        renderData(limit.value, page.value, keyword == "" ? "null": keyword);
+        renderData(limit.value, page.value, document.getElementById("keyword"));
     }).catch((err)=>{//If some error occured
         //display error message
         Swal.fire({
