@@ -13,14 +13,14 @@ const createTable = async(students) =>{
     for(const student of students){
         const tr = document.createElement('tr');
         let tds = [];
-        for(let i = 0; i <= 4; i++){
+        for(let i = 0; i <= 5; i++){
             const td = document.createElement('td');
             tds[i] = td;
         }
-        tds[0].textContent = student['srcode'];
-        tds[1].textContent = student['last_name'];
-        tds[2].textContent = student['first_name'];
-        tds[3].textContent = student['program'];
+        tds[1].textContent = student['srcode'];
+        tds[2].textContent = student['last_name'];
+        tds[3].textContent = student['first_name'];
+        tds[4].textContent = student['program'];
 
         tds.forEach(td=>tr.appendChild(td));
         tbody.appendChild(tr);
