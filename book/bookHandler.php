@@ -49,7 +49,7 @@
         $stmt = $pdo->prepare('CALL insertBook(:InfoId, :statusId, :createdAt)');
         $stmt->bindParam(':InfoId', $bookInfoId, PDO::PARAM_INT);
         $stmt->bindParam(':statusId', $statusId, PDO::PARAM_INT);
-        $stmt->bindParam(':createdAt', $now, PDO::PARAM_STR); //Timestamp not inserting
+        $stmt->bindParam(':createdAt', $now, PDO::PARAM_STR);
 
         $stmt->execute();
 
