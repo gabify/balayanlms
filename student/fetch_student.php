@@ -2,10 +2,11 @@
     $pdo = require '/xampp/htdocs/balayanlms/configuration/connect.php';
 
     //fettch data from db
-    function fetchStudent($pdo){
-        $stmt = $pdo->query('CALL getAllStudents()');
+    function fetchStudent($pdo, $keyword){
+        $stmt = $pdo->prepare('CALL getAllStudents(:keyword)');
+        $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+        $stmt->execute();
         $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         if($students){
             return $students;
         }else{
@@ -13,6 +14,12 @@
         }
     }
 
-    $students = fetchStudent($pdo);
+    $keyword = '%null%';
+    if(isset($_GET['keyword'])){
+        $keyword = htmlspecialchars($_GET['keyword']);
+        $keyword = '%'.$keyword.'%';
+    }
+
+    $students = fetchStudent($pdo, $keyword);
     echo json_encode($students);
 ?>

@@ -1,9 +1,12 @@
 //get reference to the table
 const table = document.querySelector('#studentTable');
+const searchForm = document.querySelector('#studentSearch');
+
+const keyword = document.querySelector('#keyword');
 
 //get data from php
-const getStudents = async() =>{
-    const response = await fetch('../balayanlms/student/fetch_student.php');
+const getStudents = async(keyword) =>{
+    const response = await fetch('../balayanlms/student/fetch_student.php?keyword='+keyword);
     const result = await response.json();
     return result;
 }
@@ -17,6 +20,7 @@ const createTable = async(students) =>{
             const td = document.createElement('td');
             tds[i] = td;
         }
+        
         tds[1].textContent = student['srcode'];
         tds[2].textContent = student['last_name'];
         tds[3].textContent = student['first_name'];
@@ -28,14 +32,15 @@ const createTable = async(students) =>{
     return tbody;
 }
 
-const displayData = async() =>{
-    const students = await getStudents();
+const displayData = async(keyword) =>{
+    const students = await getStudents(keyword);
     const table = await createTable(students);
     return table;
 }
 
-const renderData = () =>{
-    displayData().then(result =>{
+const renderData = (keyword) =>{
+    keyword = keyword.value == "" ? 'null' : keyword.value;
+    displayData(keyword).then(result =>{
         table.appendChild(result);
     }).catch(err =>{
         Swal.fire(
@@ -46,4 +51,13 @@ const renderData = () =>{
     });
 }
 
-table.addEventListener("load", renderData());
+table.addEventListener("load", renderData(keyword));
+searchForm.addEventListener("submit", e =>{
+    e.preventDefault();
+    e.stopPropagation();
+    const tbody = table.lastElementChild;
+    if(document.body.contains(tbody)){
+        tbody.replaceChildren();
+    }
+    renderData(keyword);
+});
