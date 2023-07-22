@@ -7,16 +7,31 @@
         $keyword = htmlspecialchars($_GET['keyword']);
     }
 ?>
-<div class="my-2 mt-5 mx-4 d-flex justify-content-between">
-    <h3 class="display-6">Books</h3>
+<div class="card my-4 mx-4 py-3 px-2">
     <div class="d-flex justify-content-between">
-        <button 
-            class="btn btn-outline-secondary fw-bold fs-6 me-3"
-            data-bs-toggle="modal"
-            data-bs-target="#addBook">
-                Add Book
-        </button>
-        <form class="mt-3" id="bookSearch" role="search" method="GET">
+        <h3 class="display-6">Books</h3>
+        <div class="d-flex justify-content-between">
+            <button 
+                class="btn btn-outline-secondary fw-bold"
+                data-bs-toggle="modal"
+                data-bs-target="#addBook">
+                    Add Book
+            </button>
+        </div>
+    </div>
+</div>
+<div class="card mx-4 mb-3 px-4 pt-4">
+    <div class="d-flex justify-content-between mb-2 mx-2">
+        <div class="d-flex justify-content-between">
+            <div class="lead me-1">Show</div>
+            <select name="limit" id="limit" class="form-select">
+                <option value="10" selected>10</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+            <div class="lead ms-1">Books</div>
+        </div>
+        <form id="bookSearch" role="search" method="GET">
             <div class="input-group mb-3">
                 <input 
                     class="form-control" 
@@ -30,59 +45,21 @@
             </div>
         </form>
     </div>
-</div>
-<div class="container-fluid mt-1 px-4">
-    <ul class="nav nav-tabs" id="optionTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button 
-                class="nav-link active text-dark" 
-                id="tableView" 
-                data-bs-toggle="tab" 
-                data-bs-target="#tableViewContent" 
-                type="button" role="tab" 
-                aria-controls="table-tab-pane" 
-                aria-selected="true">
-                    <i class="bi-table"></i>
-                    Table View
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button 
-                class="nav-link text-dark" 
-                id="listView" 
-                data-bs-toggle="tab" 
-                data-bs-target="#listViewContent" 
-                type="button" role="tab" 
-                aria-controls="list-tab-pane" 
-                aria-selected="true">
-                    <i class="bi-list-task"></i>
-                    List View
-            </button>
-        </li>
-    </ul>
-
-    <div class="tab-content px-2 pt-2" id="myTabContent">
-        <!--Table View -->
-        <div 
-            class="tab-pane fade mx-3 my-3 py-3 show active" 
-            id="tableViewContent" 
-            role="tabpanel" 
-            aria-labelledby="profile-tab" 
-            tabindex="0">
-            <?php include '../balayanlms/book/bookTable.php';?>
-                
-        </div>
-        
-        <!--List View -->
-        <div 
-            class="tab-pane fade" 
-            id="listViewContent" 
-            role="tabpanel" 
-            aria-labelledby="profile-tab" 
-            tabindex="0">
-            <?php include '../balayanlms/book/bookList.php';?>
-                
-        </div>
+    <table class="table table-hover table-bordered text-center" id="bookTable">
+        <thead class="fs-5">
+            <th scope="col">Accession Number</th>
+            <th scope="col">Call Number</th>
+            <th scope="col" class="w-50">Title</th>
+            <th scope="col">Actions</th>
+        </thead>
+    </table>
+    <!-- Pagination -->
+    <div class="d-flex justify-content-between my-2">
+        <div class="lead" id="pageInfo"></div>
+        <nav aria-label="book pagination">
+            <ul class="pagination">
+            </ul>
+        </nav>
     </div>
 </div>
 <?php include '../balayanlms/book/createBook.php';?>
