@@ -1,13 +1,16 @@
 //get reference to the table
 const table = document.querySelector('#studentTable');
 const searchForm = document.querySelector('#studentSearch');
-
+const limit = document.querySelector('#limit');
 const keyword = document.querySelector('#keyword');
 
 //get data from php
-const getStudents = async(keyword) =>{
-    const response = await fetch('../balayanlms/student/fetch_student.php?keyword='+keyword);
+const getStudents = async(keyword, limit) =>{
+    const response = await fetch('../balayanlms/student/fetch_student.php?keyword='+keyword+'&limit='+limit);
     const result = await response.json();
+    if(result == 'An error occured. Retrieved empty dataset'){
+        throw new Error('Sorry. No such student exist.');
+    }
     return result;
 }
 
@@ -32,15 +35,15 @@ const createTable = async(students) =>{
     return tbody;
 }
 
-const displayData = async(keyword) =>{
-    const students = await getStudents(keyword);
+const displayData = async(keyword, limit) =>{
+    const students = await getStudents(keyword, limit);
     const table = await createTable(students);
     return table;
 }
 
-const renderData = (keyword) =>{
+const renderData = (keyword, limit) =>{
     keyword = keyword.value == "" ? 'null' : keyword.value;
-    displayData(keyword).then(result =>{
+    displayData(keyword, limit).then(result =>{
         table.appendChild(result);
     }).catch(err =>{
         Swal.fire(
@@ -51,7 +54,7 @@ const renderData = (keyword) =>{
     });
 }
 
-table.addEventListener("load", renderData(keyword));
+table.addEventListener("load", renderData(keyword, limit.value));
 searchForm.addEventListener("submit", e =>{
     e.preventDefault();
     e.stopPropagation();
@@ -59,5 +62,13 @@ searchForm.addEventListener("submit", e =>{
     if(document.body.contains(tbody)){
         tbody.replaceChildren();
     }
-    renderData(keyword);
+    renderData(keyword, limit.value);
+});
+
+limit.addEventListener('change', e =>{
+    const tbody = table.lastElementChild;
+    if(document.body.contains(tbody)){
+        tbody.replaceChildren();
+    }
+    renderData(keyword, e.target.value);
 });
