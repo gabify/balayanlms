@@ -3,8 +3,12 @@
         session_start();
     }
     $keyword = 'null';
+    $page = 1;
     if(isset($_GET['keyword'])){
-        $keyword = $_GET['keyword'];
+        $keyword = htmlspecialchars($_GET['keyword']);
+    }
+    if(isset($_GET['page'])){
+        $page = htmlspecialchars($_GET['page']);
     }
 ?>
 <?php require '../balayanlms/template/header.php';?>
@@ -48,6 +52,14 @@
                 <th scope="col">Actions</th>
             </thead>
         </table>
+        <div class="d-flex justify-content-between mt-2">
+            <div class="tableInfo">Showing 10 of 50 students</div>
+            <nav aria-label="Student Pagination">
+                <ul class="pagination">
+                </ul>
+            </nav>
+            <input type="hidden" name="page" id="page" value="<?php echo htmlspecialchars($page)?>">
+        </div>
     </div>
     <?php require '../balayanlms/template/footer.php';?>
     <script src="../balayanlms/student/studentDataTable.js"></script>
