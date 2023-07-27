@@ -25,5 +25,11 @@
                 Students
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link fs-5 fw-light text-light" href="../balayanlms/student-log.php">
+                <i class="bi-person-circle"></i>
+                Student Logs
+            </a>
+        </li>
     </ul>
 </div>

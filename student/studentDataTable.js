@@ -4,6 +4,7 @@ const searchForm = document.querySelector('#studentSearch');
 const limit = document.querySelector('#limit');
 const keyword = document.querySelector('#keyword');
 const page = document.querySelector('#page');
+const tableInfo = document.querySelector('.tableInfo');
 
 //get data from php
 const getStudents = async(keyword, limit) =>{
@@ -23,6 +24,7 @@ const getTotalStudents = async(keyword, limit) =>{
 
 const createTable = async(students) =>{
     const tbody = document.createElement('tbody');
+    let i = 1;
     for(const student of students){
         const tr = document.createElement('tr');
         let tds = [];
@@ -30,7 +32,8 @@ const createTable = async(students) =>{
             const td = document.createElement('td');
             tds[i] = td;
         }
-        
+        tds[0].textContent = i++;
+        tds[0].classList.add("fw-bold");
         tds[1].textContent = student['srcode'];
         tds[2].textContent = student['last_name'];
         tds[3].textContent = student['first_name'];
@@ -75,6 +78,7 @@ const createNextPage = (currentPage, totalpages, keyword) => {
 }
 
 const createPagination = async(totalStudentsandPage, currentPage, keyword) => {
+    tableInfo.textContent = "Showing "+ totalStudentsandPage['totalStudents'] + " students"
     const links = [];
     links.push(createPreviousPage(currentPage, keyword));
     if(totalStudentsandPage['totalPage'] <= 10){

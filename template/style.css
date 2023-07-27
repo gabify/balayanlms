@@ -74,3 +74,14 @@
     object-fit: cover;
     margin-left: 130px;
 }
+
+input[type="date"]{
+    box-sizing: border-box;
+    padding: 7px;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma;
+    font-size: 0.8em;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+}
