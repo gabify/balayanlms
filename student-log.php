@@ -85,9 +85,16 @@
                     Today
                 </a>
                 <?php if($logs):?>
-                    <a href="../balayanlms/student/export_student.php?log=<?php echo $logDate;?>" class="btn btn-danger mt-2">Export to Excel</a>
+                    <a href="../balayanlms/student/export_student.php?log=<?php echo $logDate;?>" 
+                    class="btn btn-danger mt-2">
+                        <i class="bi-download"></i>
+                        Export
+                    </a>
                 <?php else:?>
-                    <button class="btn btn-danger mt-2" disabled>Export to Excel</button>
+                    <button class="btn btn-danger mt-2" disabled>
+                        <i class="bi-download"></i>
+                        Export
+                    </button>
                 <?php endif;?>
             </div>
         </div>

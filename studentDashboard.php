@@ -52,8 +52,7 @@
                 <th scope="col">Actions</th>
             </thead>
         </table>
-        <div class="d-flex justify-content-between mt-2">
-            <div class="tableInfo">Showing 10 of 50 students</div>
+        <div class="d-flex justify-content-end mt-2">
             <nav aria-label="Student Pagination">
                 <ul class="pagination">
                 </ul>

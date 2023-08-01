@@ -1,6 +1,5 @@
 <?php
-    //may mali sa coputation ng offset
-    //konti na lang
+
     $pdo = require '/xampp/htdocs/balayanlms/configuration/connect.php';
     $limit = 10;
     $offset = 0;

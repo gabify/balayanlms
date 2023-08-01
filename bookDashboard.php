@@ -15,7 +15,6 @@
 <?php require '../balayanlms/template/footer.php';?>
         <script src="../balayanlms/book/deleteBook.js"></script>
         <script src="../balayanlms/book/dataTable.js"></script>
-        <script src="../balayanlms/book/dataList.js"></script>
         <script src="../balayanlms/book/add_book.js"></script>
 </body>
 </html>

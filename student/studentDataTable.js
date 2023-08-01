@@ -7,8 +7,8 @@ const page = document.querySelector('#page');
 const tableInfo = document.querySelector('.tableInfo');
 
 //get data from php
-const getStudents = async(keyword, limit) =>{
-    const response = await fetch('../balayanlms/student/fetch_student.php?keyword='+keyword+'&limit='+limit);
+const getStudents = async(keyword, limit, page) =>{
+    const response = await fetch('../balayanlms/student/fetch_student.php?keyword='+keyword+'&limit='+limit+"&page="+page);
     const result = await response.json();
     if(result == 'An error occured. Retrieved empty dataset'){
         throw new Error('Sorry. No such student exist.');
@@ -38,11 +38,37 @@ const createTable = async(students) =>{
         tds[2].textContent = student['last_name'];
         tds[3].textContent = student['first_name'];
         tds[4].textContent = student['program'];
-
+        tds[5].append(createLink("text-primary", "bi-eye-fill", "../balayanlms/view_student.php?id="+student['id']));
+        tds[5].append(createDeleteButton(student['id']));
         tds.forEach(td=>tr.appendChild(td));
         tbody.appendChild(tr);
     }
     return tbody;
+}
+
+const createLink = (color, icon, link) =>{
+    const a = document.createElement('a');
+    const i = document.createElement('i');
+
+    a.classList.add("btn");
+    a.href = link;
+    i.classList.add(icon);
+    i.classList.add("fs-4");
+    i.classList.add(color);
+    a.append(i);
+    return a;
+}
+
+const createDeleteButton = (id) => {
+    const btn = document.createElement('button');
+    const i = document.createElement('i');
+    btn.classList.add('btn');
+    btn.setAttribute("onclick", "deleteStudent("+id+")");
+    i.classList.add("bi-trash3-fill");
+    i.classList.add("fs-4");
+    i.classList.add("text-danger");
+    btn.append(i);
+    return btn;
 }
 
 const createPreviousPage = (currentPage, keyword) =>{
@@ -78,7 +104,6 @@ const createNextPage = (currentPage, totalpages, keyword) => {
 }
 
 const createPagination = async(totalStudentsandPage, currentPage, keyword) => {
-    tableInfo.textContent = "Showing "+ totalStudentsandPage['totalStudents'] + " students"
     const links = [];
     links.push(createPreviousPage(currentPage, keyword));
     if(totalStudentsandPage['totalPage'] <= 10){
@@ -214,7 +239,7 @@ const createPagination = async(totalStudentsandPage, currentPage, keyword) => {
 }
 
 const displayData = async(keyword, limit, currentPage) =>{
-    const students = await getStudents(keyword, limit);
+    const students = await getStudents(keyword, limit, currentPage);
     const totalStudentsandPage = await getTotalStudents(keyword, limit);
     const table = await createTable(students);
     await createPagination(totalStudentsandPage, currentPage, keyword);
@@ -242,7 +267,7 @@ searchForm.addEventListener("submit", e =>{
     if(document.body.contains(tbody)){
         tbody.replaceChildren();
     }
-    renderData(keyword, limit.value, 1);
+    renderData(keyword, limit.value, page.value);
 });
 
 limit.addEventListener('change', e =>{
