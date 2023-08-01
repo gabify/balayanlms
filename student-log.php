@@ -81,7 +81,14 @@
                     </div>
                 </form>
                 <a href="../balayanlms/student-log.php?log=<?php echo $today?>"
-                    class="btn btn-outline-danger ms-2 mt-2">Today</a>
+                    class="btn btn-outline-danger mx-2 mt-2">
+                    Today
+                </a>
+                <?php if($logs):?>
+                    <a href="../balayanlms/student/export_student.php?log=<?php echo $logDate;?>" class="btn btn-danger mt-2">Export to Excel</a>
+                <?php else:?>
+                    <button class="btn btn-danger mt-2" disabled>Export to Excel</button>
+                <?php endif;?>
             </div>
         </div>
     </section>
@@ -161,7 +168,10 @@
                 </tbody>
             </table>
         <?php else:?>
-            <p class="display-3 text-center">No such log exist.</p>
+            <p class="display-3 text-center my-5">No such log exist.</p>
+            <div class="d-flex justify-content-center p-5">
+                <img src="../balayanlms/assets/web_search.svg" alt="no result" class="img-fluid w-50">
+            </div>
         <?php endif;?>
     </section>
 <?php require '../balayanlms/template/footer.php';?>
