@@ -32,10 +32,10 @@
         return $total['total'];
     }
 
-    function getTotalBITlogs($pdo, $date){
+    function getTotalCITlogs($pdo, $date){
         $stmt = $pdo->prepare("SELECT COUNT(*) AS total FROM student_log
         JOIN student ON student.id = student_log.student_id
-        WHERE program = 'BIT' AND date_in = :logDate");
+        WHERE program = 'CIT' AND date_in = :logDate");
         $stmt->bindParam(':logDate',  $date, PDO::PARAM_STR);
         $stmt->execute();
         $total = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -117,9 +117,9 @@
                     <div class="card-body text-bg-danger rounded-2">
                         <i class="bi-person-circle float-end fs-1"></i>
                         <h3 class="card-title display-5 fw-bold">
-                            <?php echo htmlspecialchars(getTotalBITlogs($pdo, $logDate))?>
+                            <?php echo htmlspecialchars(getTotalCITlogs($pdo, $logDate))?>
                         </h3>
-                        <p class="card-text fs-5 ms-1 fw-light">BIT</p>
+                        <p class="card-text fs-5 ms-1 fw-light">CIT</p>
                     </div>
                 </div>
             </div>
