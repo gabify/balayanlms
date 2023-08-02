@@ -27,6 +27,7 @@ const createTable = async(students) =>{
     let i = 1;
     for(const student of students){
         const tr = document.createElement('tr');
+        tr.setAttribute("id", student['id']);
         let tds = [];
         for(let i = 0; i <= 5; i++){
             const td = document.createElement('td');
@@ -257,6 +258,48 @@ const renderData = (keyword, limit, currentpage) =>{
             'error'
           )
     });
+}
+
+const asyncDelete = async(id) =>{
+    const response = await fetch('../balayanlms/student/delete_student.php?id='+id);
+    const result = await response.text();
+    if(result == 'error'){
+        throw new Error('An error occured. Please try again later.');
+    }
+    return result;
+}
+
+
+//ayaw makuha ng tr
+const deleteStudent = (id) =>{
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if(result.isConfirmed) {
+          asyncDelete(id);
+        }
+      }).then(result =>{
+        if(result === 'success'){
+            Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+              );
+            document.getElementById(id).style.display = "none";
+        }
+      }).catch(e =>{
+        Swal.fire(
+            'Deleted!',
+            e.message,
+            'success'
+          )
+      })
 }
 
 table.addEventListener("load", renderData(keyword, limit.value, page.value));
