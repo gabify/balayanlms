@@ -27,17 +27,47 @@
     
     //Get all books
     function getAllBooks($pdo, $offset, $limit, $keyword){
-        $stmt = $pdo->prepare('CALL getAllBooks(:opset, :pages, :keyword)');
-        $stmt->bindParam(':opset', $offset, PDO::PARAM_INT);
-        $stmt->bindParam(':pages', $limit, PDO::PARAM_INT);
-        $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
-        $stmt->execute();
-        $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if($books){
-            return $books;
+        if($keyword == '%null%'){
+            $stmt = $pdo->prepare("SELECT books.id,
+            books.callnum,
+            books.title,
+            books.status
+            FROM books
+            WHERE books.is_deleted = 0
+            LIMIT :opset, :pages");
+            $stmt->bindParam(':opset', $offset, PDO::PARAM_INT);
+            $stmt->bindParam(':pages', $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+            if($books){
+                return $books;
+            }else{
+                return 'Some error occurred';
+            }
         }else{
-            return 'Some error occurred';
+            $stmt = $pdo->prepare("SELECT books.id,
+            books.callnum,
+            books.title,
+            books.status
+            FROM books
+            WHERE books.callnum LIKE :keyword
+            OR books.title LIKE :keyword
+            OR books.author LIKE :keyword
+            OR books.publisher LIKE :keyword
+            AND books.is_deleted = 0
+            LIMIT :opset, :pages");
+            $stmt->bindParam(':opset', $offset, PDO::PARAM_INT);
+            $stmt->bindParam(':pages', $limit, PDO::PARAM_INT);
+            $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+            $stmt->execute();
+            $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+            if($books){
+                return $books;
+            }else{
+                return 'Some error occurred';
+            }
         }
     }
 ?>
