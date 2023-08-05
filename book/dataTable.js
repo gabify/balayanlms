@@ -156,7 +156,7 @@ const createPagination = async(tbody, totalPagesAndBooks, page, keyword) =>{
     const totalPage = totalPagesAndBooks['totalPages'];
     const secondLast = totalPage - 1;
     if(totalPage <= 10){
-        for(let i = 1; i<=totalPagesAndBooks['totalPages']; i++){
+        for(let i = 1; i<=totalPage; i++){
             if(page === i){
                 links.push(createPagelink(i, keyword, true));
             }else{
@@ -184,7 +184,7 @@ const createPagination = async(tbody, totalPagesAndBooks, page, keyword) =>{
                 links.push(createPagelink(totalPage, keyword, false));
             }
             
-        }else if(page > 4 && page < totalPagesAndBooks['totalPages'] -4){
+        }else if(page > 4 && page < totalPage -4){
             if(page == 1){
                 links.push(createPagelink(1, keyword, true));
             }else{
@@ -196,8 +196,7 @@ const createPagination = async(tbody, totalPagesAndBooks, page, keyword) =>{
                 links.push(createPagelink(2, keyword, false));
             }
             links.push(createInBetween());
-            
-            for(let i = page -2; i <= page + 2; i++){
+            for(let i =  parseInt(page) - 2; i <= parseInt(page) + 2; i++){
                 if(page == i){
                     links.push(createPagelink(i, keyword, true));
                 }else{
@@ -227,7 +226,7 @@ const createPagination = async(tbody, totalPagesAndBooks, page, keyword) =>{
                 links.push(createPagelink(2, keyword, false));
             }
             links.push(createInBetween());
-            for(let i = totalPagesAndBooks['totalPages'] -6 ; i <= totalPagesAndBooks['totalPages']; i++){
+            for(let i = totalPage -6; i <= totalPage; i++){
                 if(page == i){
                     links.push(createPagelink(i, keyword, true));
                 }else{
