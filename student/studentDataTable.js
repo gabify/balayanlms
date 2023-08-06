@@ -9,7 +9,7 @@ const tableInfo = document.querySelector('.tableInfo');
 //get data from php
 const getStudents = async(keyword, limit, page) =>{
     const response = await fetch('../balayanlms/student/fetch_student.php?keyword='+keyword+'&limit='+limit+"&page="+page);
-    const result = await response.json();
+    const result = await response.text();
     if(result == 'An error occured. Retrieved empty dataset'){
         throw new Error('Sorry. No such student exist.');
     }
