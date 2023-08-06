@@ -25,7 +25,7 @@
         return $publisher['publisherId'];
     }
 
-    function insertBookDetails($pdo, $bookInfo, $authorId, $publisherId): int
+    /* function insertBookDetails($pdo, $bookInfo, $authorId, $publisherId): int
     {
         $sql = 'CALL insertBookDetails(:callnumber, :bookTitle, :bookAuthor, :bookPublisher, :bookCopyright)';
         $stmt = $pdo->prepare($sql);
@@ -43,17 +43,26 @@
 
     }
 
-    function insertBook($pdo, $bookInfoId, $statusId): int
+    function insertBook($pdo, $bookInfo): int
     {
         $now = date("Y-m-d H:i:s");
-        $stmt = $pdo->prepare('CALL insertBook(:InfoId, :statusId, :createdAt)');
-        $stmt->bindParam(':InfoId', $bookInfoId, PDO::PARAM_INT);
-        $stmt->bindParam(':statusId', $statusId, PDO::PARAM_INT);
+        $stmt = $pdo->prepare('INSERT INTO books(callnum,
+        author, title, publisher, copyright, copy, status, created_at) 
+        VALUES(:callnum, :author, :title, :publisher, :copyright, :copy, :status, :created_at)');
+        $stmt->bindParam(':callnum', $bookInfo['callnum'], PDO::PARAM_STR);
+        $stmt->bindParam(':author', $bookInfo['author'], PDO::PARAM_STR);
+        $stmt->bindParam(':title', $bookInfo['title'], PDO::PARAM_STR);
+        $stmt->bindParam(':publisher', $bookInfo['publisher'], PDO::PARAM_STR);
+        $stmt->bindParam(':copyright', $bookInfo['copyright'], PDO::PARAM_INT);
+        $stmt->bindParam(':copy', 1, PDO::PARAM_INT);
+        $stmt->bindParam(':status', 'Available', PDO::PARAM_STR);
         $stmt->bindParam(':createdAt', $now, PDO::PARAM_STR);
 
-        $stmt->execute();
-
-        return $pdo->lastInsertId();
+        if($stmt->execute()){
+            return 'success';
+        }else{
+            return 'An error occured.';
+        }
     }
 
     //book transaction
@@ -81,7 +90,7 @@
         }
         
         return 'success';
-    }
+    } */
 
     //Get one book
     function getBook($pdo, $id){
