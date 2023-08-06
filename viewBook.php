@@ -3,6 +3,14 @@
         session_start();
     }
     $pdo = require '/xampp/htdocs/balayanlms/configuration/connect.php';
+    $bookData = array("id" =>'',
+    "callnum" => "",
+    "author" => "",
+    "title" => "",
+    "publisher" => "",
+    "copyright" => "",
+    "copy" => "",
+    "status" => "");
 
     if(isset($_GET['id'])){
         $id = htmlspecialchars($_GET['id']);
@@ -10,7 +18,16 @@
     }
 
     if(isset($_POST['submit'])){
-        
+        $bookData['id'] = htmlspecialchars($_POST['accessnum']);
+        $bookData['callnum'] = htmlspecialchars($_POST['callnum']);
+        $bookData['author'] = htmlspecialchars($_POST['author']);
+        $bookData['title'] = htmlspecialchars($_POST['title']);
+        $bookData['publisher'] = htmlspecialchars($_POST['publisher']);
+        $bookData['copyright'] = htmlspecialchars($_POST['copyright']);
+        $bookData['copy'] = htmlspecialchars($_POST['copy']);
+        $bookData['status'] = htmlspecialchars($_POST['status']);
+        updateBook($pdo, $bookData);
+
     }
 
     function getBook($pdo, $id){
@@ -35,7 +52,17 @@
         $stmt->bindParam(':id', $bookData['id'], PDO::PARAM_INT);
 
         if($stmt->execute()){
+            $_SESSION['status'] = 'success';
+            $_SESSION['statusIcon'] = 'success';
+            $_SESSION['statusTitle'] = 'Operation successful';
+            $_SESSION['statusText'] = 'The book has been successfully updated.';
             header("Location: viewBook.php?id=".$bookData['id']);
+            exit();
+        }else{
+            $_SESSION['status'] = 'error';
+            $_SESSION['statusIcon'] = 'error';
+            $_SESSION['statusTitle'] = 'Operation failed';
+            $_SESSION['statusText'] = 'An error occured. Please try again later.';
         }
     }
 ?>
@@ -58,7 +85,7 @@
                                         id="accessnum"
                                         name="accessnum" 
                                         value="<?php echo htmlspecialchars($book['id'])?>"
-                                        disabled>
+                                        readonly>
                                     <span class="text-danger"></span>
                                 </div>
                                 <div class="mb-3 mx-5">
