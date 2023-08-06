@@ -149,7 +149,7 @@ const createInBetween = () =>{
 
 //create pagination
 const createPagination = async(tbody, totalPagesAndBooks, page, keyword) =>{
-    pageInfo.textContent = "Showing "+tbody.childElementCount+" of page "+ page+" out of "+totalPagesAndBooks['totalBooks']+" Books"
+    pageInfo.textContent = "Showing "+tbody.childElementCount+" books of page "+ page+" out of "+totalPagesAndBooks['totalBooks']+" Books"
     const paginationContainer = document.querySelector('.pagination');
     let links = [];
     links.push(createPrev(page, keyword));
@@ -157,7 +157,7 @@ const createPagination = async(tbody, totalPagesAndBooks, page, keyword) =>{
     const secondLast = totalPage - 1;
     if(totalPage <= 10){
         for(let i = 1; i<=totalPage; i++){
-            if(page === i){
+            if(page == i){
                 links.push(createPagelink(i, keyword, true));
             }else{
                 links.push(createPagelink(i, keyword, false));
@@ -173,12 +173,12 @@ const createPagination = async(tbody, totalPagesAndBooks, page, keyword) =>{
                 }
             }
             links.push(createInBetween());
-            if(page === secondLast){
+            if(page == secondLast){
                 links.push(createPagelink(secondLast, keyword, true));
             }else{
                 links.push(createPagelink(secondLast, keyword, false));
             }
-            if(page === totalPage){
+            if(page == totalPage){
                 links.push(createPagelink(totalPage, keyword, true));
             }else{
                 links.push(createPagelink(totalPage, keyword, false));
@@ -204,12 +204,12 @@ const createPagination = async(tbody, totalPagesAndBooks, page, keyword) =>{
                 }
             }
             links.push(createInBetween());
-            if(page === secondLast){
+            if(page == secondLast){
                 links.push(createPagelink(secondLast, keyword, true));
             }else{
                 links.push(createPagelink(secondLast, keyword, false));
             }
-            if(page === totalPage){
+            if(page == totalPage){
                 links.push(createPagelink(totalPage, keyword, true));
             }else{
                 links.push(createPagelink(totalPage, keyword, false));

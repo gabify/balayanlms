@@ -3,11 +3,17 @@
         session_start();
     }
     $pdo = require '/xampp/htdocs/balayanlms/configuration/connect.php';
-    require '../balayanlms/book/bookHandler.php';
 
     if(isset($_GET['id'])){
         $id = htmlspecialchars($_GET['id']);
         $book = getBook($pdo, $id);
+    }
+
+    function getBook($pdo, $id){
+        $stmt = $pdo->prepare("SELECT * FROM books WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 ?>
 <?php require '../balayanlms/template/header.php';?>
@@ -25,7 +31,7 @@
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
                             data-bs-title="Accession Number">
-                            <?php echo htmlspecialchars($book['accessnum']);?>
+                            <?php echo htmlspecialchars($book['id']);?>
                         </p>
                         <p class="d-inline">|</p>
                         <p class="d-inline"
@@ -38,23 +44,23 @@
                     <div class="mt-5 my-5">
                         <div class="mt-1">
                             <p class="fw-light fs-4 d-inline">Author:</p>
-                            <p class="fw-normal fs-4 d-inline"><?php echo htmlspecialchars($book['author_name']);?></p>
+                            <p class="fw-normal fs-4 d-inline"><?php echo htmlspecialchars($book['author']);?></p>
                         </div>
                         <div class="mt-1">
                             <p class="fw-light fs-4 d-inline">Publisher:</p>
-                            <p class="fw-normal fs-4 d-inline"><?php echo htmlspecialchars($book['publisher_name']);?></p>
+                            <p class="fw-normal fs-4 d-inline"><?php echo htmlspecialchars($book['publisher']);?></p>
                         </div>
                         <div class="mt-1">
                             <p class="fw-light fs-4 d-inline">Copyright Year:</p>
                             <p class="fw-normal fs-4 d-inline"><?php echo htmlspecialchars($book['copyright']);?></p>
                         </div>
                     </div>
-                    <p class="fw-semibold fs-2 d-inline"><?php echo htmlspecialchars($book['stat_value']);?></p>
+                    <p class="fw-semibold fs-2 d-inline"><?php echo htmlspecialchars($book['status']);?></p>
                     <div class="my-5">
                         <a 
                             href="borrow.php?id=<?php echo htmlspecialchars($book['id']);?>" 
                             class="btn btn-outline-secondary btn-lg d-inline mx-2 
-                            <?php if($book['stat_value'] != 'Available')echo 'disabled'?>">
+                            <?php if($book['status'] != 'Available')echo 'disabled'?>">
                             Borrow
                         </a>
                         <a href="editBook.php?id=<?php echo htmlspecialchars($book['id']);?>" class="btn btn-outline-secondary btn-lg d-inline mx-2">Edit</a>

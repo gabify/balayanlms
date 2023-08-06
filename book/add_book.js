@@ -52,6 +52,7 @@ const insert = async (book_data) =>{
         body: JSON.stringify(book_data)
     });
     const result = await response.text();
+    console.log(result);
     if(result == 'Aborted'){
         throw new Error('An error occured while processing the data.');
     }
