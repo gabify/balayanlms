@@ -9,7 +9,7 @@ const tableInfo = document.querySelector('.tableInfo');
 //get data from php
 const getStudents = async(keyword, limit, page) =>{
     const response = await fetch('../balayanlms/student/fetch_student.php?keyword='+keyword+'&limit='+limit+"&page="+page);
-    const result = await response.text();
+    const result = await response.json();
     if(result == 'An error occured. Retrieved empty dataset'){
         throw new Error('Sorry. No such student exist.');
     }
@@ -104,124 +104,120 @@ const createNextPage = (currentPage, totalpages, keyword) => {
     return nextLi;
 }
 
+const createPageLink = (pageNum, keyword, isActive) =>{
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+
+    li.classList.add("page-item");
+    a.classList.add("page-link");
+    a.textContent = pageNum;
+
+    if(isActive){
+        a.classList.add("active")
+    }else{
+        a.classList.add("text-dark");
+        a.href = "../balayanlms/studentDashboard.php?page="+pageNum+'&keyword='+keyword;
+    }
+
+    li.append(a);
+    return li;
+}
+
+const createInBetween = () =>{
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    li.classList.add("page-item");
+    a.classList.add("page-link");
+    a.classList.add("text-dark");
+    a.textContent = '......';
+    li.append(a);
+    return li;
+}
+
 const createPagination = async(totalStudentsandPage, currentPage, keyword) => {
     const links = [];
+    const totalPage = totalStudentsandPage['totalPage'];
+    const secondLast = totalPage - 1;
     links.push(createPreviousPage(currentPage, keyword));
     if(totalStudentsandPage['totalPage'] <= 10){
-        for(let i = 1; i<= totalStudentsandPage['totalPage']; i++){
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            li.classList.add("page-item");
-            a.classList.add("page-link");
-            a.classList.add("text-dark");
-            a.textContent = i;
-            if(i == currentPage){
-                a.classList.add('active');
-                a.classList.remove('text-dark')
+        for(let i = 1; i<= totalPage; i++){
+            if(currentPage == i){
+                links.push(createPageLink(i, keyword, true));
             }else{
-                a.href =  "../balayanlms/studentDashboard.php?page="+i+'&keyword='+keyword;
+                links.push(createPageLink(i, keyword, false));
             }
-            li.append(a);
-            links.push(li);
         }
-    }else if( totalStudentsandPage['totalPage'] > 10){
+    }else if( totalPage > 10){
         if(currentPage < 4){
             for(let i = 1; i<= 8; i++){
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                li.classList.add("page-item");
-                a.classList.add("page-link");
-                a.classList.add("text-dark");
-                a.textContent = i;
-                if(i == currentPage){
-                    a.classList.add('active');
-                    a.classList.remove('text-dark')
+                if(currentPage == i){
+                    links.push(createPageLink(i, keyword, true));
                 }else{
-                    a.href =  "../balayanlms/studentDashboard.php?page="+i+'&keyword='+keyword;
+                    links.push(createPageLink(i, keyword, false));
                 }
-                li.append(a);
-                links.push(li);
             }
-            const inBetween = links[1];
-            const secondToLast = links[1];
-            const secondToLastLink = totalStudentsandPage['totalPage'] - 1;
-            const last = links[1];
-            inBetween.firstChild.removeAttribute("href");
-            inBetween.firstChild.textContent = "...";
-            secondToLast.firstChild.href = "../balayanlms/studentDashboard.php?page="+secondToLastLink+'&keyword='+keyword;
-            secondToLast.firstChild.textContent = secondToLastLink;
-            last.firstChild.href ="../balayanlms/studentDashboard.php?page="+totalStudentsandPage['totalPage']+'&keyword='+keyword;
-            last.firstChild.textContent = totalStudentsandPage['totalPage'];
-            links.push(inBetween);
-            links.push(secondToLast);
-            links.push(last);
-        }else if(currentPage > 4 && currentPage < totalStudentsandPage['totalpage'] -4){
-            const inBetween = links[1];
-            const first = links[1];
-            const second = links[1];
-            inBetween.firstChild.removeAttribute("href");
-            inBetween.firstChild.textContent = "...";
-            first.firstChild.href = "../balayanlms/studentDashboard.php?page=1"+'&keyword='+keyword;
-            first.textContent = "1";
-            second.firstChild.href ="../balayanlms/studentDashboard.php?page=2"+'&keyword='+keyword;
-            second.firstChild.textContent = "2";
-            links.push(first);
-            links.push(second);
-            links.push(inBetween);
-            for(let i = currentPage - 2; i < currentPage + 2; i++){
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                li.classList.add("page-item");
-                a.classList.add("page-link");
-                a.classList.add("text-dark");
-                a.textContent = i;
-                if(i == currentPage){
-                    a.classList.add('active');
-                    a.classList.remove('text-dark')
+            links.push(createInBetween());
+            if(currentPage == secondLast){
+                links.push(createPageLink(secondLast, keyword, true));
+            }else{
+                links.push(createPageLink(secondLast, keyword, false));
+            }
+            if(currentPage == totalPage){
+                links.push(createPageLink(totalPage, keyword, true));
+            }else{
+                links.push(createPageLink(totalPage, keyword, false));
+            }
+        }else if(currentPage > 4 && currentPage < totalPage - 4){
+            if(currentPage == 1){
+                links.push(createPageLink(1, keyword, true));
+            }else{
+                links.push(createPageLink(2, keyword, false));
+            }
+            if(currentPage == 2){
+                links.push(createPageLink(2, keyword, true));
+            }else{
+                links.push(createPageLink(2, keyword, false));
+            }
+            links.push(createInBetween());
+
+            for(let i = parseInt(currentPage) - 2; i < parseInt(currentPage) + 2; i++){
+                if(currentPage == i){
+                    links.push(createPageLink(i, keyword, true));
                 }else{
-                    a.href =  "../balayanlms/studentDashboard.php?page="+i+'&keyword='+keyword;
+                    links.push(createPageLink(i, keyword, false));
                 }
-                li.append(a);
-                links.push(li);
             }
-            const secondToLast = links[1];
-            const secondToLastLink = totalStudentsandPage['totalPage'] - 1;
-            const last = links[1];
-            secondToLast.firstChild.href = "../balayanlms/studentDashboard.php?page="+secondToLastLink+'&keyword='+keyword;
-            secondToLast.firstChild.textContent = secondToLastLink;
-            last.firstChild.href ="../balayanlms/studentDashboard.php?page="+totalStudentsandPage['totalPage']+'&keyword='+keyword;
-            last.firstChild.textContent = totalStudentsandPage['totalPage'];
-            links.push(inBetween);
-            links.push(secondToLast);
-            links.push(last);
+
+            links.push(createInBetween());
+            if(currentPage == secondLast){
+                links.push(createPageLink(secondLast, keyword, true));
+            }else{
+                links.push(createPageLink(secondLast, keyword, false));
+            }
+            if(currentPage == totalPage){
+                links.push(createPageLink(totalPage, keyword, true));
+            }else{
+                links.push(createPageLink(totalPage, keyword, false));
+            }
         }else{
-            const inBetween = links[1];
-            const first = links[1];
-            const second = links[1];
-            inBetween.firstChild.removeAttribute("href");
-            inBetween.firstChild.textContent = "...";
-            first.firstChild.href = "../balayanlms/studentDashboard.php?page=1"+'&keyword='+keyword;
-            first.textContent = "1";
-            second.firstChild.href ="../balayanlms/studentDashboard.php?page=2"+'&keyword='+keyword;
-            second.firstChild.textContent = "2";
-            links.push(first);
-            links.push(second);
-            links.push(inBetween);
-            for(let i = totalStudentsandPage['totalPage'] - 6; i <= totalStudentsandPage['totalPage']; i++){
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                li.classList.add("page-item");
-                a.classList.add("page-link");
-                a.classList.add("text-dark");
-                a.textContent = i;
-                if(i == currentPage){
-                    a.classList.add('active');
-                    a.classList.remove('text-dark')
+            if(currentPage == 1){
+                links.push(createPageLink(1, keyword, true));
+            }else{
+                links.push(createPageLink(2, keyword, false));
+            }
+            if(currentPage == 2){
+                links.push(createPageLink(2, keyword, true));
+            }else{
+                links.push(createPageLink(2, keyword, false));
+            }
+            links.push(createInBetween());
+
+            for(let i = totalPage - 6; i <= totalPage; i++){
+                if(currentPage == i){
+                    links.push(createPageLink(i, keyword, true));
                 }else{
-                    a.href =  "../balayanlms/studentDashboard.php?page="+i+'&keyword='+keyword;
+                    links.push(createPageLink(i, keyword, false));
                 }
-                li.append(a);
-                links.push(li);
             }
         }
     }
@@ -233,7 +229,7 @@ const createPagination = async(totalStudentsandPage, currentPage, keyword) => {
         }
     }
     links.forEach(link=> paginationContainer.append(link));
-    if(currentPage > 1){
+    if(totalStudentsandPage['totalStudents'] <= 10){
         const limit = document.querySelector('#limit');
         limit.disabled = true;
     }

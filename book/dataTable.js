@@ -244,7 +244,7 @@ const createPagination = async(tbody, totalPagesAndBooks, page, keyword) =>{
         }
     }
     links.forEach(link => paginationContainer.appendChild(link))
-    if(totalPage <= 10){
+    if(totalPagesAndBooks['totalPages'] <= 10){
         const limit = document.querySelector('#limit');
         limit.disabled = true;
     }
