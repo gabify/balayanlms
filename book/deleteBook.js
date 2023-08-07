@@ -62,9 +62,8 @@ const deleteBookOnView = (id) =>{
 const partialDelete = async (id) =>{
     const response = await fetch('../balayanlms/book/partialDelete.php?id='+id);
     const result = await response.text();
-
-    if(result == 'failed'){
-        throw new Error('An error occured on the database');
+    if(result !== 'success'){
+        throw new Error(result);
     }
     return result;
 }
