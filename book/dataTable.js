@@ -49,17 +49,23 @@ const createTable = async(books) =>{
             }
             //add attributes
             tr.setAttribute("id", book['id']);
-            viewLink.setAttribute("class", "btn");
+            viewLink.classList.add("btn");
             viewLink.setAttribute("href", "../balayanlms/viewBook.php?id="+book['id']);
-            editLink.setAttribute("class", "btn");
+            editLink.classList.add("btn");
             editLink.setAttribute("href", "../balayanlms/editBook.php?id="+book['id']);
-            deleteBtn.setAttribute("class", "btn");
+            deleteBtn.classList.add("btn");
             deleteBtn.setAttribute("onclick", "deleteBook("+book['id']+")");
-            icns[0].setAttribute("class", "bi-eye-fill fs-4 text-primary");
-            icns[1].setAttribute("class", "bi-pencil-fill fs-4 text-warning");
-            icns[2].setAttribute("class", "bi-trash3-fill fs-4 text-danger");
+            icns[0].classList.add("bi-eye-fill");
+            icns[0].classList.add("fs-4");
+            icns[0].classList.add("text-primary");
+            icns[1].classList.add("bi-pencil-fill");
+            icns[1].classList.add("fs-4");
+            icns[1].classList.add("text-warning");
+            icns[2].classList.add("bi-trash3-fill");
+            icns[2].classList.add("fs-4");
+            icns[2].classList.add("text-danger");
             //add data
-            tds[0].textContent = book['accessnum'];
+            tds[0].textContent = book['id'];
             tds[1].textContent = book['callnum'];
             tds[2].textContent = book['title'];
             //append to tr and tbody
@@ -78,13 +84,9 @@ const createTable = async(books) =>{
         return tbody;
 }
 
-//create pagination
-const createPagination = async(tbody, totalPagesAndBooks, page) =>{
-    const paginationContainer = document.querySelector('.pagination');
+//create previous link
+const createPrev = (page, keyword) =>{
     const prev = page -1;
-    const next = parseInt(page) + 1;
-    let links = [];
-    pageInfo.textContent = "Showing "+tbody.childElementCount+" out of "+totalPagesAndBooks['totalBooks']+" Books"
     const prevLi = document.createElement('li');
     const preva = document.createElement('a');
     prevLi.classList.add("page-item");
@@ -93,26 +95,15 @@ const createPagination = async(tbody, totalPagesAndBooks, page) =>{
     }
     preva.classList.add("page-link");
     preva.classList.add("text-dark");
-    preva.setAttribute("href", "../balayanlms/bookDashboard.php?page="+prev);
+    preva.setAttribute("href", "../balayanlms/bookDashboard.php?page="+prev+'&keyword='+keyword);
     preva.textContent = 'Previous';
     prevLi.appendChild(preva);
-    links[0] = prevLi;
-    for(let i = 1; i<=totalPagesAndBooks['totalPages']; i++){
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        li.classList.add("page-item");
-        a.classList.add("page-link");
-        a.classList.add("text-dark");
-        a.textContent = i;
-        if(i == page){
-            a.classList.add("active")
-            a.classList.remove("text-dark")
-        }else{
-            a.setAttribute("href", "../balayanlms/bookDashboard.php?page="+i);
-        }
-        li.appendChild(a);
-        links[i] = li;
-    }
+    return prevLi;
+}
+
+//create next link
+const createNext = (page, totalPagesAndBooks, keyword)=>{
+    const next = parseInt(page) + 1;
     const nextLi = document.createElement('li');
     const nexta = document.createElement('a');
     nextLi.classList.add("page-item");
@@ -121,10 +112,131 @@ const createPagination = async(tbody, totalPagesAndBooks, page) =>{
     }
     nexta.classList.add("page-link");
     nexta.classList.add("text-dark");
-    nexta.setAttribute("href", "../balayanlms/bookDashboard.php?page="+next);
+    nexta.setAttribute("href", "../balayanlms/bookDashboard.php?page="+next+"&keyword="+keyword);
     nexta.textContent = 'Next';
     nextLi.appendChild(nexta);
-    links[links.length+1] = nextLi;
+    return nextLi;
+}
+
+//create page link number
+const createPagelink = (pageNum, keyword, isActive) =>{
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    li.classList.add("page-item");
+    a.classList.add("page-link");
+    a.textContent = pageNum;
+    if(isActive == true){
+        a.classList.add("active");
+    }else{
+        a.classList.add("text-dark");
+        a.href =  "../balayanlms/bookDashboard.php?page="+pageNum+'&keyword='+keyword;
+    }
+    li.append(a);
+    return li;
+}
+
+//create in between link
+const createInBetween = () =>{
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    li.classList.add("page-item");
+    a.classList.add("page-link");
+    a.classList.add("text-dark");
+    a.textContent = '......';
+    li.append(a);
+    return li;
+}
+
+//create pagination
+const createPagination = async(tbody, totalPagesAndBooks, page, keyword) =>{
+    pageInfo.textContent = "Showing "+tbody.childElementCount+" books of page "+ page+" out of "+totalPagesAndBooks['totalBooks']+" Books"
+    const paginationContainer = document.querySelector('.pagination');
+    let links = [];
+    links.push(createPrev(page, keyword));
+    const totalPage = totalPagesAndBooks['totalPages'];
+    const secondLast = totalPage - 1;
+    if(totalPage <= 10){
+        for(let i = 1; i<=totalPage; i++){
+            if(page == i){
+                links.push(createPagelink(i, keyword, true));
+            }else{
+                links.push(createPagelink(i, keyword, false));
+            }
+        }
+    }else if(totalPage > 10){
+        if(page <= 4){
+            for(let i = 1; i<8; i++){
+                if(page == i){
+                    links.push(createPagelink(i, keyword, true));
+                }else{
+                    links.push(createPagelink(i, keyword, false));
+                }
+            }
+            links.push(createInBetween());
+            if(page == secondLast){
+                links.push(createPagelink(secondLast, keyword, true));
+            }else{
+                links.push(createPagelink(secondLast, keyword, false));
+            }
+            if(page == totalPage){
+                links.push(createPagelink(totalPage, keyword, true));
+            }else{
+                links.push(createPagelink(totalPage, keyword, false));
+            }
+            
+        }else if(page > 4 && page < totalPage -4){
+            if(page == 1){
+                links.push(createPagelink(1, keyword, true));
+            }else{
+                links.push(createPagelink(1, keyword, false));
+            }
+            if(page == 2){
+                links.push(createPagelink(2, keyword, true));
+            }else{
+                links.push(createPagelink(2, keyword, false));
+            }
+            links.push(createInBetween());
+            for(let i =  parseInt(page) - 2; i <= parseInt(page) + 2; i++){
+                if(page == i){
+                    links.push(createPagelink(i, keyword, true));
+                }else{
+                    links.push(createPagelink(i, keyword, false));
+                }
+            }
+            links.push(createInBetween());
+            if(page == secondLast){
+                links.push(createPagelink(secondLast, keyword, true));
+            }else{
+                links.push(createPagelink(secondLast, keyword, false));
+            }
+            if(page == totalPage){
+                links.push(createPagelink(totalPage, keyword, true));
+            }else{
+                links.push(createPagelink(totalPage, keyword, false));
+            }
+        }else{
+            if(page == 1){
+                links.push(createPagelink(1, keyword, true));
+            }else{
+                links.push(createPagelink(1, keyword, false));
+            }
+            if(page == 2){
+                links.push(createPagelink(2, keyword, true));
+            }else{
+                links.push(createPagelink(2, keyword, false));
+            }
+            links.push(createInBetween());
+            for(let i = totalPage -6; i <= totalPage; i++){
+                if(page == i){
+                    links.push(createPagelink(i, keyword, true));
+                }else{
+                    links.push(createPagelink(i, keyword, false));
+                }
+            }
+        }
+    }
+    
+    links.push(createNext(page, totalPagesAndBooks,keyword));
 
     if(paginationContainer.hasChildNodes()){
         while(paginationContainer.firstChild){
@@ -132,7 +244,7 @@ const createPagination = async(tbody, totalPagesAndBooks, page) =>{
         }
     }
     links.forEach(link => paginationContainer.appendChild(link))
-    if(page > 1){
+    if(totalPagesAndBooks['totalPages'] <= 10){
         const limit = document.querySelector('#limit');
         limit.disabled = true;
     }
@@ -143,15 +255,15 @@ const displayData = async(limit, page, keyword) =>{
     const books = await getData(limit, page, keyword);
     const totalPagesAndBooks = await getTotal(limit, keyword);
     const tbody = await createTable(books);
-    await createPagination(tbody, totalPagesAndBooks, page);
+    await createPagination(tbody, totalPagesAndBooks, page, keyword);
     return tbody;
 }
 
 //render to DOM
 const renderData = (limit, page, keyword) =>{
-    displayData(limit, page, keyword)
-    .then((tbody) =>{
-        table.appendChild(tbody);
+    displayData(limit, page, keyword.value=="" ? "null":keyword.value)
+    .then((result) =>{
+        table.appendChild(result);
     }).catch((err) =>{
         Swal.fire(
             'Error!',
@@ -162,24 +274,22 @@ const renderData = (limit, page, keyword) =>{
 }
 
 //add event listener to the table element
-table.addEventListener("load", 
-    renderData(limit.value, page.value, document.getElementById("keyword").value == "" ? "null": keyword));
+table.addEventListener("load",
+    renderData(limit.value, page.value, document.getElementById("keyword")));
 limit.addEventListener("change", ()=>{
     const tbody = table.lastElementChild;
-    const keyword = document.getElementById("keyword").value;
     if(document.body.contains(tbody)){
         tbody.replaceChildren();
     }
-    renderData(limit.value, page.value, keyword == "" ? "null": keyword);
+    renderData(limit.value, page.value, document.getElementById("keyword"));
 });
 bookSearchForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const tbody = table.lastElementChild;
-    const keyword = document.getElementById("keyword").value;
     if(document.body.contains(tbody)){
         tbody.replaceChildren();
     }
-    renderData(limit.value, page.value, keyword == "" ? "null": keyword);
+    renderData(limit.value, 1, document.getElementById("keyword"));
 });
 
 /* const search = document.querySelector('#keyword');
@@ -191,4 +301,3 @@ search.addEventListener("input", (e)=>{
     }
     renderData(limit.value, val == "" ? "null": val);
 }); */
-

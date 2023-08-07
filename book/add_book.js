@@ -1,7 +1,6 @@
 const form = document.getElementById('addForm');
 const insertBook = () =>{
     //get all inputs
-    const limit = document.querySelector('#limit');
     const callnum = document.getElementById('callnum').value;
     const title = document.getElementById('title').value;
     const publisher = document.getElementById('publisher').value;
@@ -29,7 +28,11 @@ const insertBook = () =>{
         document.querySelector('#author').value = "";
         document.querySelector('#copyright').value = "";
         //update table
-        displayData(limit.value);
+        const tbody = table.lastElementChild;
+        if(document.body.contains(tbody)){
+            tbody.replaceChildren();
+        }
+        renderData(limit.value, page.value, document.getElementById("keyword"));
     }).catch((err)=>{//If some error occured
         //display error message
         Swal.fire({
@@ -49,6 +52,7 @@ const insert = async (book_data) =>{
         body: JSON.stringify(book_data)
     });
     const result = await response.text();
+    console.log(result);
     if(result == 'Aborted'){
         throw new Error('An error occured while processing the data.');
     }

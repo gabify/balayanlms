@@ -16,18 +16,16 @@
             $data['totalPages'] = $totalPages;
             echo json_encode($data);
         }else{
-            $stmt = $pdo->query("SELECT COUNT(*) AS totalRecords 
-            FROM books LEFT JOIN book_data
-            ON book_data.id = books.book_Info_Id
-            LEFT JOIN author
-            ON author.id = book_data.author_id
-            LEFT JOIN publisher
-            ON publisher.id = book_data.publisher_id
-            WHERE book_data.callnum LIKE '%$keyword%'
-            OR book_data.title LIKE '%$keyword%'
-            OR publisher.publisher_name LIKE '%$keyword%'
-            OR author.author_name LIKE '%$keyword%'
+            $keyword = '%'.$keyword.'%';
+            $stmt = $pdo->prepare("SELECT COUNT(*) AS totalRecords 
+            FROM books
+            WHERE books.callnum LIKE :keyword
+            OR books.title LIKE :keyword
+            OR books.publisher LIKE :keyword
+            OR books.author LIKE :keyword
             AND books.is_deleted = 0");
+            $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+            $stmt->execute();
             $totalRecords = $stmt->fetch(PDO::FETCH_ASSOC);
             $totalPages = ceil($totalRecords['totalRecords']/$limit);
             $data['totalBooks'] = $totalRecords['totalRecords'];
