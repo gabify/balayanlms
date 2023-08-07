@@ -1,7 +1,7 @@
 <?php
     $pdo = require '/xampp/htdocs/balayanlms/configuration/connect.php';
 
-    $studentData = json_decode(file_get_contents('php://input'));
+    $studentData = json_decode(file_get_contents('php://input'),true);
 
     //insert student on user table
     function insertUser($pdo, $lastname, $firstname, $usertype){

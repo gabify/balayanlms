@@ -10,7 +10,6 @@
     if(isset($_GET['page'])){
         $page = htmlspecialchars($_GET['page']);
     }
-    //will add add student function
 ?>
 <?php require '../balayanlms/template/header.php';?>
     <div class="my-2 mt-3 mx-4 px-4 py-3 card">
@@ -66,7 +65,7 @@
 
     <div class="modal fade" id="addStudent" tabindex="-1" aria-labelledby="add student" aria-hidden="true">
         <div class="modal-dialog">
-            <form action="">
+            <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" class="addStudent">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -75,12 +74,12 @@
                         <div class="d-flex justify-content-between mb-3">
                             <div class="me-1">
                                 <label for="srcode" class="form-label fw-bold text-secondary">Srcode</label>
-                                <input type="text" class="form-control" id="srcode" name="srcode" placeholder="ex. 12-34567" required>
+                                <input type="text" class="form-control" id="srcode" name="srcode" placeholder="ex. 12-34567">
                                 <small class="error-message text-danger"></small>
                             </div>
                             <div class="ms-1">
                                 <label for="program" class="form-label fw-bold text-secondary">Program</label>
-                                <select class="form-select" aria-label="Programs" id="program" name="program" required>
+                                <select class="form-select" aria-label="Programs" id="program" name="program">
                                     <option selected disabled value="">Choose program..</option>
                                     <option value="CIT">CIT</option>
                                     <option value="CTE">CTE</option>
@@ -91,18 +90,18 @@
                         </div>
                         <div class="mb-3">
                             <label for="firstname" class="form-label fw-bold text-secondary">First Name</label>
-                            <input type="text" class="form-control ms-1" id="firstname" name="firstname" placeholder="ex. Juan" required>
+                            <input type="text" class="form-control ms-1" id="firstname" name="firstname" placeholder="ex. Juan">
                             <small class="error-message text-danger"></small>
                         </div>
                         <div class="mb-4">
                             <label for="lastname" class="form-label fw-bold text-secondary">Last Name</label>
-                            <input type="text" class="form-control ms-1" id="lastname" name="lastname" placeholder="ex. Dela Cruz" required>
+                            <input type="text" class="form-control ms-1" id="lastname" name="lastname" placeholder="ex. Dela Cruz">
                             <small class="error-message text-danger"></small>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger">Submit</button>
+                        <button type="submit" name="submit" id="submitBtn" class="btn btn-danger" disabled>Submit</button>
                     </div>
                 </div>
             </form>
@@ -110,5 +109,6 @@
     </div>
     <?php require '../balayanlms/template/footer.php';?>
     <script src="../balayanlms/student/studentDataTable.js"></script>
+    <script src="../balayanlms/student/validateSrcode.js"></script>
 </body>
 </html>

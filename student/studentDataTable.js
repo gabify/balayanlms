@@ -278,16 +278,17 @@ const deleteStudent = (id) =>{
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if(result.isConfirmed) {
-          asyncDelete(id);
-        }
-      }).then(result =>{
-        if(result === 'success'){
-            Swal.fire(
-                'Deleted!',
-                'Your file has been deleted.',
-                'success'
-              );
-            document.getElementById(id).style.display = "none";
+          asyncDelete(id)
+          .then(result =>{
+            if(result == 'success'){
+                Swal.fire(
+                    'Deleted!',
+                    'The student has been deleted.',
+                    'success'
+                  );
+                document.getElementById(id).style.display = "none";
+            }
+          });
         }
       }).catch(e =>{
         Swal.fire(

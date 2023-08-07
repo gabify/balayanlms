@@ -28,10 +28,10 @@ const insertBook = () =>{
         document.querySelector('#author').value = "";
         document.querySelector('#copyright').value = "";
         //update table
-        //get page number
-        const page = document.querySelector('#page');
-        //get select element
-        const limit = document.querySelector('#limit');
+        const tbody = table.lastElementChild;
+        if(document.body.contains(tbody)){
+            tbody.replaceChildren();
+        }
         renderData(limit.value, page.value, document.getElementById("keyword"));
     }).catch((err)=>{//If some error occured
         //display error message
