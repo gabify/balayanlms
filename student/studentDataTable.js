@@ -265,8 +265,6 @@ const asyncDelete = async(id) =>{
     return result;
 }
 
-
-//ayaw makuha ng tr
 const deleteStudent = (id) =>{
     Swal.fire({
         title: 'Are you sure?',

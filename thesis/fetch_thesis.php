@@ -21,7 +21,8 @@
     function fetchThesis($pdo, $keyword, $numOfThesis, $offset){
         if($keyword == 'null'){
             $stmt = $pdo->prepare("SELECT id, callnum, title, publication_year FROM thesis 
-            LIMIT :opset, :page");
+            WHERE is_deleted = 0
+             LIMIT :opset, :page");
             $stmt->bindParam(':opset', $offset, PDO::PARAM_INT);
             $stmt->bindParam(':page', $numOfThesis, PDO::PARAM_INT);
             $stmt->execute();
@@ -33,7 +34,8 @@
             WHERE callnum LIKE :keyword 
             OR title LIKE :keyword 
             OR adviser LIKE :keyword 
-            OR author LIKE :keyword
+            OR author LIKE :keyword 
+            AND is_deleted = 0 
             LIMIT :opset, :page");
             $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
             $stmt->bindParam(':opset', $offset, PDO::PARAM_INT);

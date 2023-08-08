@@ -17,6 +17,47 @@ const getTotalThesis = async(keyword, limit) =>{
     return result;
 }
 
+const partialDelete = async id =>{
+    const response = await fetch('../balayanlms/thesis/delete_thesis?id='+id);
+    const result = await response.text();
+    if(result != 'success'){
+        throw new Error(result);
+    }
+    return result;
+}
+
+const deleteThesis = id =>{
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if(result.isConfirmed) {
+          partialDelete(id)
+          .then(result =>{
+            if(result == 'success'){
+                Swal.fire(
+                    'Deleted!',
+                    'The thesis has been removed to the collection.',
+                    'success'
+                  );
+                document.getElementById(id).style.display = "none";
+            }
+          });
+        }
+      }).catch(e =>{
+        Swal.fire(
+            'Deleted!',
+            e.message,
+            'success'
+          )
+      });
+}
+
 const createPagination = async(totalThesis, page, keyword) =>{
     const links= [];
     const totalpages = totalThesis['totalPage'];
@@ -247,9 +288,6 @@ const displayData = async(limit, page, keyword) =>{
 
 const renderData = (limit, page, keyword) =>{
     keyword = keyword.value == "" ? 'null' : keyword.value;
-    console.log(keyword);
-    console.log(limit);
-    console.log(page);
     displayData(limit, page, keyword)
     .then(result =>{
         table.append(result);
