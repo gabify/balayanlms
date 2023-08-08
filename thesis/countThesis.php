@@ -12,9 +12,8 @@
         $numOfThesis = htmlspecialchars($_GET['limit']);
         $numOfThesis = (int)$numOfThesis;
     }
-    echo $numOfThesis;
 
-    /* if($keyword == 'null'){
+    if($keyword == 'null'){
         $stmt = $pdo->query('SELECT COUNT(*) AS total FROM thesis');
         $stmt->execute();
         $totalThesis = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -34,6 +33,6 @@
         $data['totalThesis'] = $totalThesis['total'];
         $data['totalPage'] = ceil($totalThesis['total']/$numOfThesis);
         echo json_encode($data);
-    } */
+    }
 
 ?>

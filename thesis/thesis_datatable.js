@@ -13,8 +13,7 @@ const getThesis = async(limit, keyword, page) =>{
 
 const getTotalThesis = async(keyword, limit) =>{
     const response = await fetch('../balayanlms/thesis/countThesis.php?keyword='+keyword+'&limit='+limit);
-    const result = await response.text();
-    console.log(result)
+    const result = await response.json();
     return result;
 }
 
@@ -64,7 +63,7 @@ const createPagination = async(totalThesis, page, keyword) =>{
             }
             links.push(createInBetween());
             for(let i = parseInt(page) - 2; i<=parseInt(page) + 2; i++){
-                if(i == page){
+                if(i == parseInt(page)){
                     links.push(createPageLink(i, keyword, true));
                 }else{
                     links.push(createPageLink(i, keyword, false));
@@ -248,6 +247,9 @@ const displayData = async(limit, page, keyword) =>{
 
 const renderData = (limit, page, keyword) =>{
     keyword = keyword.value == "" ? 'null' : keyword.value;
+    console.log(keyword);
+    console.log(limit);
+    console.log(page);
     displayData(limit, page, keyword)
     .then(result =>{
         table.append(result);

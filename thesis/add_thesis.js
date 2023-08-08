@@ -100,10 +100,10 @@ const addThesis = () =>{
             if(document.body.contains(tbody)){
                 tbody.replaceChildren();
             }
-            const limit = document.querySelector('#limit');//something wrong with limit. dunno
+            const limit = document.querySelector('#limit');
             const keyword = document.querySelector('#keyword');
             const page = document.querySelector('#page');
-            renderData(keyword, limit.value, page.value);
+            renderData(limit.value, page.value, keyword);
         }
     }).catch(error=>{
         Swal.fire({

@@ -3,8 +3,12 @@
         session_start();
     }
     $page = 1;
+    $keyword = '';
     if(isset($_GET['page'])){
         $page = htmlspecialchars($_GET['page']);
+    }
+    if(isset($_GET['keyword'])){
+        $keyword = htmlspecialchars($_GET['keyword']);
     }
 ?>
 <?php require '../balayanlms/template/header.php';?>
@@ -35,7 +39,7 @@
                         aria-label="Search" 
                         id="keyword" 
                         name="keyword" 
-                        value="">
+                        value="<?php echo htmlspecialchars($keyword);?>">
                     <button class="btn btn-outline-secondary" type="submit">Search</button>
                 </div>
             </form>
