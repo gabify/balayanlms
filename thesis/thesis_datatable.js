@@ -72,7 +72,7 @@ const createPagination = async(totalThesis, page, keyword) =>{
             }
         }
     }else if(totalpages > 10){
-        if(page < 4){
+        if(page <= 4){
             for(let i = 1; i<=8; i++){
                 if(i == page){
                     links.push(createPageLink(i, keyword, true));
@@ -91,7 +91,7 @@ const createPagination = async(totalThesis, page, keyword) =>{
             }else{
                 links.push(createPageLink(totalpages, keyword, false))
             }
-        }else if(page > 4 && page < totalpages - 4){
+        }else if(page > 4 && page <= totalpages - 4){
             
             if(page == 1){
                 links.push(createPageLink(1, keyword, true))
@@ -105,7 +105,7 @@ const createPagination = async(totalThesis, page, keyword) =>{
             }
             links.push(createInBetween());
             for(let i = parseInt(page) - 2; i<= parseInt(page) + 2; i++){
-                if(i == parseInt(page)){
+                if(i == page){
                     links.push(createPageLink(i, keyword, true));
                 }else{
                     links.push(createPageLink(i, keyword, false));
@@ -122,7 +122,7 @@ const createPagination = async(totalThesis, page, keyword) =>{
             }else{
                 links.push(createPageLink(totalpages, keyword, false))
             }
-        }else if(page > totalpages - 4){
+        }else{
             if(page == 1){
                 links.push(createPageLink(1, keyword, true))
             }else{
@@ -235,7 +235,7 @@ const createTable = async(theses) =>{
         tds[1].textContent= thesis['callnum'];
         tds[2].textContent= thesis['title'];
         tds[3].textContent= thesis['publication_year'];
-        tds[4].append(createLink("text-primary", "bi-eye-fill", "../balayanlms/view_student.php?id="+thesis['id']));
+        tds[4].append(createLink("text-primary", "bi-eye-fill", "../balayanlms/view_thesis.php?id="+thesis['id']));
         tds[4].append(createDeleteButton(thesis['id']));
         tds.forEach(td=>tr.append(td));
         tbody.append(tr);
