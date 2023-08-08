@@ -14,7 +14,7 @@
     }
 
     if($keyword == 'null'){
-        $stmt = $pdo->query('SELECT COUNT(*) AS total FROM thesis');
+        $stmt = $pdo->query('SELECT COUNT(*) AS total FROM thesis WHERE is_deleted = 0');
         $stmt->execute();
         $totalThesis = $stmt->fetch(PDO::FETCH_ASSOC);
         $data['totalThesis'] = $totalThesis['total'];
@@ -26,7 +26,8 @@
         WHERE callnum LIKE :keyword 
         OR title LIKE :keyword 
         OR author LIKE :keyword 
-        OR adviser LIKE :keyword');
+        OR adviser LIKE :keyword 
+        AND is_deleted = 0');
         $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
         $stmt->execute();
         $totalThesis = $stmt->fetch(PDO::FETCH_ASSOC);

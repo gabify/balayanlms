@@ -18,7 +18,7 @@ const getTotalThesis = async(keyword, limit) =>{
 }
 
 const partialDelete = async id =>{
-    const response = await fetch('../balayanlms/thesis/delete_thesis?id='+id);
+    const response = await fetch('../balayanlms/thesis/delete_thesis.php?id='+id);
     const result = await response.text();
     if(result != 'success'){
         throw new Error(result);
@@ -92,6 +92,7 @@ const createPagination = async(totalThesis, page, keyword) =>{
                 links.push(createPageLink(totalpages, keyword, false))
             }
         }else if(page > 4 && page < totalpages - 4){
+            
             if(page == 1){
                 links.push(createPageLink(1, keyword, true))
             }else{
@@ -103,7 +104,7 @@ const createPagination = async(totalThesis, page, keyword) =>{
                 links.push(createPageLink(2, keyword, false))
             }
             links.push(createInBetween());
-            for(let i = parseInt(page) - 2; i<=parseInt(page) + 2; i++){
+            for(let i = parseInt(page) - 2; i<= parseInt(page) + 2; i++){
                 if(i == parseInt(page)){
                     links.push(createPageLink(i, keyword, true));
                 }else{
@@ -121,7 +122,7 @@ const createPagination = async(totalThesis, page, keyword) =>{
             }else{
                 links.push(createPageLink(totalpages, keyword, false))
             }
-        }else{
+        }else if(page > totalpages - 4){
             if(page == 1){
                 links.push(createPageLink(1, keyword, true))
             }else{
@@ -139,17 +140,6 @@ const createPagination = async(totalThesis, page, keyword) =>{
                 }else{
                     links.push(createPageLink(i, keyword, false));
                 }
-            }
-            links.push(createInBetween());
-            if(page == secondLast){
-                links.push(createPageLink(secondLast, keyword, true))
-            }else{
-                links.push(createPageLink(secondLast, keyword, false))
-            }
-            if(page == totalpages){
-                links.push(createPageLink(totalpages, keyword, true))
-            }else{
-                links.push(createPageLink(totalpages, keyword, false))
             }
         }
     }
