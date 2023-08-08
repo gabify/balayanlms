@@ -307,7 +307,7 @@ searchForm.addEventListener("submit", e =>{
     if(document.body.contains(tbody)){
         tbody.replaceChildren();
     }
-    renderData(keyword, limit.value, page.value);
+    renderData(keyword, limit.value, 1);
 });
 
 limit.addEventListener('change', e =>{
