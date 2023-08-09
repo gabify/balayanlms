@@ -59,6 +59,8 @@ const deleteThesis = id =>{
 }
 
 const createPagination = async(totalThesis, page, keyword) =>{
+    const dataInfo = document.querySelector('.result-info');
+    dataInfo.textContent = "Retrieved "+totalThesis['totalThesis'] + " theses"
     const links= [];
     const totalpages = totalThesis['totalPage'];
     const secondLast = totalpages - 1;

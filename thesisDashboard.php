@@ -53,7 +53,8 @@
                 <th scope="col">Actions</th>
             </thead>
         </table>
-        <div class="d-flex justify-content-end mt-2">
+        <div class="d-flex justify-content-between mt-2 mx-2">
+            <div class="result-info fw-bold"></div>
             <nav aria-label="Thesis Pagination">
                 <ul class="pagination">
                 </ul>

@@ -4,8 +4,40 @@
     }
     $pdo = require '/xampp/htdocs/balayanlms/configuration/connect.php';
     $id= '';
+    $thesisData = array("callnum"=>"", "author"=>"", "title"=>"", "adivser"=>"", "publicationYear"=>"");
     if(isset($_GET['id'])){
         $id = htmlspecialchars($_GET['id']);
+    }
+    if(isset($_POST['submit'])){
+        $thesisData['id']= htmlspecialchars($_POST['id']);
+        $thesisData['callnum']= htmlspecialchars($_POST['callnum']);
+        $thesisData['author']= htmlspecialchars($_POST['author']);
+        $thesisData['title']= htmlspecialchars($_POST['title']);
+        $thesisData['adviser']= htmlspecialchars($_POST['adviser']);
+        $thesisData['publicationYear']= htmlspecialchars($_POST['publicationYear']);
+
+        $stmt= $pdo->prepare("UPDATE thesis SET callnum = :callnum,
+        author = :author, title = :title, adviser = :adviser, publication_year = :publicationYear
+        WHERE id = :id");
+        $stmt->bindParam(':callnum', $thesisData['callnum'], PDO::PARAM_STR);
+        $stmt->bindParam(':author', $thesisData['author'], PDO::PARAM_STR);
+        $stmt->bindParam(':title', $thesisData['title'], PDO::PARAM_STR);
+        $stmt->bindParam(':adviser', $thesisData['adviser'], PDO::PARAM_STR);
+        $stmt->bindParam(':publicationYear', $thesisData['publicationYear'], PDO::PARAM_INT);
+        $stmt->bindParam(':id', $thesisData['id'], PDO::PARAM_INT);
+        if($stmt->execute()){
+            $_SESSION['status'] = 'success';
+            $_SESSION['statusIcon'] = 'success';
+            $_SESSION['statusTitle'] = 'Operation successful';
+            $_SESSION['statusText'] = 'The information of the thesis has been updated';
+            header("Location:view_thesis.php?id=".$thesisData['id']);
+            exit();
+        }else{
+            $_SESSION['status'] = 'error';
+            $_SESSION['statusIcon'] = 'error';
+            $_SESSION['statusTitle'] = 'Error';
+            $_SESSION['statusText'] = 'An error occured during operation. ';
+        }
     }
 
     function getThesis($pdo, $id){
@@ -25,7 +57,7 @@
                         Thesis Information 
                         <button type="button" class="btn" onclick="enableEdit()"><i class="bi-pencil-square fs-5"></i></button>
                     </h3>
-                    <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                    <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" class="thesis-edit">
                         <div class="row mt-4">
                             <div class="col-lg-6 col-sm-12">
                                 <div class="mb-3 mx-5">
@@ -42,8 +74,8 @@
                                     <label for="publisher" class="form-label text-secondary fw-bold">Adviser</label>
                                     <input type="text" 
                                         class="form-control ms-1" 
-                                        id="publisher"
-                                        name="publisher" 
+                                        id="adviser"
+                                        name="adviser" 
                                         value="<?php echo htmlspecialchars($thesis['adviser'])?>"
                                         disabled>
                                     <span class="text-danger"></span>
@@ -52,8 +84,8 @@
                                     <label for="copyright" class="form-label text-secondary fw-bold">Publication Year</label>
                                     <input type="text" 
                                         class="form-control ms-1" 
-                                        id="copyright"
-                                        name="copyright" 
+                                        id="publicationYear"
+                                        name="publicationYear" 
                                         value="<?php echo htmlspecialchars($thesis['publication_year'])?>"
                                         disabled>
                                     <span class="text-danger"></span>
@@ -92,7 +124,7 @@
                             </div>
                             <div class="col-12 my-3 d-none buttons">
                                 <div class="d-flex justify-content-end">
-                                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($book['id']);?>">
+                                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($thesis['id']);?>">
                                     <button type="submit" class="btn btn-danger mx-1" name="submit" id="submitBtn">Update</button>
                                     <button type="button" class="btn btn-secondary mx-1" onclick="disableEdit()">Cancel</button>
                                 </div>
@@ -114,23 +146,94 @@
     <script>
         const inputs = document.querySelectorAll('.form-control');
         const buttons = document.querySelector('.buttons');
+        const form = document.querySelector('.thesis-edit');
 
         const enableEdit = () =>{
             inputs.forEach(input =>{
-                if(input.getAttribute("name") != 'accessnum'){
-                    input.disabled = false; 
-                }
+                input.disabled = false; 
             });
             buttons.classList.remove("d-none");
         }
         const disableEdit = () =>{
             inputs.forEach(input =>{
-                if(input.getAttribute("name") != 'accessnum'){
-                    input.disabled = true; 
-                }
+                input.disabled = true;
             });
             buttons.classList.add("d-none");
         }
+
+        const setError = (element, message) =>{
+            const label = element.previousElementSibling;
+            const error = element.nextElementSibling;
+
+            label.classList.add("text-danger");
+            element.classList.add("border-danger");
+
+            error.textContent= message;
+        }
+
+        const setSuccess = element =>{
+            const label = element.previousElementSibling;
+            const error = element.nextElementSibling;
+
+            label.classList.remove("text-danger");
+            element.classList.remove("border-danger");
+
+            error.textContent= "";
+        }
+
+        const isEmpty = element =>{
+            if(element.value === ''){
+                return true;
+            }
+            return false;
+        }
+
+        const checkValidity = () =>{
+            if(isEmpty(inputs[0])){
+                setError(inputs[0], 'Please provide a call number');
+                return true;
+            }else{
+                setSuccess(inputs[0]);
+            }
+            if(isEmpty(inputs[1])){
+                setError(inputs[1], 'Please provide an adviser');
+                return true;
+            }else{
+                setSuccess(inputs[1]);
+            }
+            if(isEmpty(inputs[2])){
+                setError(inputs[2], 'Please provide a publication year');
+                return true;
+            }else{
+                setSuccess(inputs[2]);
+            }
+            if(isEmpty(inputs[3])){
+                setError(inputs[3], 'Please provide a number of copy');
+                return true;
+            }else{
+                setSuccess(inputs[3]);
+            }
+            if(isEmpty(inputs[4])){
+                setError(inputs[4], 'Please provide a title');
+                return true;
+            }else{
+                setSuccess(inputs[4]);
+            }
+            if(isEmpty(inputs[5])){
+                setError(inputs[5], 'Please provide an author');
+                return true;
+            }else{
+                setSuccess(inputs[5]);
+            }
+            return false;
+        }
+
+        form.addEventListener('submit', e=>{
+            if(checkValidity()){
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
     </script>
     </body>
 </html>
