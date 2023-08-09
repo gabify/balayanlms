@@ -6,7 +6,6 @@
     $offset = 0;
     if(isset($_GET['keyword'])){
         $keyword = htmlspecialchars($_GET['keyword']);
-        $keyword = '%'.$keyword.'%';
     }
     if(isset($_GET['limit'])){
         $numOfFaculties = htmlspecialchars($_GET['limit']);

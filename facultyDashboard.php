@@ -30,7 +30,7 @@
                 </select>
                 <div class="lead mt-2">Faculties</div>
             </div>
-            <form id="studentSearch" role="search" method="GET">
+            <form id="facultySearch" role="search" method="GET">
                 <div class="input-group mb-3">
                     <input 
                         class="form-control" 
@@ -61,6 +61,40 @@
             <input type="hidden" name="page" id="page" value="<?php echo htmlspecialchars($page)?>">
         </div>
     </div>
+    <div class="modal fade" id="addFaculty" tabindex="-1" aria-labelledby="add student" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" class="addFaculty">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body mx-3">
+                        <div class="mb-3">
+                            <label for="employeeNum" class="form-label fw-bold text-secondary">Employee Number</label>
+                            <input type="text" class="form-control" id="employeeNum" name="employeeNum" placeholder="ex. 12345">
+                            <small class="error-message text-danger"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="firstname" class="form-label fw-bold text-secondary">First Name</label>
+                            <input type="text" class="form-control ms-1" id="firstname" name="firstname" placeholder="ex. Juan">
+                            <small class="error-message text-danger"></small>
+                        </div>
+                        <div class="mb-4">
+                            <label for="lastname" class="form-label fw-bold text-secondary">Last Name</label>
+                            <input type="text" class="form-control ms-1" id="lastname" name="lastname" placeholder="ex. Dela Cruz">
+                            <small class="error-message text-danger"></small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" name="submit" id="submitBtn" class="btn btn-danger">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 <?php require '../balayanlms/template/footer.php';?>
+    <script src="../balayanlms/faculty/faculty_datatable.js"></script>
+    <script src="../balayanlms/faculty/validate_faculty.js"></script>
 </body>
 </html>
