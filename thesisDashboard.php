@@ -68,6 +68,7 @@
             <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" class="addNewThesis">
                 <div class="modal-content">
                     <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="addNewThesisLabel">Add new thesis</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body mx-3">
