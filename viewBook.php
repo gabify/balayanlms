@@ -31,7 +31,7 @@
     }
 
     function getBook($pdo, $id){
-        $stmt = $pdo->prepare("SELECT * FROM books WHERE id = :id");
+        $stmt = $pdo->prepare("SELECT * FROM books WHERE id = :id AND is_deleted = 0");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
