@@ -1,48 +1,44 @@
-//get reference to the table
-const table = document.querySelector('#studentTable');
-const searchForm = document.querySelector('#studentSearch');
+const table = document.querySelector('#facultyTable');
+const page = document.querySelector('#page');
 const limit = document.querySelector('#limit');
 const keyword = document.querySelector('#keyword');
-const page = document.querySelector('#page');
-const tableInfo = document.querySelector('.tableInfo');
+const searchForm = document.querySelector('#facultySearch');
 
-//get data from php
-const getStudents = async(keyword, limit, page) =>{
-    const response = await fetch('../balayanlms/student/fetch_student.php?keyword='+keyword+'&limit='+limit+"&page="+page);
-    const result = await response.json();
-    if(result == 'An error occured. Retrieved empty dataset'){
-        throw new Error('Sorry. No such student exist.');
-    }
-    return result;
-}
-
-const getTotalStudents = async(keyword, limit) =>{
-    const response = await fetch('../balayanlms/student/countStudents.php?keyword='+keyword+'&limit='+limit);
+const getFaculties = async(keyword, limit, page) =>{
+    const response = await fetch('../balayanlms/faculty/fetch_faculty.php?keyword='+keyword
+    +'&limit='+limit+'&page='+page);
     const result = await response.json();
     return result;
 }
 
-const createTable = async(students) =>{
+const getTotalFaculty = async(keyword, limit) =>{
+    const response = await fetch('../balayanlms/faculty/count_faculty.php?keyword='+keyword+'&limit='+limit);
+    const result = await response.json();
+    return result;
+}
+
+const createTable = async faculties =>{
     const tbody = document.createElement('tbody');
     let i = 1;
-    for(const student of students){
-        const tr = document.createElement('tr');
-        tr.setAttribute("id", student['id']);
-        let tds = [];
-        for(let i = 0; i <= 5; i++){
+    for(const faculty of faculties){
+        const tds = [];
+        for(let i = 0; i<=3; i++){
             const td = document.createElement('td');
-            tds[i] = td;
+            tds.push(td);
         }
-        tds[0].textContent = i++;
-        tds[0].classList.add("fw-bold");
-        tds[1].textContent = student['srcode'];
-        tds[2].textContent = student['last_name'];
-        tds[3].textContent = student['first_name'];
-        tds[4].textContent = student['program'];
-        tds[5].append(createLink("text-primary", "bi-eye-fill", "../balayanlms/view_student.php?id="+student['id']));
-        tds[5].append(createDeleteButton(student['id']));
-        tds.forEach(td=>tr.appendChild(td));
-        tbody.appendChild(tr);
+        tds[0].textContent = faculty['employee_num'];
+        tds[1].textContent = faculty['last_name'];
+        tds[2].textContent = faculty['first_name'];
+        tds[3].append(createLink("text-primary", "bi-eye-fill", '../balayanlms/view_faculty.php?id='+faculty['id']));
+        tds[3].append(createDeleteButton(faculty['id']));
+        const th = document.createElement('th');
+        th.setAttribute("scope", "row");
+        th.textContent = i++;
+        const tr = document.createElement('tr');
+        tr.id = faculty['id'];
+        tr.append(th);
+        tds.forEach(td=>{tr.append(td)});
+        tbody.append(tr);
     }
     return tbody;
 }
@@ -60,48 +56,15 @@ const createLink = (color, icon, link) =>{
     return a;
 }
 
-const createDeleteButton = (id) => {
-    const btn = document.createElement('button');
-    const i = document.createElement('i');
-    btn.classList.add('btn');
-    btn.setAttribute("onclick", "deleteStudent("+id+")");
-    i.classList.add("bi-trash3-fill");
-    i.classList.add("fs-4");
-    i.classList.add("text-danger");
-    btn.append(i);
-    return btn;
-}
-
-const createPreviousPage = (currentPage, keyword) =>{
-    const prev = currentPage -1;
-    const prevLi = document.createElement('li');
-    const preva = document.createElement('a');
-    prevLi.classList.add("page-item");
-    if(currentPage == 1){
-        prevLi.classList.add("disabled");
-    }
-    preva.classList.add("page-link");
-    preva.classList.add("text-dark");
-    preva.setAttribute("href", "../balayanlms/studentDashboard.php?page="+prev+'&keyword='+keyword);
-    preva.textContent = 'Previous';
-    prevLi.appendChild(preva);
-    return prevLi;
-}
-
-const createNextPage = (currentPage, totalpages, keyword) => {
-    const next = parseInt(currentPage) + 1;
-    const nextLi = document.createElement('li');
-    const nextA = document.createElement('a');
-    nextLi.classList.add("page-item");
-    if(parseInt(currentPage) === totalpages){
-        nextLi.classList.add("disabled");
-    }
-    nextA.classList.add("page-link");
-    nextA.classList.add("text-dark");
-    nextA.href = "../balayanlms/studentDashboard.php?page="+next+'&keyword='+keyword;
-    nextA.textContent = 'Next';
-    nextLi.append(nextA);
-    return nextLi;
+const createInBetween = () =>{
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    li.classList.add("page-item");
+    a.classList.add("page-link");
+    a.classList.add("text-dark");
+    a.textContent = '......';
+    li.append(a);
+    return li;
 }
 
 const createPageLink = (pageNum, keyword, isActive) =>{
@@ -116,30 +79,51 @@ const createPageLink = (pageNum, keyword, isActive) =>{
         a.classList.add("active")
     }else{
         a.classList.add("text-dark");
-        a.href = "../balayanlms/studentDashboard.php?page="+pageNum+'&keyword='+keyword;
+        a.href = "../balayanlms/facultyDashboard.php?page="+pageNum+'&keyword='+keyword;
     }
 
     li.append(a);
     return li;
 }
 
-const createInBetween = () =>{
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    li.classList.add("page-item");
-    a.classList.add("page-link");
-    a.classList.add("text-dark");
-    a.textContent = '......';
-    li.append(a);
-    return li;
+const createNextPage = (currentPage, totalpages, keyword) => {
+    const next = parseInt(currentPage) + 1;
+    const nextLi = document.createElement('li');
+    const nextA = document.createElement('a');
+    nextLi.classList.add("page-item");
+    if(parseInt(currentPage) === totalpages){
+        nextLi.classList.add("disabled");
+    }
+    nextA.classList.add("page-link");
+    nextA.classList.add("text-dark");
+    nextA.href = "../balayanlms/facultyDashboard.php?page="+next+'&keyword='+keyword;
+    nextA.textContent = 'Next';
+    nextLi.append(nextA);
+    return nextLi;
 }
 
-const createPagination = async(totalStudentsandPage, currentPage, keyword) => {
+const createPreviousPage = (currentPage, keyword) =>{
+    const prev = currentPage -1;
+    const prevLi = document.createElement('li');
+    const preva = document.createElement('a');
+    prevLi.classList.add("page-item");
+    if(currentPage == 1){
+        prevLi.classList.add("disabled");
+    }
+    preva.classList.add("page-link");
+    preva.classList.add("text-dark");
+    preva.setAttribute("href", "../balayanlms/facultyDashboard.php?page="+prev+'&keyword='+keyword);
+    preva.textContent = 'Previous';
+    prevLi.appendChild(preva);
+    return prevLi;
+}
+
+const createPagination = async(totalFacultyandPage, currentPage, keyword) => {
     const links = [];
-    const totalPage = totalStudentsandPage['totalPage'];
+    const totalPage = totalFacultyandPage['totalPage'];
     const secondLast = totalPage - 1;
     links.push(createPreviousPage(currentPage, keyword));
-    if(totalStudentsandPage['totalPage'] <= 10){
+    if(totalPage <= 10){
         for(let i = 1; i<= totalPage; i++){
             if(currentPage == i){
                 links.push(createPageLink(i, keyword, true));
@@ -221,7 +205,7 @@ const createPagination = async(totalStudentsandPage, currentPage, keyword) => {
             }
         }
     }
-    links.push(createNextPage(currentPage, totalStudentsandPage['totalPage'], keyword));
+    links.push(createNextPage(currentPage, totalPage, keyword));
     const paginationContainer  =document.querySelector('.pagination');
     if(paginationContainer.hasChildNodes()){
         while(paginationContainer.firstChild){
@@ -229,43 +213,34 @@ const createPagination = async(totalStudentsandPage, currentPage, keyword) => {
         }
     }
     links.forEach(link=> paginationContainer.append(link));
-    if(totalStudentsandPage['totalStudents'] <= 10){
+    if(totalFacultyandPage['totalFaculty'] <= 10){
         const limit = document.querySelector('#limit');
         limit.disabled = true;
     }
 }
 
-const displayData = async(keyword, limit, currentPage) =>{
-    const students = await getStudents(keyword, limit, currentPage);
-    const totalStudentsandPage = await getTotalStudents(keyword, limit);
-    const table = await createTable(students);
-    await createPagination(totalStudentsandPage, currentPage, keyword);
-    return table;
+const createDeleteButton = (id) => {
+    const btn = document.createElement('button');
+    const i = document.createElement('i');
+    btn.classList.add('btn');
+    btn.setAttribute("onclick", "deleteFaculty("+id+")");
+    i.classList.add("bi-trash3-fill");
+    i.classList.add("fs-4");
+    i.classList.add("text-danger");
+    btn.append(i);
+    return btn;
 }
 
-const renderData = (keyword, limit, currentpage) =>{
-    keyword = keyword.value == "" ? 'null' : keyword.value;
-    displayData(keyword, limit, currentpage).then(result =>{
-        table.appendChild(result);
-    }).catch(err =>{
-        Swal.fire(
-            'Error!',
-            err.message,
-            'error'
-          )
-    });
-}
-
-const asyncDelete = async(id) =>{
-    const response = await fetch('../balayanlms/student/delete_student.php?id='+id);
-    const result = await response.text();
+const asyncDelete = async id =>{
+    const response = await fetch('../balayanlms/faculty/delete_faculty.php?id='+id);
+    const result = response.text();
     if(result == 'error'){
         throw new Error('An error occured. Please try again later.');
     }
     return result;
 }
 
-const deleteStudent = (id) =>{
+const deleteFaculty = id =>{
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -281,7 +256,7 @@ const deleteStudent = (id) =>{
             if(result == 'success'){
                 Swal.fire(
                     'Deleted!',
-                    'The student has been deleted.',
+                    'The faculty has been deleted.',
                     'success'
                   );
                 document.getElementById(id).style.display = "none";
@@ -293,11 +268,33 @@ const deleteStudent = (id) =>{
             'Error!',
             e.message,
             'error'
-          )
+          );
       })
 }
 
-table.addEventListener("load", renderData(keyword, limit.value, page.value));
+const displayData = async(keyword, limit, page) =>{
+    const faculties = await getFaculties(keyword, limit, page);
+    const totalFaculty = await getTotalFaculty(keyword, limit);
+    const tbody = await createTable(faculties);
+    await createPagination(totalFaculty, page, keyword);
+    return tbody;
+}
+
+const renderData = (keyword, limit, page) =>{
+    keyword = keyword.value == "" ? 'null' : keyword.value;
+    displayData(keyword, limit, page)
+    .then(result=>{
+        table.append(result);
+    }).catch(error =>{
+        Swal.fire(
+            'Error!',
+            error.message,
+            'error'
+        )
+    });
+}
+
+table.addEventListener('load', renderData(keyword, limit.value, page.value));
 searchForm.addEventListener("submit", e =>{
     e.preventDefault();
     e.stopPropagation();
@@ -307,7 +304,6 @@ searchForm.addEventListener("submit", e =>{
     }
     renderData(keyword, limit.value, 1);
 });
-
 limit.addEventListener('change', e =>{
     const tbody = table.lastElementChild;
     if(document.body.contains(tbody)){

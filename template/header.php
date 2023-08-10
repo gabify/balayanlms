@@ -52,6 +52,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link fs-5 fw-light text-light" href="../balayanlms/facultyDashboard.php">
+                            <i class="bi-mortarboard-fill"></i>
+                            Faculty
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link fs-5 fw-light text-light" href="../balayanlms/studentDashboard.php">
                             <i class="bi-person-circle"></i>
                             Students
