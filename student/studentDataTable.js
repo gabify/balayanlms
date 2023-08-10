@@ -290,9 +290,9 @@ const deleteStudent = (id) =>{
         }
       }).catch(e =>{
         Swal.fire(
-            'Deleted!',
+            'Error!',
             e.message,
-            'success'
+            'error'
           )
       })
 }
