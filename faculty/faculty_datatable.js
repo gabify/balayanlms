@@ -30,6 +30,7 @@ const createTable = async faculties =>{
         tds[1].textContent = faculty['last_name'];
         tds[2].textContent = faculty['first_name'];
         tds[3].append(createLink("text-primary", "bi-eye-fill", '../balayanlms/view_faculty.php?id='+faculty['id']));
+        tds[3].append(createLink("text-warning", "bi-bag-plus-fill", '../balayanlms/borrow_book.php?user_type=faculty&id='+faculty['id']));
         tds[3].append(createDeleteButton(faculty['id']));
         const th = document.createElement('th');
         th.setAttribute("scope", "row");

@@ -15,11 +15,12 @@
     }
 
     //insert student on student table
-    function insertStudent($pdo, $srcode, $program, $uid){
-        $stmt = $pdo->prepare("INSERT INTO student(srcode, program, user_id)
-        VALUES(:srcode, :program, :userid)");
+    function insertStudent($pdo, $srcode, $program, $course, $uid){
+        $stmt = $pdo->prepare("INSERT INTO student(srcode, program, course, user_id)
+        VALUES(:srcode, :program, :course, :userid)");
         $stmt->bindParam(':srcode', $srcode, PDO::PARAM_STR);
         $stmt->bindParam(':program', $program, PDO::PARAM_STR);
+        $stmt->bindParam(':course', $course, PDO::PARAM_STR);
         $stmt->bindParam(':userid', $uid, PDO::PARAM_INT);
         $stmt->execute();
     }
@@ -33,7 +34,7 @@
                 $pdo->rollBack();
                 return "An error occured during operation.";
             }
-            echo insertStudent($pdo, $student['srcode'], $student['program'], $uid);
+            echo insertStudent($pdo, $student['srcode'], $student['program'], $student['course'], $uid);
             $pdo->commit();
         }catch(\PDOException $e){
             $pdo->rollBack();

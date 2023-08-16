@@ -29,7 +29,7 @@ const createTable = async(students) =>{
         const tr = document.createElement('tr');
         tr.setAttribute("id", student['id']);
         let tds = [];
-        for(let i = 0; i <= 5; i++){
+        for(let i = 0; i <= 6; i++){
             const td = document.createElement('td');
             tds[i] = td;
         }
@@ -39,8 +39,10 @@ const createTable = async(students) =>{
         tds[2].textContent = student['last_name'];
         tds[3].textContent = student['first_name'];
         tds[4].textContent = student['program'];
-        tds[5].append(createLink("text-primary", "bi-eye-fill", "../balayanlms/view_student.php?id="+student['id']));
-        tds[5].append(createDeleteButton(student['id']));
+        tds[5].textContent = student['course']
+        tds[6].append(createLink("text-primary", "bi-eye-fill", "../balayanlms/view_student.php?id="+student['id']));
+        tds[6].append(createLink("text-warning", "bi-bag-plus-fill", "../balayanlms/borrow_book.php?user_type=student&id="+student['id']));
+        tds[6].append(createDeleteButton(student['id']));
         tds.forEach(td=>tr.appendChild(td));
         tbody.appendChild(tr);
     }

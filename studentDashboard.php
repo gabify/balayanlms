@@ -51,6 +51,7 @@
                 <th scope="col">Last name</th>
                 <th scope="col">First Name</th>
                 <th scope="col">Program</th>
+                <th scope="col">Course</th>
                 <th scope="col">Actions</th>
             </thead>
         </table>
@@ -71,7 +72,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body mx-3">
-                        <div class="d-flex justify-content-between mb-3">
+                        <div class="d-flex justify-content-between mb-2">
                             <div class="me-1">
                                 <label for="srcode" class="form-label fw-bold text-secondary">Srcode</label>
                                 <input type="text" class="form-control" id="srcode" name="srcode" placeholder="ex. 12-34567">
@@ -87,6 +88,11 @@
                                 </select>
                                 <small class="error-message text-danger"></small>
                             </div>
+                        </div>
+                        <div class="mb-2">
+                            <label for="course" class="form-label fw-bold text-secondary">Course</label>
+                            <input type="text" class="form-control" id="course" name="course" placeholder="ex. Computer Technology">
+                            <small class="error-message text-danger"></small>
                         </div>
                         <div class="mb-3">
                             <label for="firstname" class="form-label fw-bold text-secondary">First Name</label>
