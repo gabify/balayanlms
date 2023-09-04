@@ -4,7 +4,7 @@
     }
     $pdo = require '/xampp/htdocs/balayanlms/configuration/connect.php';
     $id = '';
-    $studentInfo = array("id"=>"", "first_name"=>"last_name", "srcode"=>"", "program"=>"");
+    $studentInfo = array("id"=>"", "first_name"=>"last_name", "srcode"=>"", "program"=>"","course"=>"");
     if(isset($_GET['id'])){
         $id = htmlspecialchars($_GET['id']);
     }
@@ -14,6 +14,7 @@
         $studentInfo['first_name'] = htmlspecialchars($_POST['first_name']);
         $studentInfo['last_name'] = htmlspecialchars($_POST['last_name']);
         $studentInfo['program'] = htmlspecialchars($_POST['program']);
+        $studentInfo['course'] = htmlspecialchars($_POST['course']);
        updateStudent($pdo, $studentInfo);
     }
     function updateStudent($pdo, $student){
@@ -22,12 +23,14 @@
         SET user.first_name = :first_name,
         user.last_name = :last_name,
         student.srcode = :srcode,
-        student.program = :program
+        student.program = :program,
+        student.course = :course
         WHERE student.id = :id");
         $stmt->bindParam(':first_name', $student['first_name'], PDO::PARAM_STR);
         $stmt->bindParam(':last_name', $student['last_name'], PDO::PARAM_STR);
         $stmt->bindParam(':srcode', $student['srcode'], PDO::PARAM_STR);
         $stmt->bindParam(':program', $student['program'], PDO::PARAM_STR);
+        $stmt->bindParam(':course', $student['course'], PDO::PARAM_STR);
         $stmt->bindParam(':id', $student['id'], PDO::PARAM_INT);
         if($stmt->execute()){
             $_SESSION['status'] = 'success';
@@ -49,7 +52,8 @@
         user.first_name,
         user.last_name,
         student.srcode,
-        student.program FROM student
+        student.program,
+        student.course FROM student
         JOIN user ON student.user_id = user.id
         WHERE student.id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -104,17 +108,17 @@
                                         <span class="text-danger"></span>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="program" class="form-label text-secondary fw-bold">Program</label>
+                                    <label for="program" class="form-label text-secondary fw-bold">College</label>
                                     <select class="form-select" aria-label="program" id="program" name="program" disabled>
                                         <?php if($student['program'] == 'CICS'):?>
                                             <option value="CICS" selected>CICS</option>
                                         <?php else:?>
                                             <option value="CICS">CICS</option>
                                         <?php endif;?>
-                                        <?php if($student['program'] == 'BIT'):?>
-                                            <option value="BIT" selected>BIT</option>
+                                        <?php if($student['program'] == 'CIT'):?>
+                                            <option value="CIT" selected>CIT</option>
                                         <?php else:?>
-                                            <option value="BIT">BIT</option>
+                                            <option value="CIT">CIT</option>
                                         <?php endif;?>
                                         <?php if($student['program'] == 'CTE'):?>
                                             <option value="CTE" selected>CTE</option>
@@ -123,6 +127,16 @@
                                         <?php endif;?>
                                     </select>
                                     <span class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="course" class="form-label text-secondary fw-bold">Course</label>
+                                    <input type="text" 
+                                        class="form-control" 
+                                        id="course"
+                                        name="course" 
+                                        value="<?php echo htmlspecialchars($student['course'])?>"
+                                        disabled>
+                                        <span class="text-danger"></span>
                                 </div>
                                 <div class="buttons d-none my-3">
                                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($student['id']);?>">
@@ -243,6 +257,7 @@
         const validate = () =>{
             const firstName = inputs[1];
             const lastName = inputs[2];
+            const course = inputs[3];
 
             if(isEmpty(firstName)){
                 setError(firstName, 'Please provide a first name');
@@ -255,6 +270,12 @@
                 return false;
             }else{
                 setSuccess(lastName);
+            }
+            if(isEmpty(course)){
+                setError(course, 'Please provide a course');
+                return false;
+            }else{
+                setSuccess(course);
             }
             return true;
         }

@@ -50,7 +50,7 @@
                 <th scope="col">Sr-code</th>
                 <th scope="col">Last name</th>
                 <th scope="col">First Name</th>
-                <th scope="col">Program</th>
+                <th scope="col">College</th>
                 <th scope="col">Course</th>
                 <th scope="col">Actions</th>
             </thead>
@@ -79,7 +79,7 @@
                                 <small class="error-message text-danger"></small>
                             </div>
                             <div class="ms-1">
-                                <label for="program" class="form-label fw-bold text-secondary">Program</label>
+                                <label for="program" class="form-label fw-bold text-secondary">College</label>
                                 <select class="form-select" aria-label="Programs" id="program" name="program">
                                     <option selected disabled value="">Choose program..</option>
                                     <option value="CIT">CIT</option>
