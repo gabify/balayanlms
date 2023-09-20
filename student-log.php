@@ -17,7 +17,7 @@
         ON student_log.student_id = student.id
         JOIN user ON user.id = student.user_id
         WHERE date_in = :logDate
-        ORDER BY date_in");
+        ORDER BY time_in DESC");
         $stmt->bindParam(':logDate',  $date, PDO::PARAM_STR);
         $stmt->execute();
         $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
