@@ -1,5 +1,9 @@
-        <footer class="bg-dark text-light py-3 px-2">
-            Copyright &copy;2023 <a href="#" class="text-decoration-none">Gabify&#128020</a>
+        <footer class="bg-danger text-light py-3 px-4">
+            <div class="my-3 border-bottom pb-2">
+                <h4 class="fw-bold">Library Management System</h4>
+            </div>
+
+            Copyright &copy;2023 <a href="https://gabify.github.io/" class="text-decoration-none text-dark">Gabify&#128020</a>
         </footer>
         <script src="../balayanlms/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="../balayanlms/node_modules/jquery/dist/jquery.min.js"></script>
