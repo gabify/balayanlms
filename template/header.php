@@ -9,7 +9,7 @@
         
         <title>Library Management System</title>
     </head>
-    <body>
+    <body style="background-color: #f7f1e3;">
         <nav class="navbar">
             <div class="container-fluid ps-4 py-2">
                 <a class="navbar-brand fs-4 fw-bold text-light" href="../balayanlms/index.php">
