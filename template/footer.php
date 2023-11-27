@@ -1,6 +1,46 @@
         <footer class="bg-danger text-light py-3 px-4">
             <div class="my-3 border-bottom pb-2">
-                <h4 class="fw-bold">Library Management System</h4>
+                <div class="d-flex justify-content-between">
+                    <h4 class="fw-bold">Library Management System</h4>
+                    <ul class="nav">
+                        <li class=" footer-link nav-item">
+                            <a class="nav-link fs-5 fw-light text-light" aria-current="page" href="../balayanlms/index.php">
+                                <i class="bi-speedometer2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="footer-link nav-item">
+                            <a class="nav-link fs-5 fw-light text-light" href="../balayanlms/bookDashboard.php">
+                                <i class="bi-journal-bookmark-fill"></i>
+                                Books
+                            </a>
+                        </li>
+                        <li class="footer-link nav-item">
+                            <a class="nav-link fs-5 fw-light text-light" href="../balayanlms/thesisDashboard.php">
+                                <i class="bi-journal-bookmark"></i>
+                                Theses
+                            </a>
+                        </li>
+                        <li class="footer-link nav-item">
+                            <a class="nav-link fs-5 fw-light text-light" href="../balayanlms/facultyDashboard.php">
+                                <i class="bi-mortarboard-fill"></i>
+                                Faculty
+                            </a>
+                        </li>
+                        <li class="footer-link nav-item">
+                            <a class="nav-link fs-5 fw-light text-light" href="../balayanlms/studentDashboard.php">
+                                <i class="bi-person-circle"></i>
+                                Students
+                            </a>
+                        </li>
+                        <li class="footer-link nav-item">
+                            <a class="nav-link fs-5 fw-light text-light" href="../balayanlms/student-log.php">
+                                <i class="bi-person-lines-fill"></i>
+                                Student Logs
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             Copyright &copy;2023 <a href="https://gabify.github.io/" class="text-decoration-none text-dark">Gabify&#128020</a>

@@ -8,7 +8,7 @@
     }
 ?>
 <main class="w-75 mx-auto my-4">
-    <div class="card my-4 mx-4 py-3 px-4" style="background-color: #E3E9F7;">
+    <div class="card mt-4 mx-4 py-3 px-4" style="background-color: #E3E9F7;">
         <div class="d-flex justify-content-between">
             <h3 class="display-6">List of Books</h3>
             <div class="d-flex justify-content-between">
@@ -21,7 +21,7 @@
             </div>
         </div>
     </div>
-    <div class="card mx-4 mb-3 px-4 pt-4" style="background-color: #E3E9F7;">
+    <div class="card mx-4 mb-3 mt-2 px-4 pt-4" style="background-color: #E3E9F7;">
         <div class="d-flex justify-content-between mb-2 mx-2">
             <div class="d-flex justify-content-between">
                 <div class="lead me-1 mt-2">Show</div>

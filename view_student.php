@@ -65,9 +65,9 @@
 ?>
 <?php require '../balayanlms/template/header.php';?>
     <?php if($student):?>
-        <section class="card m-4 bg-light">
+        <section class="card m-4 w-75 mx-auto">
             <div class="row">
-                <div class="col-3 border-end border-dark-subtle">
+                <div class="col-4 border-end border-dark-subtle">
                     <div class="row">
                         <di class="col-12 px-5 py-4">
                             <img src="../balayanlms/assets/male.svg" class="img-fluid" alt="no result" width="250px">
@@ -147,11 +147,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-9 p-4">
+                <div class="col-8 p-4">
+                    <div class="d-flex justify-content-end">
+                        <a href="studentDashboard.php" class="btn btn-danger">Back</a>
+                    </div>
                     <h3 class="display-5 text-center mb-5">Student's History</h3>
                     <p class="fs-4 mb-0 text-center">No history for this student</p>
                     <div class="d-flex justify-content-center">
-                        <img src="../balayanlms/assets/web_search.svg" class="img-fluid" alt="no result" width="500px">
+                        <img src="../balayanlms/assets/web_search.svg" class="img-fluid" alt="no result" width="330px">
                     </div>
                 </div>
             </div>

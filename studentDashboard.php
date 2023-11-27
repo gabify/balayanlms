@@ -15,7 +15,7 @@
     <main class="w-75 mx-auto my-4">
         <div class="my-2 mt-3 mb-1 mx-4 px-4 py-3 card" style="background-color: #E3E9F7;">
             <div class="d-flex justify-content-between">    
-                <h3 class="display-6 my-2">List of students</h3>
+                <h3 class="display-6 my-2">Student Information</h3>
                 <button type="button" class="btn btn-danger my-2" data-bs-toggle="modal" data-bs-target="#addStudent">
                     Add new
             </div>

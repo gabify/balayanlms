@@ -55,16 +55,16 @@
 ?>
 <?php require '../balayanlms/template/header.php';?>
     <?php if($faculty):?>
-        <section class="card m-4 bg-light">
+        <section class="card my-4 mx-auto w-75">
             <div class="row">
-                <div class="col-3 border-end border-dark-subtle">
+                <div class="col-4 border-end border-dark-subtle">
                     <div class="row">
                         <di class="col-12 px-5 py-4">
                             <img src="../balayanlms/assets/male.svg" class="img-fluid" alt="no result" width="250px">
                         </di>
                         <div class="col-12 px-5 py-3">
                             <form action="<?php echo $_SERVER['PHP_SELF']?>" method="POST" id="edit_form">
-                                <p class="text-center mt-3 fs-5 fw-bold">Student's Information 
+                                <p class="text-center mt-3 fs-5 fw-bold">Faculty's Information 
                                     <i class="bi-pencil-square text-danger" onclick="enableEdit()" style="cursor: pointer;"></i>
                                 </p>
                                 <div class="mb-3">
@@ -106,11 +106,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-9 p-4">
+                <div class="col-8 p-4">
+                    <div class="d-flex justify-content-end">
+                        <a href="facultyDashboard.php" class="btn btn-danger">Back</a>
+                    </div>
                     <h3 class="display-5 text-center mb-5">Faculty's History</h3>
                     <p class="fs-4 mb-0 text-center">No history for this faculty</p>
                     <div class="d-flex justify-content-center">
-                        <img src="../balayanlms/assets/web_search.svg" class="img-fluid" alt="no result" width="500px">
+                        <img src="../balayanlms/assets/web_search.svg" class="img-fluid" alt="no result" width="330px">
                     </div>
                 </div>
             </div>

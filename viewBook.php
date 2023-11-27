@@ -67,9 +67,9 @@
     }
 ?>
 <?php require '../balayanlms/template/header.php';?>
-    <main class="container-fluid px-5 py-5">
+    <main class="w-75 mx-auto p-5">
         <?php if($book):?>
-            <div class="card p-2 m-4">
+            <div class="card p-2 m-4" style="background-color: #E3E9F7;">
                 <div class="card-body">
                     <h3 class="card-title text-center">
                         Book Information 
@@ -188,12 +188,15 @@
                     </form>
                 </div>
             </div>
-            <div class="card p-2 m-4">
+            <div class="card p-2 m-4" style="background-color: #E3E9F7;">
                 <div class="card-body">
                     <h3 class="card-title text-center">Book History</h3>
                     <p class="text-center mt-5 fs-5">No history to show</p>
                     <div class="d-flex justify-content-center">
-                        <img src="../balayanlms/assets/web_search.svg" alt="no history" class="img-fluid w-50">
+                        <img src="../balayanlms/assets/web_search.svg" alt="no history" class="img-fluid w-25">
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <a href="bookDashboard.php" class="btn btn-danger">Back</a>
                     </div>
                 </div>
             </div>
