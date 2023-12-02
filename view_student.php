@@ -17,6 +17,21 @@
         $studentInfo['course'] = htmlspecialchars($_POST['course']);
        updateStudent($pdo, $studentInfo);
     }
+    function getStudentHistory($pdo, $id){
+        $stmt = $pdo->prepare("SELECT books.id, 
+        books.callnum,
+        books.title,
+        book_borrow.date_borrowed,
+        book_borrow.date_returned,
+        book_borrow.is_returned
+        FROM book_borrow JOIN books
+        ON book_borrow.book_id = books.id
+        WHERE book_borrow.student_id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     function updateStudent($pdo, $student){
         $stmt = $pdo->prepare("UPDATE student INNER JOIN user 
         ON student.user_id = user.id
@@ -62,6 +77,7 @@
         return $student;
     }
     $student= getStudent($pdo, $id);
+    $studentHistory = getStudentHistory($pdo, $id);
 ?>
 <?php require '../balayanlms/template/header.php';?>
     <?php if($student):?>
@@ -152,10 +168,40 @@
                         <a href="studentDashboard.php" class="btn btn-danger">Back</a>
                     </div>
                     <h3 class="display-5 text-center mb-5">Student's History</h3>
-                    <p class="fs-4 mb-0 text-center">No history for this student</p>
-                    <div class="d-flex justify-content-center">
-                        <img src="../balayanlms/assets/web_search.svg" class="img-fluid" alt="no result" width="330px">
-                    </div>
+                    <?php if($studentHistory):?>
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-danger">
+                                <tr class="text-center">
+                                    <th scope="col">Call Number</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Date Borrowed</th>
+                                    <th scope="col">Date Returned</th>
+                                    <th scope="col">Is Returned</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($studentHistory as $history):?>
+                                    <tr class="text-center">
+                                        <td><?php echo $history['callnum'];?></td>
+                                        <td><?php echo $history['title'];?></td>
+                                        <td><?php echo $history['date_borrowed'];?></td>
+                                        <td><?php echo $history['date_returned'];?></td>
+                                        <td><?php echo $history['is_returned'] == 0 ? 'No': 'Yes' ?></td>
+                                        <td>
+                                            <!---Will Add return function later-->
+                                            <a href="#" class="btn btn-danger">Return</a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach;?>
+                            </tbody>
+                        </table>
+                    <?php else:?>
+                        <p class="fs-4 mb-0 text-center">No history for this student</p>
+                        <div class="d-flex justify-content-center">
+                            <img src="../balayanlms/assets/web_search.svg" class="img-fluid" alt="no result" width="330px">
+                        </div>
+                    <?php endif;?>
                 </div>
             </div>
         </section>
