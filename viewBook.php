@@ -15,6 +15,7 @@
     if(isset($_GET['id'])){
         $id = htmlspecialchars($_GET['id']);
         $book = getBook($pdo, $id);
+        $bookHistory = getBookHistory($pdo, $id);
     }
 
     if(isset($_POST['submit'])){
@@ -35,6 +36,22 @@
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    function getBookHistory($pdo, $id){
+        $stmt = $pdo->prepare("SELECT student.srcode,
+        user.first_name,
+        user.last_name,
+        book_borrow.date_borrowed,
+        book_borrow.date_returned,
+        book_borrow.is_returned
+        FROM student JOIN book_borrow
+        ON student.id = book_borrow.student_id
+        JOIN user ON student.user_id = user.id
+        WHERE book_borrow.book_id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     function updateBook($pdo, $bookData){
@@ -189,16 +206,55 @@
                 </div>
             </div>
             <div class="card p-2 m-4" style="background-color: #E3E9F7;">
-                <div class="card-body">
-                    <h3 class="card-title text-center">Book History</h3>
-                    <p class="text-center mt-5 fs-5">No history to show</p>
-                    <div class="d-flex justify-content-center">
-                        <img src="../balayanlms/assets/web_search.svg" alt="no history" class="img-fluid w-25">
+                <?php if($bookHistory):?>
+                    <div class="card-body">
+                        <h3 class="card-title text-center">Book History</h3>
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-danger">
+                                <tr>
+                                    <th scope="col">Sr Code</th>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Date Borrowed</th>
+                                    <th scope="col">Date Returned</th>
+                                    <th scope="col">Is Returned</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($bookHistory as $history):?>
+                                    <tr class="text-center">
+                                        <td><?php echo $history['srcode']?></td>
+                                        <td><?php echo $history['first_name']?></td>
+                                        <td><?php echo $history['last_name']?></td>
+                                        <td><?php echo $history['date_borrowed']?></td>
+                                        <td><?php echo $history['date_returned']?></td>
+                                        <td>
+                                            <?php if($history['is_returned'] == 0):?>
+                                                <?php echo 'No'?>
+                                            <?php else:?>
+                                                <?php echo 'Yes'?>
+                                            <?php endif;?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach;?>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-end mt-3">
+                            <a href="bookDashboard.php" class="btn btn-danger">Back</a>
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-end mt-3">
-                        <a href="bookDashboard.php" class="btn btn-danger">Back</a>
+                <?php else:?>
+                    <div class="card-body">
+                        <h3 class="card-title text-center">Book History</h3>
+                        <p class="text-center mt-5 fs-5">No history to show</p>
+                        <div class="d-flex justify-content-center">
+                            <img src="../balayanlms/assets/web_search.svg" alt="no history" class="img-fluid w-25">
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <a href="bookDashboard.php" class="btn btn-danger">Back</a>
+                        </div>
                     </div>
-                </div>
+                <?php endif;?>
             </div>
         <?php else:?>
             <?php include '../balayanlms/book/bookNotFound.php';?>    
