@@ -37,10 +37,18 @@
     </div>
 </section>
 
-<!--Will Add Pagination and search function later-->
-
 
 <section class="px-4 py-3 card">
+    <!-- Still Working with Search-->
+    <div class="d-flex justify-content-end mb-2">
+        <form method="GET" action="<?php echo $_SERVER['PHP_SELF']?>" class="d-flex" role="search">
+            <div class="input-group">
+                <input class="form-control w-25" type="search" name="keyword" placeholder="Search here..." aria-label="Search"
+                value="<?php echo $keyword;?>">
+                <button class="btn btn-danger" type="submit" name="search">Search</button>
+            </div>
+        </form>
+    </div>
     <table class="table table-bordered table-hover">
         <thead class="table-danger">
             <tr class="text-center">
@@ -73,7 +81,7 @@
     </table>
 
     <!--Paginatiooonnnnn--->
-    
+
     <div class="d-flex justify-content-end">
         <nav aria-label="Page navigation example">
             <ul class="pagination">
@@ -84,7 +92,7 @@
                 <?php else:?>
                     <li class="page-item">
                         <a class="page-link text-dark" 
-                        href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $prev;?>">Previous</a>
+                        href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $prev;?>&keyword=<?php echo $keyword;?>">Previous</a>
                     </li>
                 <?php endif;?>
                 <?php if($totalPage <= 10):?>
@@ -96,7 +104,7 @@
                         <?php else:?>
                             <li class="page-item">
                                 <a class="page-link text-dark" 
-                                href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $counter;?>"><?php echo $counter;?></a>
+                                href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $counter;?>&keyword=<?php echo $keyword;?>"><?php echo $counter;?></a>
                             </li>
                         <?php endif;?>
                     <?php endfor;?>
@@ -110,7 +118,7 @@
                             <?php else:?>
                                 <li class="page-item">
                                     <a class="page-link text-dark" 
-                                    href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $counter;?>"><?php echo $counter;?></a>
+                                    href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $counter;?>&keyword=<?php echo $keyword;?>"><?php echo $counter;?></a>
                                 </li>
                             <?php endif;?>
                         <?php endfor;?>
@@ -119,20 +127,20 @@
                         </li>
                         <li class="page-item">
                             <a class="page-link text-dark" 
-                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $secondLast;?>"><?php echo $secondLast;?></a>
+                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $secondLast;?>&keyword=<?php echo $keyword;?>"><?php echo $secondLast;?></a>
                         </li>
                         <li class="page-item">
                             <a class="page-link text-dark" 
-                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $totalPage;?>"><?php echo $totalPage;?></a>
+                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $totalPage;?>&keyword=<?php echo $keyword;?>"><?php echo $totalPage;?></a>
                         </li>
                     <?php elseif($page_num > 4 && $page_num < $totalPage - 4):?>
                         <li class="page-item">
                             <a class="page-link text-dark" 
-                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=1">1</a>
+                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=1&keyword=<?php echo $keyword;?>">1</a>
                         </li>
                         <li class="page-item">
                             <a class="page-link text-dark" 
-                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=2">2</a>
+                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=2&keyword=<?php echo $keyword;?>">2</a>
                         </li>
                         <li class="page-item" aria-current="page">
                             <a class="page-link text-dark">.....</a>
@@ -145,7 +153,7 @@
                             <?php else:?>
                                 <li class="page-item">
                                     <a class="page-link text-dark" 
-                                    href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $counter;?>"><?php echo $counter;?></a>
+                                    href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $counter;?>&keyword=<?php echo $keyword;?>"><?php echo $counter;?></a>
                                 </li>
                             <?php endif;?>
                         <?php endfor;?>
@@ -154,20 +162,20 @@
                         </li>
                         <li class="page-item">
                             <a class="page-link text-dark" 
-                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $secondLast;?>"><?php echo $secondLast;?></a>
+                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $secondLast;?>&keyword=<?php echo $keyword;?>"><?php echo $secondLast;?></a>
                         </li>
                         <li class="page-item">
                             <a class="page-link text-dark" 
-                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $totalPage;?>"><?php echo $totalPage;?></a>
+                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $totalPage;?>&keyword=<?php echo $keyword;?>"><?php echo $totalPage;?></a>
                         </li>
                     <?php else:?>
                         <li class="page-item">
                             <a class="page-link text-dark" 
-                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=1">1</a>
+                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=1&keyword=<?php echo $keyword;?>">1</a>
                         </li>
                         <li class="page-item">
                             <a class="page-link text-dark" 
-                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=2">2</a>
+                            href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=2&keyword=<?php echo $keyword;?>">2</a>
                         </li>
                         <li class="page-item" aria-current="page">
                             <a class="page-link text-dark">.....</a>
@@ -180,7 +188,7 @@
                             <?php else:?>
                                 <li class="page-item">
                                     <a class="page-link text-dark" 
-                                    href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $counter;?>"><?php echo $counter;?></a>
+                                    href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $counter;?>&keyword=<?php echo $keyword;?>"><?php echo $counter;?></a>
                                 </li>
                             <?php endif;?>
                         <?php endfor;?>
@@ -193,7 +201,7 @@
                 <?php else:?>
                     <li class="page-item">
                         <a class="page-link text-dark" 
-                        href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $next;?>">Next</a>
+                        href="?user_type=<?php echo $userType;?>&id=<?php echo $id;?>&page-num=<?php echo $next;?>&keyword=<?php echo $keyword;?>">Next</a>
                     </li>
                 <?php endif;?>
             </ul>
