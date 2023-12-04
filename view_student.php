@@ -18,7 +18,8 @@
        updateStudent($pdo, $studentInfo);
     }
     function getStudentHistory($pdo, $id){
-        $stmt = $pdo->prepare("SELECT books.id, 
+        $stmt = $pdo->prepare("SELECT book_borrow.id,
+        book_borrow.book_id, 
         books.callnum,
         books.title,
         book_borrow.date_borrowed,
@@ -189,8 +190,11 @@
                                         <td><?php echo $history['date_returned'];?></td>
                                         <td><?php echo $history['is_returned'] == 0 ? 'No': 'Yes' ?></td>
                                         <td>
-                                            <!---Will Add return function later-->
-                                            <a href="#" class="btn btn-danger">Return</a>
+                                            <?php if($history['is_returned'] == 0):?>
+                                                <a href="return_book_student.php?id=<?php echo $student['id'];?>&book-transact=<?php echo $history['id'];?>&book-id=<?php echo $history['book_id'];?>" class="btn btn-danger">Return</a>
+                                            <?php else:?>
+                                                <a class="btn btn-danger disabled">Return</a>
+                                            <?php endif;?>
                                         </td>
                                     </tr>
                                 <?php endforeach;?>

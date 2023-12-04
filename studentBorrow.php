@@ -39,7 +39,6 @@
 
 
 <section class="px-4 py-3 card">
-    <!-- Still Working with Search-->
     <div class="d-flex justify-content-end mb-2">
         <form method="GET" action="<?php echo $_SERVER['PHP_SELF']?>" class="d-flex" role="search">
             <div class="input-group">
