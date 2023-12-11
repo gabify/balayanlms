@@ -17,7 +17,7 @@
         $studentInfo['course'] = htmlspecialchars($_POST['course']);
        updateStudent($pdo, $studentInfo);
     }
-    function getStudentHistory($pdo, $id){
+    function getStudentHistory($pdo, $id, $offset, $historyPerPage){
         $stmt = $pdo->prepare("SELECT book_borrow.id,
         book_borrow.book_id, 
         books.callnum,
@@ -27,10 +27,23 @@
         book_borrow.is_returned
         FROM book_borrow JOIN books
         ON book_borrow.book_id = books.id
+        WHERE book_borrow.student_id = :id 
+        LIMIT :offset, :total_record_per_page");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':total_record_per_page', $historyPerPage, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    function getNumberOfBorrowedBooks($pdo, $id, $historyPerPage){
+        $stmt = $pdo->prepare("SELECT COUNT(book_borrow.id)
+        AS NumofBorrowedBooks FROM book_borrow
         WHERE book_borrow.student_id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return ceil($result['NumofBorrowedBooks']/$historyPerPage);
     }
 
     function updateStudent($pdo, $student){
@@ -78,7 +91,19 @@
         return $student;
     }
     $student= getStudent($pdo, $id);
-    $studentHistory = getStudentHistory($pdo, $id);
+    $historyPerPage = 10;
+    $page_num = 1;
+
+    if(isset($_GET['page'])){
+        $page_num = htmlspecialchars($_GET['page']);
+    }
+    $offset = (intval($page_num) - 1) * $historyPerPage;
+    $next = intval($page_num) + 1;
+    $prev = intval($page_num) - 1;
+    $adjacent = 2;
+    $totalPage = getNumberOfBorrowedBooks($pdo, $id, $historyPerPage);
+    $secondToLast = $totalPage - 1;
+    $studentHistory = getStudentHistory($pdo, $id, $offset, $historyPerPage);
 ?>
 <?php require '../balayanlms/template/header.php';?>
     <?php if($student):?>
@@ -200,6 +225,127 @@
                                 <?php endforeach;?>
                             </tbody>
                         </table>
+                       <div class="d-flex justify-content-end">
+                        <nav aria-label="Pagination of book history">
+                                <ul class="pagination">
+                                    <?php if($page_num == 1):?>
+                                        <li class="page-item disabled"><a class="page-link">Previous</a></li>
+                                    <?php else:?>
+                                        <li class="page-item">
+                                            <a class="page-link text-dark" 
+                                            href="?id=<?php echo $id;?>&page=<?php echo $prev;?>">Previous</a>
+                                        </li>
+                                    <?php endif;?>
+                                    <?php if($totalPage <= 10):?>
+                                        <?php for($counter = 1; $counter <= $totalPage; $counter++):?>
+                                            <?php if($counter == $page_num):?>
+                                                <li class="page-item active" aria-current="page">
+                                                    <a class="page-link"><?php echo $counter;?></a>
+                                                </li>
+                                            <?php else:?>
+                                                <li class="page-item">
+                                                    <a class="page-link text-dark" 
+                                                    href="?id=<?php echo $id;?>&page=<?php echo $counter;?>"><?php echo $counter;?></a>
+                                                </li>
+                                            <?php endif;?>
+                                        <?php endfor;?>
+                                    <?php elseif($totalPage > 10):?>
+                                        <?php if($page_num < 4):?>
+                                            <?php for($counter = 1; $counter < 8; $counter++):?>
+                                                <?php if($counter == $page_num):?>
+                                                    <li class="page-item active" aria-current="page">
+                                                        <a class="page-link"><?php echo $counter;?></a>
+                                                    </li>
+                                                <?php else:?>
+                                                    <li class="page-item">
+                                                        <a class="page-link text-dark" 
+                                                        href="?id=<?php echo $id;?>&page=<?php echo $counter;?>"><?php echo $counter;?></a>
+                                                    </li>
+                                                <?php endif;?>
+                                            <?php endfor;?>
+                                            <li class="page-item" aria-current="page">
+                                                <a class="page-link text-dark">.....</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=<?php echo $secondToLast;?>"><?php echo $secondToLast;?></a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=<?php echo $totalPage;?>"><?php echo $totalPage;?></a>
+                                            </li>
+                                        <?php elseif($page_num > 4 && $page_num < $totalPage - 4):?>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=1">1</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=2">2</a>
+                                            </li>
+                                            <li class="page-item" aria-current="page">
+                                                <a class="page-link text-dark">.....</a>
+                                            </li>
+                                            <?php for($counter = $page_num - $adjacents; $counter <= $page_num + $adjacents; $counter++):?>
+                                                <?php if($counter == $page_num):?>
+                                                    <li class="page-item active" aria-current="page">
+                                                        <a class="page-link"><?php echo $counter;?></a>
+                                                    </li>
+                                                <?php else:?>
+                                                    <li class="page-item">
+                                                        <a class="page-link text-dark" 
+                                                        href="?id=<?php echo $id;?>&page=<?php echo $counter;?>"><?php echo $counter;?></a>
+                                                    </li>
+                                                <?php endif;?>
+                                            <?php endfor;?>
+                                            <li class="page-item" aria-current="page">
+                                                <a class="page-link text-dark">.....</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=<?php echo $secondToLast;?>"><?php echo $secondToLast;?></a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=<?php echo $totalPage;?>"><?php echo $totalPage;?></a>
+                                            </li>
+                                        <?php else:?>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=1">1</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=2">2</a>
+                                            </li>
+                                            <li class="page-item" aria-current="page">
+                                                <a class="page-link text-dark">.....</a>
+                                            </li>
+                                            <?php for($counter = $totalPage - 6; $counter <= $totalPage; $counter++):?>
+                                                <?php if($counter == $page_num):?>
+                                                    <li class="page-item active" aria-current="page">
+                                                        <a class="page-link"><?php echo $counter;?></a>
+                                                    </li>
+                                                <?php else:?>
+                                                    <li class="page-item">
+                                                        <a class="page-link text-dark" 
+                                                        href="?id=<?php echo $id;?>&page=<?php echo $counter;?>"><?php echo $counter;?></a>
+                                                    </li>
+                                                <?php endif;?>
+                                            <?php endfor;?>
+                                        <?php endif;?>
+                                    <?php endif;?>
+                                    <?php if($page_num == $totalPage):?>
+                                        <li class="page-item disabled"><a class="page-link">Next</a></li>
+                                    <?php else:?>
+                                        <li class="page-item">
+                                            <a class="page-link text-dark" 
+                                            href="?id=<?php echo $id;?>&page=<?php echo $next;?>">Next</a>
+                                        </li>
+                                    <?php endif;?>
+                                </ul>
+                            </nav>
+                       </div>
                     <?php else:?>
                         <p class="fs-4 mb-0 text-center">No history for this student</p>
                         <div class="d-flex justify-content-center">
