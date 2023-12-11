@@ -121,9 +121,10 @@
     if(isset($_GET['page-num'])){
         $page_num = htmlspecialchars($_GET['page-num']);
     }
+    $offset = (intval($page_num) - 1) * $total_record_per_page;
     if(isset($_GET['keyword'])){
         $keyword = htmlspecialchars($_GET['keyword']);
-        $books = getBooks($pdo, $page_num, $total_record_per_page, $keyword);
+        $books = getBooks($pdo, $offset, $total_record_per_page, $keyword);
         $totalPage = getTotalPages($pdo, $total_record_per_page, $keyword);
         
     }
