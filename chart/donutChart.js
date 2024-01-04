@@ -31,7 +31,7 @@ getData().then(result=> {
                 ],
             },
             options:{
-                borderWidth:2,
+                borderWidth:1,
                 borderRadius:3,
                 hoverBorderWidth: 0,
                 plugins:{

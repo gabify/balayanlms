@@ -82,15 +82,31 @@
     </div>
 </div>
 
-<div class="container my-5 rounded-5 py-3" id="charts" style="box-shadow: 0 4px 12px -2px rgba(0,0,0,0.3);">
+<div class="container my-5 rounded-5 py-3" id="visitsGraph" style="box-shadow: 0 4px 12px -2px rgba(0,0,0,0.3);">
+    <div class="px-5 py-3">
+        <canvas class="visits mb-3"></canvas>
+        <p class="text-end">
+            <a href="student-log.php" 
+                class="text-danger link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0">
+                    <small>
+                        Manage Student log
+                        <i class="bi bi-arrow-right-short"></i>
+                    </small>
+                    
+            </a>
+        </p>
+    </div>
+</div>
+
+<div class="container my-5 rounded-5 py-3 px-5" id="charts" style="box-shadow: 0 4px 12px -2px rgba(0,0,0,0.3);">
     <h4 class="text-center">Book Status</h4>
-    <div class="row ms-5">
+    <div class="row">
         <div class="col col-xl-4 col-lg-6 col-sm-12">
             <div class="charts">
                 <canvas class="book-chart"></canvas>
             </div>
         </div>
-        <div class="col col-xl-6 col-lg-6 col-sm-12">
+        <div class="col col-xl-8 col-lg-6 col-sm-12 px-5">
             <div class="d-flex justify-content-evenly mb-2 mt-5 pt-4">
                 <div class="card text-bg-primary" style="width: 240px;">
                     <div class="card-body">
@@ -98,7 +114,7 @@
                         <p class="card-text pt-1 fw-light">Available Books</p>
                     </div>
                 </div>
-                <div class="card text-bg-success" style="width: 240px;">
+                <div class="card text-bg-danger" style="width: 240px;">
                     <div class="card-body">
                         <h5 class="card-title"><?php echo getDataByStat($pdo,"Borrowed");?></h5>
                         <p class="card-text pt-1 fw-light">Borrowed Books</p>
@@ -112,13 +128,25 @@
                         <p class="card-text pt-1 fw-light">Weeded-out Books</p>
                     </div>
                 </div>
-                <div class="card text-bg-danger" style="width: 240px;">
+                <div class="card text-bg-success" style="width: 240px;">
                     <div class="card-body">
                         <h5 class="card-title"><?php echo getDataByStat($pdo,"Missing");?></h5>
                         <p class="card-text pt-1 fw-light">Missing Books</p>
                     </div>
                 </div>
             </div>
+
+            <p class="fs-6 fw-light mt-3 ms-5">Note: Numbers and chart do not update automatically.</p>
         </div>
+        <p class="text-end">
+            <a href="viewBook.php" 
+                class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0">
+                    <small>
+                        Manage Books
+                        <i class="bi bi-arrow-right-short"></i>
+                    </small>
+            </a>
+        </p>
     </div>
+    
 </div>
