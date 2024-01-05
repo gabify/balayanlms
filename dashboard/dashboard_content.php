@@ -1,6 +1,6 @@
 <?php 
     $pdo = require '/xampp/htdocs/balayanlms/configuration/connect.php';
-
+    date_default_timezone_set('Asia/Manila');
 
     function getAllBooks($pdo){
         $stmt = $pdo->query("SELECT COUNT(id) AS allBooks FROM books");
@@ -29,6 +29,48 @@
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['allBooks'];
+    }
+
+    function getTotalLogs($pdo, $today){
+        $stmt= $pdo->prepare('SELECT COUNT(id) AS totalLogs FROM student_log
+        WHERE date_in = :today');
+        $stmt->bindParam('today', $today, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['totalLogs'];
+    }
+
+    function getCITLogs($pdo, $today, $program){
+        $stmt= $pdo->prepare("SELECT COUNT(student_log.id) AS logs FROM student_log
+        JOIN student ON student_log.student_id = student.id WHERE date_in = :today
+        AND program = :program");
+        $stmt->bindParam(':today', $today, PDO::PARAM_STR);
+        $stmt->bindParam(':program', $program, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['logs'];
+    }
+
+    if(isset($_POST['save'])){
+        $title = htmlspecialchars($_POST['title']);
+        $body = htmlspecialchars($_POST['body']);
+        $now = date('Y-m-d h:i:s a', time());
+
+        $stmt = $pdo->prepare("UPDATE announcement SET title=:title, body=:body, updated_at= :now WHERE id= 1");
+        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+        $stmt->bindParam(':body', $body, PDO::PARAM_STR);
+        $stmt->bindParam(':now', $now, PDO::PARAM_STR);
+        if($stmt->execute()){
+            $_SESSION['status'] = 'success';
+            $_SESSION['statusIcon'] = 'success';
+            $_SESSION['statusTitle'] = 'Operation successful';
+            $_SESSION['statusText'] = 'A new announcement has been published.';
+        }else{
+            $_SESSION['status'] = 'errror';
+            $_SESSION['statusIcon'] = 'error';
+            $_SESSION['statusTitle'] = 'Operation failed';
+            $_SESSION['statusText'] = 'An error occured during operation. Please try again later.';
+        }
     }
 
 ?>
@@ -84,7 +126,37 @@
 
 <div class="container my-5 rounded-5 py-3" id="visitsGraph" style="box-shadow: 0 4px 12px -2px rgba(0,0,0,0.3);">
     <div class="px-5 py-3">
-        <canvas class="visits mb-3"></canvas>
+        <div class="row">
+            <div class="col-8">
+                <canvas class="visits mb-3"></canvas>
+            </div>
+            <div class="col-4">
+                <div class="card text-bg-secondary border-0 mb-2">
+                    <div class="card-body">
+                        <h5 class="card-title text-light pt-2 fs-4 fw-bolder"><?php echo getTotalLogs($pdo, date("Y-m-d"));?></h5>
+                        <p class="card-text text-light pt-1 fw-light">Total Logs</p>
+                    </div>
+                </div>
+                <div class="card text-bg-danger border-0 mb-2">
+                    <div class="card-body">
+                        <h5 class="card-title text-light pt-2 fs-4 fw-bolder"><?php echo getCITLogs($pdo, date("Y-m-d"), "CIT");?></h5>
+                        <p class="card-text text-light pt-1 fw-light">CIT Students</p>
+                    </div>
+                </div>
+                <div class="card border-0 mb-2 text-bg-primary">
+                    <div class="card-body">
+                        <h5 class="card-title text-light pt-2 fs-4 fw-bolder"><?php echo getCITLogs($pdo, date("Y-m-d"), "CICS");?></h5>
+                        <p class="card-text text-light pt-1 fw-light">CICS Students</p>
+                    </div>
+                </div>
+                <div class="card border-0 mb-2 text-bg-warning">
+                    <div class="card-body">
+                        <h5 class="card-title text-light pt-2 fs-4 fw-bolder"><?php echo getCITLogs($pdo, date("Y-m-d"), "CTE");?></h5>
+                        <p class="card-text text-light pt-1 fw-light">CTE Students</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <p class="text-end">
             <a href="student-log.php" 
                 class="text-danger link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0">
@@ -150,3 +222,24 @@
     </div>
     
 </div>
+
+<section class="container my-5 rounded-5 p-3" id="richTextEditor" style="box-shadow: 0 4px 12px -2px rgba(0,0,0,0.3);">
+    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
+        <div class="my-3 mx-auto" style="width: 700px;">
+            <h4 class="text-center mb-4">Create New Announcement &#128227;</h4>
+            <div class="border border-dark-subtle rounded-5 p-4">
+                <div class="mb-3 mt-2">
+                    <label for="title" class="form-label ms-3 fw-bold">Title</label>
+                    <input type="text" name="title" class="form-control p-3 rounded-5" id="title" placeholder="Type the announcement here....">
+                </div>
+                <div class="mb-3">
+                    <label for="body" class="form-label ms-3 fw-bold">Body</label>
+                    <textarea class="form-control p-4 rounded-5" name="body" placeholder="Provide a details here...." id="body" style="min-height: 300px;"></textarea>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" name="save" class="btn btn-danger">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>

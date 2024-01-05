@@ -4,7 +4,7 @@
      $day = (date("d") - date("w")) + 1;
      $month = date("m");
      $year = date("Y");
-     $dayoftheWeek = ["sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+     $dayoftheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
      $dataSet = array();
 
 
