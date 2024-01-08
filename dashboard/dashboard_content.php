@@ -51,28 +51,6 @@
         return $result['logs'];
     }
 
-    if(isset($_POST['save'])){
-        $title = htmlspecialchars($_POST['title']);
-        $body = htmlspecialchars($_POST['body']);
-        $now = date('Y-m-d h:i:s a', time());
-
-        $stmt = $pdo->prepare("UPDATE announcement SET title=:title, body=:body, updated_at= :now WHERE id= 1");
-        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-        $stmt->bindParam(':body', $body, PDO::PARAM_STR);
-        $stmt->bindParam(':now', $now, PDO::PARAM_STR);
-        if($stmt->execute()){
-            $_SESSION['status'] = 'success';
-            $_SESSION['statusIcon'] = 'success';
-            $_SESSION['statusTitle'] = 'Operation successful';
-            $_SESSION['statusText'] = 'A new announcement has been published.';
-        }else{
-            $_SESSION['status'] = 'errror';
-            $_SESSION['statusIcon'] = 'error';
-            $_SESSION['statusTitle'] = 'Operation failed';
-            $_SESSION['statusText'] = 'An error occured during operation. Please try again later.';
-        }
-    }
-
 ?>
 
 <div class="container pt-4">
@@ -224,7 +202,7 @@
 </div>
 
 <section class="container my-5 rounded-5 p-3" id="richTextEditor" style="box-shadow: 0 4px 12px -2px rgba(0,0,0,0.3);">
-    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">
+    <form action="setAnnouncement.php" method="POST">
         <div class="my-3 mx-auto" style="width: 700px;">
             <h4 class="text-center mb-4">Create New Announcement &#128227;</h4>
             <div class="border border-dark-subtle rounded-5 p-4">

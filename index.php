@@ -1,3 +1,4 @@
+<?php session_start();?>
 <?php require '../balayanlms/template/header.php';?>
     <div class="container-fluid g-0">
         <?php include '../balayanlms/dashboard/dashboard_content.php'?>
