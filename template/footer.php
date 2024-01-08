@@ -43,7 +43,13 @@
                 </div>
             </div>
 
-            Copyright &copy;2023 <a href="https://gabify.github.io/" class="text-decoration-none text-dark">Gabify&#128020</a>
+            Copyright &copy;2023 
+            <a href="https://www.linkedin.com/in/ivan-gabriel-talaoc-8329b3243?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="text-decoration-none text-dark ms-2 me-1">
+                <i class="bi bi-linkedin text-light fs-5"></i>
+            </a>
+            <a href="https://www.facebook.com/talaoc.ivangabriel" class="text-decoration-none text-dark">
+                <i class="bi bi-facebook text-light fs-5"></i>
+            </a>
         </footer>
         <script src="../balayanlms/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="../balayanlms/node_modules/jquery/dist/jquery.min.js"></script>
