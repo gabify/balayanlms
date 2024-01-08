@@ -5,6 +5,9 @@
 .navbar{
     background-color: #b33939;
 }
+.card{
+    background-color: #E3E9F7;
+}
 
 /*  Side Navigation     */
 .side-nav{
@@ -51,7 +54,7 @@
 
 .charts{
     width: 100%;
-    margin: 80px 20px;
+    margin: 0px 20px;
 }
 
 /* Add book styles */
@@ -84,4 +87,8 @@ input[type="date"]{
     border: none;
     outline: none;
     border-radius: 6px;
+}
+
+.footer-link:hover{
+    border-bottom: solid 1px white;
 }

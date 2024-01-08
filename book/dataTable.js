@@ -52,7 +52,6 @@ const createTable = async(books) =>{
             viewLink.classList.add("btn");
             viewLink.setAttribute("href", "../balayanlms/viewBook.php?id="+book['id']);
             editLink.classList.add("btn");
-            editLink.setAttribute("href", "../balayanlms/editBook.php?id="+book['id']);
             deleteBtn.classList.add("btn");
             deleteBtn.setAttribute("onclick", "deleteBook("+book['id']+")");
             icns[0].classList.add("bi-eye-fill");
@@ -70,11 +69,9 @@ const createTable = async(books) =>{
             tds[2].textContent = book['title'];
             //append to tr and tbody
             viewLink.appendChild(icns[0]);
-            editLink.appendChild(icns[1]);
             deleteBtn.appendChild(icns[2]);
             
             tds[3].appendChild(viewLink);
-            tds[3].appendChild(editLink);
             tds[3].appendChild(deleteBtn);
             tds.forEach(td=>{
                 tr.appendChild(td);

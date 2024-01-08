@@ -8,9 +8,11 @@
             student.srcode,
             user.last_name,
             user.first_name,
-            student.program
+            student.program,
+            student.course
             FROM student LEFT JOIN user
-            ON user.id = student.user_id
+            ON user.id = student.user_id 
+            ORDER BY student.id DESC
             LIMIT :opset, :page");
             $stmt->bindParam(':opset', $offset, PDO::PARAM_INT);
             $stmt->bindParam(':page', $numOfstudents, PDO::PARAM_INT);
@@ -26,13 +28,16 @@
             student.srcode,
             user.last_name,
             user.first_name,
-            student.program
+            student.program,
+            student.course
             FROM student LEFT JOIN user
             ON user.id = student.user_id
             WHERE student.srcode LIKE :keyword 
             OR user.last_name LIKE :keyword
             OR user.first_name LIKE :keyword
-            OR student.program LIKE :keyword
+            OR student.program LIKE :keyword 
+            OR student.course LIKE :keyword 
+            ORDER BY student.id DESC
             LIMIT :opset, :page");
             $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
             $stmt->bindParam(':opset', $offset, PDO::PARAM_INT);

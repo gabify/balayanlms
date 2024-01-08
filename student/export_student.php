@@ -12,6 +12,7 @@
         user.last_name,
         user.first_name,
         student.program,
+        student.course,
         student_log.time_in,
         student_log.time_out
         FROM student_log JOIN student
@@ -34,7 +35,7 @@
         //excel file name
         $filename = "student-log-".$logDate.".xls";
         
-        $headers = array('Date', 'Srcode', 'Last Name', 'First Name', 'Program', 'Time In', 'Time Out');
+        $headers = array('Date', 'Srcode', 'Last Name', 'First Name', 'Program', 'Course', 'Time In', 'Time Out');
         $excelData = implode("\t", array_values($headers)) . "\n";
         foreach($logs as $log){
             array_walk($log, 'filterData');

@@ -51,20 +51,62 @@
         $student = $stmt->fetch(PDO::FETCH_ASSOC);
         return $student;
     }
+    function getFacultyHistory($pdo, $id, $offset, $historyPerPage, $userType){
+        $stmt = $pdo->prepare("SELECT book_borrow.id,
+        book_borrow.book_id, 
+        books.callnum,
+        books.title,
+        book_borrow.date_borrowed,
+        book_borrow.date_returned,
+        book_borrow.is_returned
+        FROM book_borrow JOIN books
+        ON book_borrow.book_id = books.id
+        WHERE book_borrow.user_id = :id 
+        AND user_type = :userType  
+        LIMIT :offset, :total_record_per_page");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':userType', $userType, PDO::PARAM_STR);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':total_record_per_page', $historyPerPage, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    function getNumberOfBorrowedBooks($pdo, $id, $historyPerPage){
+        $stmt = $pdo->prepare("SELECT COUNT(book_borrow.id)
+        AS NumofBorrowedBooks FROM book_borrow
+        WHERE book_borrow.user_id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return ceil($result['NumofBorrowedBooks']/$historyPerPage);
+    }
     $faculty = getFaculty($pdo, $id);
+    $historyPerPage = 10;
+    $page_num = 1;
+
+    if(isset($_GET['page'])){
+        $page_num = htmlspecialchars($_GET['page']);
+    }
+    $offset = (intval($page_num) - 1) * $historyPerPage;
+    $next = intval($page_num) + 1;
+    $prev = intval($page_num) - 1;
+    $adjacent = 2;
+    $totalPage = getNumberOfBorrowedBooks($pdo, $id, $historyPerPage);
+    $secondToLast = $totalPage - 1;
+    $studentHistory = getFacultyHistory($pdo, $id, $offset, $historyPerPage, 'faculty');
 ?>
 <?php require '../balayanlms/template/header.php';?>
     <?php if($faculty):?>
-        <section class="card m-4 bg-light">
+        <section class="card my-4 mx-auto w-75">
             <div class="row">
-                <div class="col-3 border-end border-dark-subtle">
+                <div class="col-4 border-end border-dark-subtle">
                     <div class="row">
                         <di class="col-12 px-5 py-4">
                             <img src="../balayanlms/assets/male.svg" class="img-fluid" alt="no result" width="250px">
                         </di>
                         <div class="col-12 px-5 py-3">
                             <form action="<?php echo $_SERVER['PHP_SELF']?>" method="POST" id="edit_form">
-                                <p class="text-center mt-3 fs-5 fw-bold">Student's Information 
+                                <p class="text-center mt-3 fs-5 fw-bold">Faculty's Information 
                                     <i class="bi-pencil-square text-danger" onclick="enableEdit()" style="cursor: pointer;"></i>
                                 </p>
                                 <div class="mb-3">
@@ -106,12 +148,169 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-9 p-4">
-                    <h3 class="display-5 text-center mb-5">Faculty's History</h3>
-                    <p class="fs-4 mb-0 text-center">No history for this faculty</p>
-                    <div class="d-flex justify-content-center">
-                        <img src="../balayanlms/assets/web_search.svg" class="img-fluid" alt="no result" width="500px">
+                <div class="col-8 p-4">
+                    <div class="d-flex justify-content-end">
+                        <a href="facultyDashboard.php" class="btn btn-danger">Back</a>
                     </div>
+                    <h3 class="display-5 text-center mb-5">Faculty's History</h3>
+                    <?php if($studentHistory):?>
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-danger">
+                                <tr class="text-center">
+                                    <th scope="col">Call Number</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Date Borrowed</th>
+                                    <th scope="col">Date Returned</th>
+                                    <th scope="col">Is Returned</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($studentHistory as $history):?>
+                                    <tr class="text-center">
+                                        <td><?php echo $history['callnum'];?></td>
+                                        <td><?php echo $history['title'];?></td>
+                                        <td><?php echo $history['date_borrowed'];?></td>
+                                        <td><?php echo $history['date_returned'];?></td>
+                                        <td><?php echo $history['is_returned'] == 0 ? 'No': 'Yes' ?></td>
+                                        <td>
+                                            <?php if($history['is_returned'] == 0):?>
+                                                <a href="return_book_faculty.php?id=<?php echo $faculty['id'];?>&book-transact=<?php echo $history['id'];?>&book-id=<?php echo $history['book_id'];?>" class="btn btn-danger">Return</a>
+                                            <?php else:?>
+                                                <a class="btn btn-danger disabled">Return</a>
+                                            <?php endif;?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach;?>
+                            </tbody>
+                        </table>
+                       <div class="d-flex justify-content-end">
+                        <nav aria-label="Pagination of book history">
+                                <ul class="pagination">
+                                    <?php if($page_num == 1):?>
+                                        <li class="page-item disabled"><a class="page-link">Previous</a></li>
+                                    <?php else:?>
+                                        <li class="page-item">
+                                            <a class="page-link text-dark" 
+                                            href="?id=<?php echo $id;?>&page=<?php echo $prev;?>">Previous</a>
+                                        </li>
+                                    <?php endif;?>
+                                    <?php if($totalPage <= 10):?>
+                                        <?php for($counter = 1; $counter <= $totalPage; $counter++):?>
+                                            <?php if($counter == $page_num):?>
+                                                <li class="page-item active" aria-current="page">
+                                                    <a class="page-link"><?php echo $counter;?></a>
+                                                </li>
+                                            <?php else:?>
+                                                <li class="page-item">
+                                                    <a class="page-link text-dark" 
+                                                    href="?id=<?php echo $id;?>&page=<?php echo $counter;?>"><?php echo $counter;?></a>
+                                                </li>
+                                            <?php endif;?>
+                                        <?php endfor;?>
+                                    <?php elseif($totalPage > 10):?>
+                                        <?php if($page_num < 4):?>
+                                            <?php for($counter = 1; $counter < 8; $counter++):?>
+                                                <?php if($counter == $page_num):?>
+                                                    <li class="page-item active" aria-current="page">
+                                                        <a class="page-link"><?php echo $counter;?></a>
+                                                    </li>
+                                                <?php else:?>
+                                                    <li class="page-item">
+                                                        <a class="page-link text-dark" 
+                                                        href="?id=<?php echo $id;?>&page=<?php echo $counter;?>"><?php echo $counter;?></a>
+                                                    </li>
+                                                <?php endif;?>
+                                            <?php endfor;?>
+                                            <li class="page-item" aria-current="page">
+                                                <a class="page-link text-dark">.....</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=<?php echo $secondToLast;?>"><?php echo $secondToLast;?></a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=<?php echo $totalPage;?>"><?php echo $totalPage;?></a>
+                                            </li>
+                                        <?php elseif($page_num > 4 && $page_num < $totalPage - 4):?>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=1">1</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=2">2</a>
+                                            </li>
+                                            <li class="page-item" aria-current="page">
+                                                <a class="page-link text-dark">.....</a>
+                                            </li>
+                                            <?php for($counter = $page_num - $adjacents; $counter <= $page_num + $adjacents; $counter++):?>
+                                                <?php if($counter == $page_num):?>
+                                                    <li class="page-item active" aria-current="page">
+                                                        <a class="page-link"><?php echo $counter;?></a>
+                                                    </li>
+                                                <?php else:?>
+                                                    <li class="page-item">
+                                                        <a class="page-link text-dark" 
+                                                        href="?id=<?php echo $id;?>&page=<?php echo $counter;?>"><?php echo $counter;?></a>
+                                                    </li>
+                                                <?php endif;?>
+                                            <?php endfor;?>
+                                            <li class="page-item" aria-current="page">
+                                                <a class="page-link text-dark">.....</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=<?php echo $secondToLast;?>"><?php echo $secondToLast;?></a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=<?php echo $totalPage;?>"><?php echo $totalPage;?></a>
+                                            </li>
+                                        <?php else:?>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=1">1</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link text-dark" 
+                                                href="?id=<?php echo $id;?>&page=2">2</a>
+                                            </li>
+                                            <li class="page-item" aria-current="page">
+                                                <a class="page-link text-dark">.....</a>
+                                            </li>
+                                            <?php for($counter = $totalPage - 6; $counter <= $totalPage; $counter++):?>
+                                                <?php if($counter == $page_num):?>
+                                                    <li class="page-item active" aria-current="page">
+                                                        <a class="page-link"><?php echo $counter;?></a>
+                                                    </li>
+                                                <?php else:?>
+                                                    <li class="page-item">
+                                                        <a class="page-link text-dark" 
+                                                        href="?id=<?php echo $id;?>&page=<?php echo $counter;?>"><?php echo $counter;?></a>
+                                                    </li>
+                                                <?php endif;?>
+                                            <?php endfor;?>
+                                        <?php endif;?>
+                                    <?php endif;?>
+                                    <?php if($page_num == $totalPage):?>
+                                        <li class="page-item disabled"><a class="page-link">Next</a></li>
+                                    <?php else:?>
+                                        <li class="page-item">
+                                            <a class="page-link text-dark" 
+                                            href="?id=<?php echo $id;?>&page=<?php echo $next;?>">Next</a>
+                                        </li>
+                                    <?php endif;?>
+                                </ul>
+                            </nav>
+                       </div>
+                    <?php else:?>
+                        <p class="fs-4 mb-0 text-center">No history for this faculty</p>
+                        <div class="d-flex justify-content-center">
+                            <img src="../balayanlms/assets/web_search.svg" class="img-fluid" alt="no result" width="330px">
+                        </div>
+                    <?php endif;?>
                 </div>
             </div>
         </section>

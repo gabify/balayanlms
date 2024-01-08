@@ -3,6 +3,7 @@ const srcode = document.querySelector('#srcode');
 const firstName = document.querySelector('#firstname');
 const lastName = document.querySelector('#lastname');
 const program = document.querySelector('#program');
+const course = document.querySelector('#course');
 const submit = document.querySelector('#submitBtn');
 
 srcode.addEventListener('input', e=>{
@@ -88,11 +89,13 @@ const addStudent = () =>{
     const firstnameVal = firstName.value.trim();
     const lastnameVal = lastName.value.trim();
     const programVal = program.value.trim();
+    const courseVal = course.value.trim();
     const student = {
         srcode: srcodeVal,
         firstname: firstnameVal, 
         lastname: lastnameVal,
-        program:  programVal
+        program:  programVal,
+        course: courseVal
     }
     
     insertStudent(student)
