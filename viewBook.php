@@ -15,7 +15,9 @@
     if(isset($_GET['id'])){
         $id = htmlspecialchars($_GET['id']);
         $book = getBook($pdo, $id);
-        $bookHistory = getBookHistory($pdo, $id);
+        $studentBookHistory = getBookHistoryStudent($pdo, $id);
+        $facultyBookHistory = getBookHistoryFaculty($pdo, $id);
+        $bookHistory = array_merge($studentBookHistory, $facultyBookHistory);
     }
 
     if(isset($_POST['submit'])){
@@ -38,7 +40,7 @@
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    function getBookHistory($pdo, $id){
+    function getBookHistoryStudent($pdo, $id){
         $stmt = $pdo->prepare("SELECT user.first_name,
         user.last_name,
         book_borrow.user_type,
@@ -48,6 +50,21 @@
         FROM student JOIN book_borrow
         ON student.id = book_borrow.user_id
         JOIN user ON student.user_id = user.id
+        WHERE book_borrow.book_id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    function getBookHistoryFaculty($pdo, $id){
+        $stmt = $pdo->prepare("SELECT user.first_name,
+        user.last_name,
+        book_borrow.user_type,
+        book_borrow.date_borrowed,
+        book_borrow.date_returned,
+        book_borrow.is_returned
+        FROM faculty JOIN book_borrow
+        ON faculty.id = book_borrow.user_id
+        JOIN user ON faculty.user_id = user.id
         WHERE book_borrow.book_id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
