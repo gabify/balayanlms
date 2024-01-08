@@ -39,14 +39,14 @@
     }
 
     function getBookHistory($pdo, $id){
-        $stmt = $pdo->prepare("SELECT student.srcode,
-        user.first_name,
+        $stmt = $pdo->prepare("SELECT user.first_name,
         user.last_name,
+        book_borrow.user_type,
         book_borrow.date_borrowed,
         book_borrow.date_returned,
         book_borrow.is_returned
         FROM student JOIN book_borrow
-        ON student.id = book_borrow.student_id
+        ON student.id = book_borrow.user_id
         JOIN user ON student.user_id = user.id
         WHERE book_borrow.book_id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -212,9 +212,9 @@
                         <table class="table table-bordered table-hover">
                             <thead class="table-danger">
                                 <tr>
-                                    <th scope="col">Sr Code</th>
                                     <th scope="col">First Name</th>
                                     <th scope="col">Last Name</th>
+                                    <th scope="col">User Type</th>
                                     <th scope="col">Date Borrowed</th>
                                     <th scope="col">Date Returned</th>
                                     <th scope="col">Is Returned</th>
@@ -223,9 +223,9 @@
                             <tbody>
                                 <?php foreach($bookHistory as $history):?>
                                     <tr class="text-center">
-                                        <td><?php echo $history['srcode']?></td>
                                         <td><?php echo $history['first_name']?></td>
                                         <td><?php echo $history['last_name']?></td>
+                                        <td><?php echo $history['user_type']?></td>
                                         <td><?php echo $history['date_borrowed']?></td>
                                         <td><?php echo $history['date_returned']?></td>
                                         <td>

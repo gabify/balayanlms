@@ -17,7 +17,7 @@
         $studentInfo['course'] = htmlspecialchars($_POST['course']);
        updateStudent($pdo, $studentInfo);
     }
-    function getStudentHistory($pdo, $id, $offset, $historyPerPage){
+    function getStudentHistory($pdo, $id, $offset, $historyPerPage, $userType){
         $stmt = $pdo->prepare("SELECT book_borrow.id,
         book_borrow.book_id, 
         books.callnum,
@@ -27,9 +27,11 @@
         book_borrow.is_returned
         FROM book_borrow JOIN books
         ON book_borrow.book_id = books.id
-        WHERE book_borrow.student_id = :id 
+        WHERE book_borrow.user_id = :id 
+        AND user_type = :userType  
         LIMIT :offset, :total_record_per_page");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':userType', $userType, PDO::PARAM_STR);
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->bindParam(':total_record_per_page', $historyPerPage, PDO::PARAM_INT);
         $stmt->execute();
@@ -39,7 +41,7 @@
     function getNumberOfBorrowedBooks($pdo, $id, $historyPerPage){
         $stmt = $pdo->prepare("SELECT COUNT(book_borrow.id)
         AS NumofBorrowedBooks FROM book_borrow
-        WHERE book_borrow.student_id = :id");
+        WHERE book_borrow.user_id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -103,7 +105,7 @@
     $adjacent = 2;
     $totalPage = getNumberOfBorrowedBooks($pdo, $id, $historyPerPage);
     $secondToLast = $totalPage - 1;
-    $studentHistory = getStudentHistory($pdo, $id, $offset, $historyPerPage);
+    $studentHistory = getStudentHistory($pdo, $id, $offset, $historyPerPage, 'student');
 ?>
 <?php require '../balayanlms/template/header.php';?>
     <?php if($student):?>
