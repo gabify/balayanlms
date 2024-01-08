@@ -9,12 +9,6 @@
     $keyword = '';
     $page_num = 1;
     $total_record_per_page = 10;
-    $next = intval($page_num) + 1;
-    $prev = intval($page_num) - 1;
-    $adjacents = 2;
-    $totalPage = getTotalPages($pdo, $total_record_per_page, $keyword);
-    $secondLast = $totalPage - 1;
-    $books = getBooks($pdo, $page_num, $total_record_per_page, $keyword);
 
     if(isset($_SESSION['id'])){
         $id = $_SESSION['id'];
@@ -45,7 +39,6 @@
         }
     }
 
-    
     function getBooks($pdo, $offset, $total_record_per_page, $keyword){
         if($keyword == ''){
             $stmt = $pdo->prepare("SELECT books.id,
@@ -75,41 +68,6 @@
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    function addToBorrowTable($pdo, $book_id, $student_id){
-        $stmt= $pdo->prepare("INSERT INTO book_borrow(book_id, student_id) 
-        VALUES(:bookId, :studentId)");
-        $stmt->bindParam(':bookId', $book_id, PDO::PARAM_STR);
-        $stmt->bindParam(':studentId', $student_id, PDO::PARAM_STR);
-        $stmt->execute();
-    }
-    function updateBookStatus($pdo, $book_id, $status){
-        $stmt = $pdo->prepare("UPDATE books SET
-        status = :status WHERE id = :id");
-        $stmt->bindParam(':status', $status, PDO::PARAM_STR);
-        $stmt->bindParam(':id', $book_id, PDO::PARAM_INT);
-        $stmt->execute();
-    }
-    function updateStudentBorrowedBooks($pdo, $student_id){
-        $stmt = $pdo->prepare("UPDATE student SET
-        borrowed_books = borrowed_books + 1 WHERE id = :id");
-        $stmt->bindParam(':id', $student_id, PDO::PARAM_INT);
-        $stmt->execute();
-    }
-
-    function borrow($pdo, $book_id, $student_id){
-        try{
-            $pdo->beginTransaction();
-            addToBorrowTable($pdo, $book_id, $student_id);
-            updateBookStatus($pdo,$book_id, 'Borrowed');
-            updateStudentBorrowedBooks($pdo, $student_id);
-            $pdo->commit();
-        }catch(\PDOException $e){
-            $pdo->rollBack();
-            return die($e->getMessage());
-        }
-        return true;
-    }
-
     if(isset($_GET['id'])){
         $id = htmlspecialchars($_GET['id']);
         $_SESSION['id'] = $id;
@@ -129,22 +87,12 @@
         
     }
 
-    if(isset($_POST['borrow'])){
-        $book_id = htmlspecialchars($_POST['bookId']);
-        $student_id = htmlspecialchars($_POST['studentId']);
-        $result = borrow($pdo, $book_id, $student_id);
-        if($result){
-            $_SESSION['status'] = 'success';
-            $_SESSION['statusIcon'] = 'success';
-            $_SESSION['statusTitle'] = 'Operation successful';
-            $_SESSION['statusText'] = 'The book has been borrowed successfully.';
-        }else{
-            $_SESSION['status'] = 'error';
-            $_SESSION['statusIcon'] = 'error';
-            $_SESSION['statusTitle'] = 'Operation failed';
-            $_SESSION['statusText'] = $result;
-        }
-    }
+    $next = intval($page_num) + 1;
+    $prev = intval($page_num) - 1;
+    $adjacents = 2;
+    $totalPage = getTotalPages($pdo, $total_record_per_page, $keyword);
+    $secondLast = $totalPage - 1;
+    $books = getBooks($pdo, $page_num, $total_record_per_page, $keyword);
 
 ?>
 <?php require '../balayanlms/template/header.php';?>
